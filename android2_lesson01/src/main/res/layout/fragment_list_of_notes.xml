@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rv_list_of_notes"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:itemCount="20"
+    tools:layoutManager="GridLayoutManager"
+    tools:listitem="@layout/item_rv"
+    tools:spanCount="2">
 
 </android.support.v7.widget.RecyclerView>

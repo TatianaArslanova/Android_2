@@ -2,7 +2,10 @@ package com.example.ama.android2_lesson01.ui.rv;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +33,14 @@ public class ListOfNotesFragment extends Fragment {
         if (getArguments() != null) {
             mData = getArguments().getParcelableArrayList(LIST_OF_NOTES_DATA);
         }
-        //TODO: create adapter and holder
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        RecyclerView rv=view.findViewById(R.id.rv_list_of_notes);
+        rv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        rv.setAdapter(new ListOfNotesAdapter(mData));
     }
 }

@@ -6,16 +6,16 @@ import android.os.Parcelable;
 //TODO: create builder
 
 public class Note implements Parcelable {
-    private String mName;
+    private String mTitle;
     private String mText;
 
-    public Note(String mName, String mText) {
-        this.mName = mName;
+    public Note(String mTitle, String mText) {
+        this.mTitle = mTitle;
         this.mText = mText;
     }
 
     protected Note(Parcel in) {
-        mName = in.readString();
+        mTitle = in.readString();
         mText = in.readString();
     }
 
@@ -38,7 +38,15 @@ public class Note implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mName);
+        dest.writeString(mTitle);
         dest.writeString(mText);
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public String getText() {
+        return mText;
     }
 }
