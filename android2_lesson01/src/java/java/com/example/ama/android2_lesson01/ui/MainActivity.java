@@ -15,23 +15,20 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private static final String LIST_OF_NOTES_FRAGMENT = "recycler_view_fragment";
-    private NotesDataManager mDataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mDataManager = NotesApp.getDataManager();
         initFragments();
     }
 
     private void initFragments() {
-        ArrayList<Note> mData = mDataManager.getListOfAllNotes();
         FragmentManager mFragmentManager = getSupportFragmentManager();
         mFragmentManager.beginTransaction()
                 .replace(R.id.fl_container_list_of_notes,
                         mFragmentManager.findFragmentByTag(LIST_OF_NOTES_FRAGMENT) == null ?
-                                ListOfNotesFragment.newInstance(mData) :
+                                ListOfNotesFragment.newInstance() :
                                 mFragmentManager.findFragmentByTag(LIST_OF_NOTES_FRAGMENT),
                         LIST_OF_NOTES_FRAGMENT)
                 .commit();
