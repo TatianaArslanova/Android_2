@@ -1,5 +1,6 @@
 package com.example.ama.android2_lesson01.ui.rv;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,9 +19,18 @@ import java.util.ArrayList;
 
 public class ListOfNotesFragment extends Fragment {
     private ArrayList<Note> mData;
+    private ListOfNotesHolder.OnNoteClickListener mListener;
 
     public static ListOfNotesFragment newInstance() {
         return new ListOfNotesFragment();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof ListOfNotesHolder.OnNoteClickListener){
+            mListener=(ListOfNotesHolder.OnNoteClickListener) context;
+        }
     }
 
     @Override
@@ -35,6 +45,6 @@ public class ListOfNotesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView rv = view.findViewById(R.id.rv_list_of_notes);
         rv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        rv.setAdapter(new ListOfNotesAdapter(mData));
+        rv.setAdapter(new ListOfNotesAdapter(mData, mListener));
     }
 }

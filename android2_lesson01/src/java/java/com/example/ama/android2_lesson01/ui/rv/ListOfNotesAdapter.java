@@ -13,16 +13,18 @@ import java.util.ArrayList;
 
 public class ListOfNotesAdapter extends RecyclerView.Adapter<ListOfNotesHolder> {
     private ArrayList<Note> mData;
+    private ListOfNotesHolder.OnNoteClickListener mListener;
 
-    public ListOfNotesAdapter(ArrayList<Note> mData){
+    public ListOfNotesAdapter(ArrayList<Note> mData, ListOfNotesHolder.OnNoteClickListener listener){
         this.mData=mData;
+        mListener=listener;
     }
 
     @NonNull
     @Override
     public ListOfNotesHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv, parent, false);
-        return new ListOfNotesHolder(itemView);
+        return new ListOfNotesHolder(itemView, this, mListener);
     }
 
     @Override
