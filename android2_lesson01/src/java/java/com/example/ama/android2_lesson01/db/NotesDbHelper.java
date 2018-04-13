@@ -1,10 +1,12 @@
 package com.example.ama.android2_lesson01.db;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import static com.example.ama.android2_lesson01.db.NotesDatabaseContract.*;
+import static com.example.ama.android2_lesson01.db.NotesDatabaseContract.NotesTable;
 
 public class NotesDbHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "notes.db";
@@ -23,5 +25,13 @@ public class NotesDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(NotesTable.SQL_DROP_TABLE);
         this.onCreate(db);
+    }
+
+    public Cursor getAllNotesCursor(String tableName) {
+        return getReadableDatabase().query(tableName, null, null, null, null, null, null);
+    }
+
+    public void insertValues(String tableName, ContentValues values){
+        getWritableDatabase().insert(tableName, null, values);
     }
 }

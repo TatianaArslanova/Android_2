@@ -1,10 +1,14 @@
 package com.example.ama.android2_lesson01.db;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 
 import com.example.ama.android2_lesson01.model.Note;
 
 import java.util.ArrayList;
+
+import static com.example.ama.android2_lesson01.db.NotesDatabaseContract.NotesTable;
 
 public class NotesDataManager extends NotesDbHelper {
 
@@ -13,13 +17,28 @@ public class NotesDataManager extends NotesDbHelper {
     }
 
     public ArrayList<Note> getListOfAllNotes() {
-        //TODO: get data from db
-        return null;
+        ArrayList<Note> listOfNotes = new ArrayList<>();
+        Cursor allNotes = getAllNotesCursor(NotesTable.TABLE_NAME);
+        if (allNotes.moveToFirst()) {
+            int titleColomn = allNotes.getColumnIndex(NotesTable.COLOMN_NAME_TITLE);
+            int textColomn = allNotes.getColumnIndex(NotesTable.COLOMN_NAME_TEXT);
+            do {
+                listOfNotes.add(Note.builder()
+                        .title(allNotes.getString(titleColomn))
+                        .text(allNotes.getString(textColomn))
+                        .build());
+            } while (allNotes.moveToNext());
+        }
+        return listOfNotes;
     }
 
-    public boolean createNote(String name, String text) {
-        //TODO: build note
-        return false;
+    public Note createNote(String name, String text) {
+        Note newNote=Note.builder()
+                .title(name)
+                .text(text)
+                .build();
+        addNoteToDatabase(newNote);
+        return newNote;
     }
 
     public boolean removeNote(Note note) {
@@ -32,8 +51,10 @@ public class NotesDataManager extends NotesDbHelper {
         return false;
     }
 
-    private boolean addNoteToDatabase(Note note) {
-        //TODO: add note to database
-        return false;
+    private void addNoteToDatabase(Note note) {
+        ContentValues values=new ContentValues();
+        values.put(NotesTable.COLOMN_NAME_TITLE, note.getTitle());
+        values.put(NotesTable.COLOMN_NAME_TEXT, note.getText());
+        insertValues(NotesTable.TABLE_NAME, values);
     }
 }
