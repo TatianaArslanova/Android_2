@@ -3,7 +3,8 @@ package com.example.ama.android2_lesson01.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-//TODO: create builder
+import com.example.ama.android2_lesson01.NotesApp;
+import com.example.ama.android2_lesson01.R;
 
 public class Note implements Parcelable {
     private String mTitle;
@@ -17,6 +18,10 @@ public class Note implements Parcelable {
     protected Note(Parcel in) {
         mTitle = in.readString();
         mText = in.readString();
+    }
+
+    public static NoteBuilder builder() {
+        return new NoteBuilder();
     }
 
     public static final Creator<Note> CREATOR = new Creator<Note>() {
@@ -48,5 +53,28 @@ public class Note implements Parcelable {
 
     public String getText() {
         return mText;
+    }
+
+    public static class NoteBuilder {
+        private String mTitle = NotesApp.getInstance().getString(R.string.default_note_title);
+        private String mText = NotesApp.getInstance().getString(R.string.default_note_text);
+
+        public NoteBuilder title(String mTitle) {
+            if (mTitle != null) {
+                this.mTitle = mTitle;
+            }
+            return this;
+        }
+
+        public NoteBuilder text(String mText) {
+            if (mText != null) {
+                this.mText = mText;
+            }
+            return this;
+        }
+
+        public Note build() {
+            return new Note(mTitle, mText);
+        }
     }
 }
