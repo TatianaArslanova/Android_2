@@ -3,14 +3,11 @@ package com.example.ama.android2_lesson01.ui;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import com.example.ama.android2_lesson01.NotesApp;
 import com.example.ama.android2_lesson01.R;
-import com.example.ama.android2_lesson01.db.NotesDataManager;
-import com.example.ama.android2_lesson01.model.Note;
 import com.example.ama.android2_lesson01.ui.rv.ListOfNotesFragment;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,5 +29,20 @@ public class MainActivity extends AppCompatActivity {
                                 mFragmentManager.findFragmentByTag(LIST_OF_NOTES_FRAGMENT),
                         LIST_OF_NOTES_FRAGMENT)
                 .commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.mi_add_note) {
+            //TODO: start new activity for note creation
+            return true;
+        }
+        return false;
     }
 }
