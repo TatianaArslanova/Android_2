@@ -15,15 +15,15 @@ public class ListOfNotesAdapter extends RecyclerView.Adapter<ListOfNotesHolder> 
     private ArrayList<Note> mData;
     private ListOfNotesHolder.OnNoteClickListener mListener;
 
-    public ListOfNotesAdapter(ArrayList<Note> mData, ListOfNotesHolder.OnNoteClickListener listener){
-        this.mData=mData;
-        mListener=listener;
+    public ListOfNotesAdapter(ArrayList<Note> mData, ListOfNotesHolder.OnNoteClickListener listener) {
+        this.mData = mData;
+        mListener = listener;
     }
 
     @NonNull
     @Override
     public ListOfNotesHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv, parent, false);
         return new ListOfNotesHolder(itemView, this, mListener);
     }
 
@@ -36,5 +36,9 @@ public class ListOfNotesAdapter extends RecyclerView.Adapter<ListOfNotesHolder> 
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    public void setmData(ArrayList<Note> mData) {
+        this.mData = mData;
     }
 }

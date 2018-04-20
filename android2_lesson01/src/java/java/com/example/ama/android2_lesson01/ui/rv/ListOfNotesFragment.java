@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class ListOfNotesFragment extends Fragment {
     private ArrayList<Note> mData;
     private ListOfNotesHolder.OnNoteClickListener mListener;
+    private ListOfNotesAdapter mAdapter;
 
     public static ListOfNotesFragment newInstance() {
         return new ListOfNotesFragment();
@@ -28,8 +29,8 @@ public class ListOfNotesFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof ListOfNotesHolder.OnNoteClickListener){
-            mListener=(ListOfNotesHolder.OnNoteClickListener) context;
+        if (context instanceof ListOfNotesHolder.OnNoteClickListener) {
+            mListener = (ListOfNotesHolder.OnNoteClickListener) context;
         }
     }
 
@@ -45,6 +46,13 @@ public class ListOfNotesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView rv = view.findViewById(R.id.rv_list_of_notes);
         rv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        rv.setAdapter(new ListOfNotesAdapter(mData, mListener));
+        mAdapter = new ListOfNotesAdapter(mData, mListener);
+        rv.setAdapter(mAdapter);
+    }
+
+    public void refresh() {
+        mData = NotesApp.getDataManager().getListOfAllNotes();
+        mAdapter.setmData(mData);
+        mAdapter.notifyDataSetChanged();
     }
 }

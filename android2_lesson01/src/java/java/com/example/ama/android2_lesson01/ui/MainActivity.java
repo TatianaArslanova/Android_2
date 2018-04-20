@@ -1,5 +1,6 @@
 package com.example.ama.android2_lesson01.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -8,12 +9,14 @@ import android.view.MenuItem;
 
 import com.example.ama.android2_lesson01.R;
 import com.example.ama.android2_lesson01.model.Note;
+import com.example.ama.android2_lesson01.ui.details.DetailsNoteActivity;
 import com.example.ama.android2_lesson01.ui.rv.ListOfNotesFragment;
 import com.example.ama.android2_lesson01.ui.rv.ListOfNotesHolder;
 
 public class MainActivity extends AppCompatActivity
-implements ListOfNotesHolder.OnNoteClickListener{
+        implements ListOfNotesHolder.OnNoteClickListener {
 
+    public static final int NOTE_EDITED_REQUEST = 1;
     private static final String LIST_OF_NOTES_FRAGMENT = "recycler_view_fragment";
 
     @Override
@@ -43,7 +46,7 @@ implements ListOfNotesHolder.OnNoteClickListener{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.mi_add_note) {
-            //TODO: start new activity for note creation
+            createNote();
             return true;
         }
         return false;
@@ -57,5 +60,17 @@ implements ListOfNotesHolder.OnNoteClickListener{
     @Override
     public void onDeleteNoteClick(Note note) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == NOTE_EDITED_REQUEST && resultCode == RESULT_OK) {
+            ((ListOfNotesFragment) getSupportFragmentManager().findFragmentByTag(LIST_OF_NOTES_FRAGMENT)).refresh();
+        }
+    }
+
+    private void createNote() {
+        Intent intent = new Intent(this, DetailsNoteActivity.class);
+        startActivityForResult(intent, NOTE_EDITED_REQUEST);
     }
 }
