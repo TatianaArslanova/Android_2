@@ -1,6 +1,5 @@
 package com.example.ama.android2_lesson01.ui.rv;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,21 +16,13 @@ import com.example.ama.android2_lesson01.model.Note;
 
 import java.util.ArrayList;
 
-public class ListOfNotesFragment extends Fragment {
+public class ListOfNotesFragment extends Fragment implements ListOfNotesHolder.OnNoteClickListener {
     private ArrayList<Note> mData;
     private ListOfNotesHolder.OnNoteClickListener mListener;
     private ListOfNotesAdapter mAdapter;
 
     public static ListOfNotesFragment newInstance() {
         return new ListOfNotesFragment();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof ListOfNotesHolder.OnNoteClickListener) {
-            mListener = (ListOfNotesHolder.OnNoteClickListener) context;
-        }
     }
 
     @Override
@@ -44,6 +35,7 @@ public class ListOfNotesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mListener = this;
         RecyclerView rv = view.findViewById(R.id.rv_list_of_notes);
         rv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mAdapter = new ListOfNotesAdapter(mData, mListener);
@@ -54,5 +46,16 @@ public class ListOfNotesFragment extends Fragment {
         mData = NotesApp.getDataManager().getListOfAllNotes();
         mAdapter.setmData(mData);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onNoteClick(Note note) {
+
+    }
+
+    @Override
+    public void onDeleteNoteClick(Note note) {
+        NotesApp.getDataManager().removeNote(note);
+        refresh();
     }
 }

@@ -29,7 +29,7 @@ public class DetailsNoteActivity extends AppCompatActivity implements DetailsNot
     }
 
     @Override
-    public void sandResult() {
+    public void sendResult() {
         setResult(RESULT_OK);
         finish();
     }

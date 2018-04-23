@@ -7,15 +7,18 @@ import com.example.ama.android2_lesson01.NotesApp;
 import com.example.ama.android2_lesson01.R;
 
 public class Note implements Parcelable {
+    private long mId;
     private String mTitle;
     private String mText;
 
-    public Note(String mTitle, String mText) {
+    public Note(long mId, String mTitle, String mText) {
+        this.mId = mId;
         this.mTitle = mTitle;
         this.mText = mText;
     }
 
     protected Note(Parcel in) {
+        mId = in.readLong();
         mTitle = in.readString();
         mText = in.readString();
     }
@@ -43,6 +46,7 @@ public class Note implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(mId);
         dest.writeString(mTitle);
         dest.writeString(mText);
     }
@@ -55,9 +59,19 @@ public class Note implements Parcelable {
         return mText;
     }
 
+    public long getmId() {
+        return mId;
+    }
+
     public static class NoteBuilder {
+        private long mId = 0;
         private String mTitle = NotesApp.getInstance().getString(R.string.default_note_title);
         private String mText = NotesApp.getInstance().getString(R.string.default_note_text);
+
+        public NoteBuilder id(long mId) {
+            this.mId = mId;
+            return this;
+        }
 
         public NoteBuilder title(String mTitle) {
             if (mTitle != null) {
@@ -74,7 +88,7 @@ public class Note implements Parcelable {
         }
 
         public Note build() {
-            return new Note(mTitle, mText);
+            return new Note(mId, mTitle, mText);
         }
     }
 }

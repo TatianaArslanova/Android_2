@@ -20,10 +20,12 @@ public class NotesDataManager extends NotesDbHelper {
         ArrayList<Note> listOfNotes = new ArrayList<>();
         Cursor allNotes = getAllNotesCursor(NotesTable.TABLE_NAME);
         if (allNotes.moveToFirst()) {
+            int idColomn = allNotes.getColumnIndex(NotesTable._ID);
             int titleColomn = allNotes.getColumnIndex(NotesTable.COLOMN_NAME_TITLE);
             int textColomn = allNotes.getColumnIndex(NotesTable.COLOMN_NAME_TEXT);
             do {
                 listOfNotes.add(Note.builder()
+                        .id(allNotes.getLong(idColomn))
                         .title(allNotes.getString(titleColomn))
                         .text(allNotes.getString(textColomn))
                         .build());
@@ -32,29 +34,20 @@ public class NotesDataManager extends NotesDbHelper {
         return listOfNotes;
     }
 
-    public Note createNote(String name, String text) {
-        Note newNote=Note.builder()
-                .title(name)
-                .text(text)
-                .build();
-        addNoteToDatabase(newNote);
-        return newNote;
+    public void createNote(String title, String text) {
+        ContentValues values = new ContentValues();
+        values.put(NotesTable.COLOMN_NAME_TITLE, title);
+        values.put(NotesTable.COLOMN_NAME_TEXT, text);
+        insertRow(NotesTable.TABLE_NAME, values);
     }
 
-    public boolean removeNote(Note note) {
-        //TODO: remove note
-        return false;
+    public void removeNote(Note note) {
+        String[] args = {String.valueOf(note.getmId())};
+        deleteRow(NotesTable.TABLE_NAME, NotesTable.SQL_WHERE_ID, args);
     }
 
     public boolean updateNote(Note note, String name, String text) {
         //TODO: update note
         return false;
-    }
-
-    private void addNoteToDatabase(Note note) {
-        ContentValues values=new ContentValues();
-        values.put(NotesTable.COLOMN_NAME_TITLE, note.getTitle());
-        values.put(NotesTable.COLOMN_NAME_TEXT, note.getText());
-        insertValues(NotesTable.TABLE_NAME, values);
     }
 }

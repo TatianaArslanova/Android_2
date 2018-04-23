@@ -47,11 +47,11 @@ public class DetailsNoteFragment extends Fragment implements View.OnClickListene
             String title = ((EditText) view.findViewById(R.id.et_note_title)).getText().toString();
             String text = ((EditText) view.findViewById(R.id.et_note_text)).getText().toString();
             NotesApp.getDataManager().createNote(title, text);
-            mListener.sandResult();
+            mListener.sendResult();
         }
     }
 
     public interface OnSaveNoteClickListener {
-        void sandResult();
+        void sendResult();
     }
 }

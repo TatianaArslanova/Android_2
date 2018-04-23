@@ -38,6 +38,10 @@ public class ListOfNotesAdapter extends RecyclerView.Adapter<ListOfNotesHolder> 
         return mData.size();
     }
 
+    public ArrayList<Note> getmData() {
+        return mData;
+    }
+
     public void setmData(ArrayList<Note> mData) {
         this.mData = mData;
     }

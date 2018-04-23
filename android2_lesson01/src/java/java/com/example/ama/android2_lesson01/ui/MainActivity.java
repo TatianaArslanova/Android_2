@@ -8,13 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.ama.android2_lesson01.R;
-import com.example.ama.android2_lesson01.model.Note;
 import com.example.ama.android2_lesson01.ui.details.DetailsNoteActivity;
 import com.example.ama.android2_lesson01.ui.rv.ListOfNotesFragment;
-import com.example.ama.android2_lesson01.ui.rv.ListOfNotesHolder;
 
-public class MainActivity extends AppCompatActivity
-        implements ListOfNotesHolder.OnNoteClickListener {
+public class MainActivity extends AppCompatActivity {
 
     public static final int NOTE_EDITED_REQUEST = 1;
     private static final String LIST_OF_NOTES_FRAGMENT = "recycler_view_fragment";
@@ -50,16 +47,6 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void onNoteClick(Note note) {
-
-    }
-
-    @Override
-    public void onDeleteNoteClick(Note note) {
-
     }
 
     @Override

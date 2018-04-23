@@ -4,4 +4,5 @@
     <string name="default_note_text">Нет текста</string>
     <string name="menu_item_add_note">Добавить заметку</string>
     <string name="btn_save_text">Сохранить</string>
+    <string name="delete_btn_content_description">delete this note</string>
 </resources>

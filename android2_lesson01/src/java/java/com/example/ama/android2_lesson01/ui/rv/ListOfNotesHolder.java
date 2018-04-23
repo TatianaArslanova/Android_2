@@ -16,10 +16,11 @@ public class ListOfNotesHolder extends RecyclerView.ViewHolder
 
     public ListOfNotesHolder(View itemView, ListOfNotesAdapter adapter, OnNoteClickListener listener) {
         super(itemView);
-        mAdapter=adapter;
-        mListener=listener;
+        mAdapter = adapter;
+        mListener = listener;
         mNoteTitle = itemView.findViewById(R.id.tv_card_note_title);
         mNoteText = itemView.findViewById(R.id.tv_card_note_text);
+        itemView.findViewById(R.id.ibtn_delete_note).setOnClickListener(this);
     }
 
     public TextView getNoteTitle() {
@@ -32,7 +33,9 @@ public class ListOfNotesHolder extends RecyclerView.ViewHolder
 
     @Override
     public void onClick(View v) {
-
+        if (v.getId() == R.id.ibtn_delete_note) {
+            mListener.onDeleteNoteClick(mAdapter.getmData().get(getAdapterPosition()));
+        }
     }
 
     public interface OnNoteClickListener {
