@@ -7,12 +7,26 @@ import android.widget.TextView;
 import com.example.ama.android2_lesson01.R;
 import com.example.ama.android2_lesson01.model.Note;
 
+/**
+ * Class of holder for RecyclerView from {@link ListOfNotesFragment}
+ *
+ * @see ListOfNotesFragment
+ */
+
 public class ListOfNotesHolder extends RecyclerView.ViewHolder
         implements View.OnClickListener {
     private TextView mNoteTitle;
     private TextView mNoteText;
     private ListOfNotesAdapter mAdapter;
     private OnNoteClickListener mListener;
+
+    /**
+     * Constructor
+     *
+     * @param itemView view for RecyclerView item
+     * @param adapter  RecyclerView adapter
+     * @param listener listener for tracing clicks on the item
+     */
 
     public ListOfNotesHolder(View itemView, ListOfNotesAdapter adapter, OnNoteClickListener listener) {
         super(itemView);
@@ -24,9 +38,21 @@ public class ListOfNotesHolder extends RecyclerView.ViewHolder
         itemView.findViewById(R.id.cv_note).setOnClickListener(this);
     }
 
+    /**
+     * Get TextView for note title
+     *
+     * @return TextView for note title
+     */
+
     public TextView getNoteTitle() {
         return mNoteTitle;
     }
+
+    /**
+     * Get TextView for note text
+     *
+     * @return TextView for note text
+     */
 
     public TextView getNoteText() {
         return mNoteText;

@@ -11,11 +11,24 @@ import java.util.ArrayList;
 
 import static com.example.ama.android2_lesson01.db.NotesDatabaseContract.NotesTable;
 
+/**
+ * Class for managing notes
+ */
+
 public class NotesDataManager extends NotesDbHelper {
 
     public NotesDataManager(Context context) {
         super(context);
     }
+
+    /**
+     * Get all data from database table described {@link NotesTable}
+     * converts every row to {@link Note} object
+     *
+     * @return ArrayList that contains all existing notes from database
+     * @see NotesTable
+     * @see Note
+     */
 
     public ArrayList<Note> getListOfAllNotes() {
         ArrayList<Note> listOfNotes = new ArrayList<>();
@@ -41,6 +54,14 @@ public class NotesDataManager extends NotesDbHelper {
         return listOfNotes;
     }
 
+    /**
+     * Add new row to database table described {@link NotesTable}
+     *
+     * @param title title of new note
+     * @param text  text of new note
+     * @see NotesTable
+     */
+
     public void createNote(String title, String text) {
         ContentValues values = new ContentValues();
         values.put(NotesTable.COLOMN_NAME_TITLE, title);
@@ -48,15 +69,35 @@ public class NotesDataManager extends NotesDbHelper {
         insertRow(NotesTable.TABLE_NAME, values);
     }
 
+    /**
+     * Remove the row from database table described {@link NotesTable}
+     * corresponding to the given {@link Note}
+     *
+     * @param note the {@link Note} to remove
+     * @see NotesTable
+     * @see Note
+     */
+
     public void removeNote(Note note) {
         String[] args = {String.valueOf(note.getmId())};
         deleteRow(NotesTable.TABLE_NAME, NotesTable.SQL_WHERE_ID, args);
     }
 
-    public void updateNote(Note note, String title, String text) {
+    /**
+     * Update the row from database table described {@link NotesTable}
+     * corresponding to the given {@link Note} with new params
+     *
+     * @param note     the {@link Note} to update
+     * @param newTitle new title for given note
+     * @param newText  new text for given note
+     * @see NotesTable
+     * @see Note
+     */
+
+    public void updateNote(Note note, String newTitle, String newText) {
         ContentValues values = new ContentValues();
-        values.put(NotesTable.COLOMN_NAME_TITLE, title);
-        values.put(NotesTable.COLOMN_NAME_TEXT, text);
+        values.put(NotesTable.COLOMN_NAME_TITLE, newTitle);
+        values.put(NotesTable.COLOMN_NAME_TEXT, newText);
         String[] args = {String.valueOf(note.getmId())};
         updateRow(NotesTable.TABLE_NAME, values, NotesTable.SQL_WHERE_ID, args);
     }

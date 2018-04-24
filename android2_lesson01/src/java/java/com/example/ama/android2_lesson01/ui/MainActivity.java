@@ -14,6 +14,10 @@ import com.example.ama.android2_lesson01.ui.details.DetailsNoteFragment;
 import com.example.ama.android2_lesson01.ui.rv.ListOfNotesFragment;
 import com.example.ama.android2_lesson01.ui.rv.ListOfNotesHolder;
 
+/**
+ * Class of main activity with the list of notes
+ */
+
 public class MainActivity extends AppCompatActivity
         implements ListOfNotesHolder.OnNoteClickListener {
 

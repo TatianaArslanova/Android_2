@@ -17,6 +17,10 @@ import com.example.ama.android2_lesson01.model.Note;
 
 import java.util.ArrayList;
 
+/**
+ * Class of fragment that contains RecyclerView for displaying notes
+ */
+
 public class ListOfNotesFragment extends Fragment {
     private ArrayList<Note> mData;
     private ListOfNotesHolder.OnNoteClickListener mListener;
@@ -50,11 +54,21 @@ public class ListOfNotesFragment extends Fragment {
         rv.setAdapter(mAdapter);
     }
 
+    /**
+     * Get new data from the database and update the list
+     */
+
     public void refresh() {
         mData = NotesApp.getDataManager().getListOfAllNotes();
         mAdapter.setmData(mData);
         mAdapter.notifyDataSetChanged();
     }
+
+    /**
+     * Delete given note from the list
+     *
+     * @param note the note to delete
+     */
 
     public void deleteNote(Note note) {
         NotesApp.getDataManager().removeNote(note);

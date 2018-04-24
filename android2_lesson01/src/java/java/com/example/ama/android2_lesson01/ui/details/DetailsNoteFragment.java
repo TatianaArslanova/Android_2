@@ -14,12 +14,24 @@ import com.example.ama.android2_lesson01.NotesApp;
 import com.example.ama.android2_lesson01.R;
 import com.example.ama.android2_lesson01.model.Note;
 
+/**
+ * Class of fragment for note editing
+ */
+
 public class DetailsNoteFragment extends Fragment implements View.OnClickListener {
 
     public static final String TARGET_NOTE = "target_note";
 
     private OnSaveNoteClickListener mListener;
     private Note mTargetNote;
+
+    /**
+     * Get new instance of {@link DetailsNoteFragment} with given parameter
+     *
+     * @param note note for edit and display in fragment.
+     *             May be NULL, then a new empty note will be created later.
+     * @return new fragment with given note parameter
+     */
 
     public static DetailsNoteFragment newInstance(Note note) {
         DetailsNoteFragment fragment = new DetailsNoteFragment();

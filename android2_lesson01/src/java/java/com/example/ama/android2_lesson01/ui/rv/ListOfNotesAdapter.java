@@ -11,6 +11,12 @@ import com.example.ama.android2_lesson01.model.Note;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter class for RecyclerView of {@link ListOfNotesFragment}
+ *
+ * @see ListOfNotesFragment
+ */
+
 public class ListOfNotesAdapter extends RecyclerView.Adapter<ListOfNotesHolder> {
     private ArrayList<Note> mData;
     private ListOfNotesHolder.OnNoteClickListener mListener;
@@ -38,9 +44,22 @@ public class ListOfNotesAdapter extends RecyclerView.Adapter<ListOfNotesHolder> 
         return mData.size();
     }
 
+    /**
+     * Get ArrayList of all displaying {@link Note} objects
+     *
+     * @return ArrayList of notes
+     * @see Note
+     */
+
     public ArrayList<Note> getmData() {
         return mData;
     }
+
+    /**
+     * Set ArrayList of all displaying {@link Note} objects
+     *
+     * @param mData ArrayList of notes
+     */
 
     public void setmData(ArrayList<Note> mData) {
         this.mData = mData;

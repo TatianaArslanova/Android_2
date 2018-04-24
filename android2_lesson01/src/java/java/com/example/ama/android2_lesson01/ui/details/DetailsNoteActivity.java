@@ -9,6 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.ama.android2_lesson01.R;
 import com.example.ama.android2_lesson01.model.Note;
 
+/**
+ * Class of activity for note editing
+ */
+
 public class DetailsNoteActivity extends AppCompatActivity implements DetailsNoteFragment.OnSaveNoteClickListener {
     private static final String DETAILS_NOTE_FRAGMENT = "details_note_fragment";
 
@@ -20,11 +24,11 @@ public class DetailsNoteActivity extends AppCompatActivity implements DetailsNot
     }
 
     private void initFragments() {
-        Note targetNote=null;
+        Note targetNote = null;
         Intent intent = getIntent();
-        Bundle extras=intent.getExtras();
-        if (extras!=null){
-            targetNote=extras.getParcelable(DetailsNoteFragment.TARGET_NOTE);
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            targetNote = extras.getParcelable(DetailsNoteFragment.TARGET_NOTE);
         }
         FragmentManager mFragmentManager = getSupportFragmentManager();
         mFragmentManager.beginTransaction()
