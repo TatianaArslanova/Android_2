@@ -74,14 +74,14 @@ public class Note implements Parcelable {
         }
 
         public NoteBuilder title(String mTitle) {
-            if (mTitle != null) {
+            if (mTitle != null && !mTitle.equals("")) {
                 this.mTitle = mTitle;
             }
             return this;
         }
 
         public NoteBuilder text(String mText) {
-            if (mText != null) {
+            if (mText != null && !mText.equals("")) {
                 this.mText = mText;
             }
             return this;
