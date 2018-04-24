@@ -46,8 +46,11 @@ public class NotesDataManager extends NotesDbHelper {
         deleteRow(NotesTable.TABLE_NAME, NotesTable.SQL_WHERE_ID, args);
     }
 
-    public boolean updateNote(Note note, String name, String text) {
-        //TODO: update note
-        return false;
+    public void updateNote(Note note, String title, String text) {
+        ContentValues values= new ContentValues();
+        values.put(NotesTable.COLOMN_NAME_TITLE, title);
+        values.put(NotesTable.COLOMN_NAME_TEXT, text);
+        String [] args={String.valueOf(note.getmId())};
+        updateRow(NotesTable.TABLE_NAME, values, NotesTable.SQL_WHERE_ID, args);
     }
 }

@@ -12,13 +12,21 @@ import android.widget.EditText;
 
 import com.example.ama.android2_lesson01.NotesApp;
 import com.example.ama.android2_lesson01.R;
+import com.example.ama.android2_lesson01.model.Note;
 
 public class DetailsNoteFragment extends Fragment implements View.OnClickListener {
 
-    private OnSaveNoteClickListener mListener;
+    public static final String TARGET_NOTE = "target_note";
 
-    public static DetailsNoteFragment newInstance() {
-        return new DetailsNoteFragment();
+    private OnSaveNoteClickListener mListener;
+    private Note mTargetNote;
+
+    public static DetailsNoteFragment newInstance(Note note) {
+        DetailsNoteFragment fragment = new DetailsNoteFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(TARGET_NOTE, note);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -38,6 +46,15 @@ public class DetailsNoteFragment extends Fragment implements View.OnClickListene
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.btn_save).setOnClickListener(this);
+        Bundle args = getArguments();
+        if (args != null) {
+            mTargetNote = args.getParcelable(TARGET_NOTE);
+            if (mTargetNote != null) {
+                ((EditText) view.findViewById(R.id.et_note_title)).setText(mTargetNote.getTitle());
+                ((EditText) view.findViewById(R.id.et_note_text)).setText(mTargetNote.getText());
+            }
+        }
+
     }
 
     @Override
@@ -46,7 +63,11 @@ public class DetailsNoteFragment extends Fragment implements View.OnClickListene
         if (view != null) {
             String title = ((EditText) view.findViewById(R.id.et_note_title)).getText().toString();
             String text = ((EditText) view.findViewById(R.id.et_note_text)).getText().toString();
-            NotesApp.getDataManager().createNote(title, text);
+            if (mTargetNote == null) {
+                NotesApp.getDataManager().createNote(title, text);
+            } else {
+                NotesApp.getDataManager().updateNote(mTargetNote, title, text);
+            }
             mListener.sendResult();
         }
     }
