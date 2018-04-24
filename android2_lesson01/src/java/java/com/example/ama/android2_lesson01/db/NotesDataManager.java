@@ -3,6 +3,7 @@ package com.example.ama.android2_lesson01.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 
 import com.example.ama.android2_lesson01.model.Note;
 
@@ -19,17 +20,23 @@ public class NotesDataManager extends NotesDbHelper {
     public ArrayList<Note> getListOfAllNotes() {
         ArrayList<Note> listOfNotes = new ArrayList<>();
         Cursor allNotes = getAllNotesCursor(NotesTable.TABLE_NAME);
-        if (allNotes.moveToFirst()) {
-            int idColomn = allNotes.getColumnIndex(NotesTable._ID);
-            int titleColomn = allNotes.getColumnIndex(NotesTable.COLOMN_NAME_TITLE);
-            int textColomn = allNotes.getColumnIndex(NotesTable.COLOMN_NAME_TEXT);
-            do {
-                listOfNotes.add(Note.builder()
-                        .id(allNotes.getLong(idColomn))
-                        .title(allNotes.getString(titleColomn))
-                        .text(allNotes.getString(textColomn))
-                        .build());
-            } while (allNotes.moveToNext());
+        try {
+            if (allNotes.moveToFirst()) {
+                int idColomn = allNotes.getColumnIndex(NotesTable._ID);
+                int titleColomn = allNotes.getColumnIndex(NotesTable.COLOMN_NAME_TITLE);
+                int textColomn = allNotes.getColumnIndex(NotesTable.COLOMN_NAME_TEXT);
+                do {
+                    listOfNotes.add(Note.builder()
+                            .id(allNotes.getLong(idColomn))
+                            .title(allNotes.getString(titleColomn))
+                            .text(allNotes.getString(textColomn))
+                            .build());
+                } while (allNotes.moveToNext());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            allNotes.close();
         }
         return listOfNotes;
     }
@@ -47,10 +54,10 @@ public class NotesDataManager extends NotesDbHelper {
     }
 
     public void updateNote(Note note, String title, String text) {
-        ContentValues values= new ContentValues();
+        ContentValues values = new ContentValues();
         values.put(NotesTable.COLOMN_NAME_TITLE, title);
         values.put(NotesTable.COLOMN_NAME_TEXT, text);
-        String [] args={String.valueOf(note.getmId())};
+        String[] args = {String.valueOf(note.getmId())};
         updateRow(NotesTable.TABLE_NAME, values, NotesTable.SQL_WHERE_ID, args);
     }
 }

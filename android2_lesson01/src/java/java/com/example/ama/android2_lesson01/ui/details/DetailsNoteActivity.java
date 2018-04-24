@@ -10,7 +10,7 @@ import com.example.ama.android2_lesson01.R;
 import com.example.ama.android2_lesson01.model.Note;
 
 public class DetailsNoteActivity extends AppCompatActivity implements DetailsNoteFragment.OnSaveNoteClickListener {
-    public static final String DETAILS_NOTE_FRAGMENT = "details_note_fragment";
+    private static final String DETAILS_NOTE_FRAGMENT = "details_note_fragment";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

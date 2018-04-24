@@ -17,7 +17,7 @@ import com.example.ama.android2_lesson01.ui.rv.ListOfNotesHolder;
 public class MainActivity extends AppCompatActivity
         implements ListOfNotesHolder.OnNoteClickListener {
 
-    public static final int NOTE_EDITED_REQUEST = 1;
+    private static final int NOTE_EDITED_REQUEST = 1;
     private static final String LIST_OF_NOTES_FRAGMENT = "recycler_view_fragment";
 
     private FragmentManager mFragmentManager;

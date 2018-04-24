@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import java.util.Arrays;
 
 import static com.example.ama.android2_lesson01.db.NotesDatabaseContract.NotesTable;
 
@@ -39,7 +36,6 @@ public class NotesDbHelper extends SQLiteOpenHelper {
     }
 
     public void deleteRow(String tableName, String whereSql, String[] args) {
-        Log.d("DeleteRow", tableName + " " + whereSql + " " + Arrays.toString(args));
         getWritableDatabase().delete(tableName, whereSql, args);
     }
 
