@@ -13,11 +13,12 @@ import kotlinx.android.synthetic.main.fragment_list_of_notes.*
 
 class ListOfNotesFragment : Fragment() {
 
-    private lateinit var mData: ArrayList<Note>
-
     companion object {
         fun newInstance(): ListOfNotesFragment = ListOfNotesFragment()
     }
+
+    private lateinit var mData: ArrayList<Note>
+    private lateinit var mAdapter: ListOfNotesAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_list_of_notes, container, false)
@@ -25,8 +26,15 @@ class ListOfNotesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mData=NotesApp.dataManager.getListOfAllNotes()
+        mData = NotesApp.dataManager.getListOfAllNotes()
         rv_list_of_notes.layoutManager = GridLayoutManager(context, 2)
-        rv_list_of_notes.adapter = ListOfNotesAdapter(mData)
+        mAdapter = ListOfNotesAdapter(mData)
+        rv_list_of_notes.adapter = mAdapter
+    }
+
+    fun refresh() {
+        mData = NotesApp.dataManager.getListOfAllNotes()
+        mAdapter.setmData(mData)
+        mAdapter.notifyDataSetChanged()
     }
 }

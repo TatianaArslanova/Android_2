@@ -19,4 +19,8 @@ class ListOfNotesAdapter(private var mData: ArrayList<Note>) : RecyclerView.Adap
         holder.getNoteTitle().text = mData[position].title
         holder.getNoteText().text = mData[position].text
     }
+
+    fun setmData(mData: ArrayList<Note>) {
+        this.mData = mData
+    }
 }

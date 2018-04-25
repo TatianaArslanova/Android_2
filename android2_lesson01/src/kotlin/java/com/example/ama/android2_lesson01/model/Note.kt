@@ -5,9 +5,9 @@ import android.os.Parcelable
 import com.example.ama.android2_lesson01.NotesApp
 import com.example.ama.android2_lesson01.R
 
-class Note(val id: Long = 0,
-           val title: String = NotesApp.instance.resources.getString(R.string.default_note_title),
-           val text: String = NotesApp.instance.resources.getString(R.string.default_note_text))
+class Note(val id: Long,
+           val title: String,
+           val text: String)
     : Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -27,6 +27,8 @@ class Note(val id: Long = 0,
     }
 
     companion object CREATOR : Parcelable.Creator<Note> {
+        fun builder(): NoteBuilder = NoteBuilder()
+
         override fun createFromParcel(parcel: Parcel): Note {
             return Note(parcel)
         }
@@ -36,4 +38,34 @@ class Note(val id: Long = 0,
         }
     }
 
+    class NoteBuilder {
+        var id: Long = 0
+            private set
+        var title = NotesApp.instance.resources.getString(R.string.default_note_title)
+            private set
+        var text = NotesApp.instance.resources.getString(R.string.default_note_text)
+            private set
+
+        fun id(id: Long): NoteBuilder {
+            this.id = id
+            return this
+        }
+
+        fun title(title: String): NoteBuilder {
+            if (title != "") {
+                this.title = title
+            }
+            return this
+        }
+
+        fun text(text: String): NoteBuilder {
+            if (text != "") {
+                this.text = text
+            }
+            return this
+        }
+
+        fun build(): Note = Note(id, title, text)
+
+    }
 }
