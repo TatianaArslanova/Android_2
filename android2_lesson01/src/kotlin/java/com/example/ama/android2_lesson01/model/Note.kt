@@ -2,8 +2,14 @@ package com.example.ama.android2_lesson01.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.example.ama.android2_lesson01.NotesApp
+import com.example.ama.android2_lesson01.R
 
-class Note(val id: Long, val title: String, val text: String) : Parcelable {
+class Note(val id: Long = 0,
+           val title: String = NotesApp.instance.resources.getString(R.string.default_note_title),
+           val text: String = NotesApp.instance.resources.getString(R.string.default_note_text))
+    : Parcelable {
+
     constructor(parcel: Parcel) : this(
             parcel.readLong(),
             parcel.readString(),
