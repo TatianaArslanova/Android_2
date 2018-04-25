@@ -13,6 +13,6 @@ class NotesApp : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        dataManager=NotesDataManager()
+        dataManager=NotesDataManager(applicationContext)
     }
 }
