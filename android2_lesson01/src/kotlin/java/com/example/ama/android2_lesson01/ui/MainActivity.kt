@@ -13,6 +13,10 @@ import com.example.ama.android2_lesson01.ui.details.DetailsNoteFragment
 import com.example.ama.android2_lesson01.ui.rv.ListOfNotesFragment
 import com.example.ama.android2_lesson01.ui.rv.ListOfNotesHolder
 
+/**
+ * Class of main activity with the list of notes
+ */
+
 class MainActivity : AppCompatActivity(),
         ListOfNotesHolder.OnNoteClickListener {
 
@@ -64,7 +68,7 @@ class MainActivity : AppCompatActivity(),
         (supportFragmentManager.findFragmentByTag(LIST_OF_NOTES_FRAGMENT) as ListOfNotesFragment).deleteNote(note)
     }
 
-    fun openEditNote(note: Note?) {
+    private fun openEditNote(note: Note?) {
         val intent = Intent(this, DetailsNoteActivity::class.java)
         intent.putExtra(DetailsNoteFragment.TARGET_NOTE, note)
         startActivityForResult(intent, NOTE_EDITED_REQUEST)

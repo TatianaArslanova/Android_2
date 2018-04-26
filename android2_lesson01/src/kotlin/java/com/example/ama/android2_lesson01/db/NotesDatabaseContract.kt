@@ -1,6 +1,9 @@
 package com.example.ama.android2_lesson01.db
 
-import android.provider.BaseColumns
+/**
+ * Object that contains constants for table
+ * textnotes in database
+ */
 
 object NotesTable {
     const val TABLE_NAME = "textnotes"
@@ -13,6 +16,6 @@ object NotesTable {
                     COLOMN_NAME_TITLE + " TEXT, " +
                     COLOMN_NAME_TEXT + " TEXT)"
     const val SQL_DROP_TABLE =
-            "DROP TABLE IF EXISTS " + TABLE_NAME
-    const val SQL_WHERE_ID = COLOMN_NAME_ID + " =?"
+            "DROP TABLE IF EXISTS $TABLE_NAME"
+    const val SQL_WHERE_ID = "$COLOMN_NAME_ID =?"
 }

@@ -11,11 +11,23 @@ import com.example.ama.android2_lesson01.R
 import com.example.ama.android2_lesson01.model.Note
 import kotlinx.android.synthetic.main.fragment_details_note.*
 
+/**
+ * Class of fragment for note editing
+ */
+
 class DetailsNoteFragment : Fragment(),
         View.OnClickListener {
 
     companion object {
         const val TARGET_NOTE = "target_note"
+
+        /**
+         * Get new instance of [DetailsNoteFragment] with given parameter
+         *
+         * @param note note for edit and display in fragment.
+         *             May be NULL, then a new empty note will be created later.
+         * @return new fragment with given note parameter
+         */
 
         fun newInstance(note: Note?): DetailsNoteFragment {
             val fragment = DetailsNoteFragment()

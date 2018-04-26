@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity
 import com.example.ama.android2_lesson01.R
 import com.example.ama.android2_lesson01.model.Note
 
+/**
+ * Class of activity for note editing
+ */
+
 class DetailsNoteActivity : AppCompatActivity(),
         DetailsNoteFragment.OnSaveNoteClickListener {
 

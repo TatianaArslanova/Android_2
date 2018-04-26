@@ -12,6 +12,10 @@ import com.example.ama.android2_lesson01.R
 import com.example.ama.android2_lesson01.model.Note
 import kotlinx.android.synthetic.main.fragment_list_of_notes.*
 
+/**
+ * Class of fragment that contains RecyclerView for displaying notes
+ */
+
 class ListOfNotesFragment : Fragment() {
 
     companion object {
@@ -40,13 +44,23 @@ class ListOfNotesFragment : Fragment() {
         rv_list_of_notes.adapter = mAdapter
     }
 
+    /**
+     * Get new data from the database and update the list
+     */
+
     fun refresh() {
         mData = NotesApp.dataManager.getListOfAllNotes()
         mAdapter.setmData(mData)
         mAdapter.notifyDataSetChanged()
     }
 
-    fun deleteNote(note: Note){
+    /**
+     * Delete given note from the list
+     *
+     * @param note the note to delete
+     */
+
+    fun deleteNote(note: Note) {
         NotesApp.dataManager.removeNote(note)
         refresh()
     }

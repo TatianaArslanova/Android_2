@@ -6,6 +6,10 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
+/**
+ * Class for for working with the database
+ */
+
 open class NotesDbHelper(context: Context)
     : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -14,9 +18,22 @@ open class NotesDbHelper(context: Context)
         const val DATABASE_VERSION = 2
     }
 
+    /**
+     * Calls the first time when the database created.
+     *
+     * @param db the database
+     */
+
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(NotesTable.SQL_CREATE_TABLE)
     }
+
+    /** Calls when database version updated
+     *
+     * @param db the database
+     * @param oldVersion old version of database
+     * @param newVersion new version of database
+     */
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL(NotesTable.SQL_DROP_TABLE)
@@ -30,11 +47,11 @@ open class NotesDbHelper(context: Context)
         writableDatabase.insert(tableName, null, values)
     }
 
-    fun deleteRow(tableName: String, whereSql: String, args: Array<String>){
+    fun deleteRow(tableName: String, whereSql: String, args: Array<String>) {
         writableDatabase.delete(tableName, whereSql, args)
     }
 
-    fun updateRow(tableName: String, values: ContentValues, whereSql: String, args: Array<String>){
+    fun updateRow(tableName: String, values: ContentValues, whereSql: String, args: Array<String>) {
         writableDatabase.update(tableName, values, whereSql, args)
     }
 }

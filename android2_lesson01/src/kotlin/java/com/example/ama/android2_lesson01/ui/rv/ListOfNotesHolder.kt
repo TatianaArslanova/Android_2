@@ -8,6 +8,12 @@ import android.widget.TextView
 import com.example.ama.android2_lesson01.model.Note
 import kotlinx.android.synthetic.main.item_rv.view.*
 
+/**
+ * Class of holder for RecyclerView from [ListOfNotesFragment]
+ *
+ * @see ListOfNotesFragment
+ */
+
 class ListOfNotesHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun getNoteTitle(): TextView = itemView.tv_card_note_title
     fun getNoteText(): TextView = itemView.tv_card_note_text

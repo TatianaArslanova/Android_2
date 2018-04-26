@@ -6,6 +6,12 @@ import android.view.ViewGroup
 import com.example.ama.android2_lesson01.R
 import com.example.ama.android2_lesson01.model.Note
 
+/**
+ * Adapter class for RecyclerView of [ListOfNotesFragment]
+ *
+ * @see ListOfNotesFragment
+ */
+
 class ListOfNotesAdapter(private var mData: ArrayList<Note>,
                          private val listener: ListOfNotesHolder.OnNoteClickListener)
     : RecyclerView.Adapter<ListOfNotesHolder>() {
@@ -23,6 +29,12 @@ class ListOfNotesAdapter(private var mData: ArrayList<Note>,
         holder.getBtnDelete().setOnClickListener { listener.onDeleteNoteClick(mData[position]) }
         holder.getNoteView().setOnClickListener { listener.onNoteClick(mData[position]) }
     }
+
+    /**
+     * Set ArrayList of all displaying [Note] objects
+     *
+     * @param mData ArrayList of notes
+     */
 
     fun setmData(mData: ArrayList<Note>) {
         this.mData = mData
