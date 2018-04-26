@@ -6,7 +6,9 @@ import android.view.ViewGroup
 import com.example.ama.android2_lesson01.R
 import com.example.ama.android2_lesson01.model.Note
 
-class ListOfNotesAdapter(private var mData: ArrayList<Note>) : RecyclerView.Adapter<ListOfNotesHolder>() {
+class ListOfNotesAdapter(private var mData: ArrayList<Note>,
+                         private val listener: ListOfNotesHolder.OnNoteClickListener)
+    : RecyclerView.Adapter<ListOfNotesHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListOfNotesHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_rv, parent, false)
@@ -18,6 +20,8 @@ class ListOfNotesAdapter(private var mData: ArrayList<Note>) : RecyclerView.Adap
     override fun onBindViewHolder(holder: ListOfNotesHolder, position: Int) {
         holder.getNoteTitle().text = mData[position].title
         holder.getNoteText().text = mData[position].text
+        holder.getBtnDelete().setOnClickListener { listener.onDeleteNoteClick(mData[position]) }
+        holder.getNoteView().setOnClickListener { listener.onNoteClick(mData[position]) }
     }
 
     fun setmData(mData: ArrayList<Note>) {

@@ -11,8 +11,10 @@ import com.example.ama.android2_lesson01.model.Note
 import com.example.ama.android2_lesson01.ui.details.DetailsNoteActivity
 import com.example.ama.android2_lesson01.ui.details.DetailsNoteFragment
 import com.example.ama.android2_lesson01.ui.rv.ListOfNotesFragment
+import com.example.ama.android2_lesson01.ui.rv.ListOfNotesHolder
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),
+        ListOfNotesHolder.OnNoteClickListener {
 
     companion object {
         const val LIST_OF_NOTES_FRAGMENT = "list_of_notes_fragment"
@@ -54,11 +56,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onNoteClick(note: Note) {
+        //TODO: edit this note
+    }
+
+    override fun onDeleteNoteClick(note: Note) {
+        (supportFragmentManager.findFragmentByTag(LIST_OF_NOTES_FRAGMENT) as ListOfNotesFragment).deleteNote(note)
+    }
+
     fun openEditNote(note: Note?) {
         val intent = Intent(this, DetailsNoteActivity::class.java)
         intent.putExtra(DetailsNoteFragment.TARGET_NOTE, note)
         startActivityForResult(intent, NOTE_EDITED_REQUEST)
     }
-
-
 }

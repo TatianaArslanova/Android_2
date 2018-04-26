@@ -39,7 +39,8 @@ class NotesDataManager(context: Context) : NotesDbHelper(context) {
     }
 
     fun removeNote(note: Note) {
-        //TODO: remove note
+        val args = arrayOf(note.id.toString())
+        deleteRow(NotesTable.TABLE_NAME, NotesTable.SQL_WHERE_ID, args)
     }
 
     fun updateNote(note: Note, newTitle: String, newText: String) {

@@ -1,5 +1,6 @@
 package com.example.ama.android2_lesson01.ui.rv
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -19,6 +20,13 @@ class ListOfNotesFragment : Fragment() {
 
     private lateinit var mData: ArrayList<Note>
     private lateinit var mAdapter: ListOfNotesAdapter
+    private lateinit var mListener: ListOfNotesHolder.OnNoteClickListener
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is ListOfNotesHolder.OnNoteClickListener)
+            mListener = context
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_list_of_notes, container, false)
@@ -28,7 +36,7 @@ class ListOfNotesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mData = NotesApp.dataManager.getListOfAllNotes()
         rv_list_of_notes.layoutManager = GridLayoutManager(context, 2)
-        mAdapter = ListOfNotesAdapter(mData)
+        mAdapter = ListOfNotesAdapter(mData, mListener)
         rv_list_of_notes.adapter = mAdapter
     }
 
@@ -36,5 +44,10 @@ class ListOfNotesFragment : Fragment() {
         mData = NotesApp.dataManager.getListOfAllNotes()
         mAdapter.setmData(mData)
         mAdapter.notifyDataSetChanged()
+    }
+
+    fun deleteNote(note: Note){
+        NotesApp.dataManager.removeNote(note)
+        refresh()
     }
 }
