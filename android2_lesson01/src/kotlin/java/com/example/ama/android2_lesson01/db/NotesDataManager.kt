@@ -44,6 +44,10 @@ class NotesDataManager(context: Context) : NotesDbHelper(context) {
     }
 
     fun updateNote(note: Note, newTitle: String, newText: String) {
-        //TODO: update note
+        val values = ContentValues()
+        values.put(NotesTable.COLOMN_NAME_TITLE, newTitle)
+        values.put(NotesTable.COLOMN_NAME_TEXT, newText)
+        val args = arrayOf(note.id.toString())
+        updateRow(NotesTable.TABLE_NAME, values, NotesTable.SQL_WHERE_ID, args)
     }
 }

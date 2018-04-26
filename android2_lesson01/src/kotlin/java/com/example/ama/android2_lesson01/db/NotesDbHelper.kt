@@ -33,4 +33,8 @@ open class NotesDbHelper(context: Context)
     fun deleteRow(tableName: String, whereSql: String, args: Array<String>){
         writableDatabase.delete(tableName, whereSql, args)
     }
+
+    fun updateRow(tableName: String, values: ContentValues, whereSql: String, args: Array<String>){
+        writableDatabase.update(tableName, values, whereSql, args)
+    }
 }

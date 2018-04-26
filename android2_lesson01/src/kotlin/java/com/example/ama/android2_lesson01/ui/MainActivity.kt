@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onNoteClick(note: Note) {
-        //TODO: edit this note
+        openEditNote(note)
     }
 
     override fun onDeleteNoteClick(note: Note) {
