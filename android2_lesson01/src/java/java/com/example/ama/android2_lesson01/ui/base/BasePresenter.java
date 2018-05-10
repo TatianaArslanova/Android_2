@@ -1,4 +1,4 @@
-package com.example.ama.android2_lesson01.base;
+package com.example.ama.android2_lesson01.ui.base;
 
 import com.example.ama.android2_lesson01.model.Note;
 

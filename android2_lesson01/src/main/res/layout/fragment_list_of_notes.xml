@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rv_list_of_notes"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:itemCount="20"
-    tools:layoutManager="GridLayoutManager"
-    tools:listitem="@layout/item_rv"
-    tools:spanCount="2">
+    android:layout_height="match_parent">
 
-</android.support.v7.widget.RecyclerView>
+    <TextView
+        android:id="@+id/tv_no_notes_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/tv_no_notes"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:visibility="invisible" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_list_of_notes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:itemCount="20"
+        tools:layoutManager="GridLayoutManager"
+        tools:listitem="@layout/item_rv"
+        tools:spanCount="2" />
+
+</FrameLayout>

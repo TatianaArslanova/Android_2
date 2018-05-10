@@ -1,28 +1,24 @@
 package com.example.ama.android2_lesson01.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.example.ama.android2_lesson01.R;
 import com.example.ama.android2_lesson01.model.Note;
-import com.example.ama.android2_lesson01.ui.details.DetailsNoteActivity;
 import com.example.ama.android2_lesson01.ui.details.DetailsNoteFragment;
 import com.example.ama.android2_lesson01.ui.rv.ListOfNotesFragment;
-import com.example.ama.android2_lesson01.ui.rv.ListOfNotesHolder;
 
 /**
- * Class of main activity with the list of notes
+ * Class of list_of_notes_menu activity with the list of notes
  */
 
 public class MainActivity extends AppCompatActivity
-        implements ListOfNotesHolder.OnNoteClickListener {
+        implements ListOfNotesFragment.OnDetailsClickListener,
+        DetailsNoteFragment.OnFinishEditClickListener {
 
-    private static final int NOTE_EDITED_REQUEST = 1;
-    private static final String LIST_OF_NOTES_FRAGMENT = "recycler_view_fragment";
+    private static final String LIST_OF_NOTES_FRAGMENT = "list_of_notes_fragment";
+    private static final String DETAILS_NOTE_FRAGMENT = "details_note_fragment";
 
     private FragmentManager mFragmentManager;
 
@@ -42,47 +38,28 @@ public class MainActivity extends AppCompatActivity
                                 mFragmentManager.findFragmentByTag(LIST_OF_NOTES_FRAGMENT),
                         LIST_OF_NOTES_FRAGMENT)
                 .commit();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.mi_add_note) {
-            openEditNote(null);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == NOTE_EDITED_REQUEST && resultCode == RESULT_OK) {
-            ((ListOfNotesFragment) mFragmentManager
-                    .findFragmentByTag(LIST_OF_NOTES_FRAGMENT)).refresh();
+        if (mFragmentManager.findFragmentByTag(DETAILS_NOTE_FRAGMENT) != null) {
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.fl_container_list_of_notes,
+                            mFragmentManager.findFragmentByTag(DETAILS_NOTE_FRAGMENT),
+                            DETAILS_NOTE_FRAGMENT)
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 
     @Override
-    public void onNoteClick(Note note) {
-        openEditNote(note);
+    public void openEditNote(Note note) {
+        mFragmentManager.beginTransaction()
+                .replace(R.id.fl_container_list_of_notes,
+                        DetailsNoteFragment.newInstance(note),
+                        DETAILS_NOTE_FRAGMENT)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
-    public void onDeleteNoteClick(Note note) {
-        if (note != null) {
-            ((ListOfNotesFragment) mFragmentManager
-                    .findFragmentByTag(LIST_OF_NOTES_FRAGMENT)).deleteNote(note);
-        }
-    }
-
-    private void openEditNote(Note note) {
-        Intent intent = new Intent(this, DetailsNoteActivity.class);
-        intent.putExtra(DetailsNoteFragment.TARGET_NOTE, note);
-        startActivityForResult(intent, NOTE_EDITED_REQUEST);
+    public void closeEditNote() {
+        mFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 }

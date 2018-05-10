@@ -6,24 +6,35 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.example.ama.android2_lesson01.NotesApp;
 import com.example.ama.android2_lesson01.R;
+import com.example.ama.android2_lesson01.ui.base.Presenter;
 import com.example.ama.android2_lesson01.model.Note;
+import com.example.ama.android2_lesson01.ui.details.mvp.DetailsNotePresenter;
+import com.example.ama.android2_lesson01.ui.details.mvp.DetailsNoteView;
 
 /**
  * Class of fragment for note editing
  */
 
-public class DetailsNoteFragment extends Fragment implements View.OnClickListener {
+public class DetailsNoteFragment extends Fragment
+        implements View.OnClickListener,
+        DetailsNoteView {
 
-    public static final String TARGET_NOTE = "target_note";
+    private static final String TARGET_NOTE = "target_note";
 
-    private OnSaveNoteClickListener mListener;
+    private OnFinishEditClickListener mListener;
+    private Presenter<DetailsNoteView> mPresenter;
     private Note mTargetNote;
+
+    private EditText mEtTitle;
+    private EditText mEtText;
 
     /**
      * Get new instance of {@link DetailsNoteFragment} with given parameter
@@ -44,9 +55,15 @@ public class DetailsNoteFragment extends Fragment implements View.OnClickListene
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnSaveNoteClickListener) {
-            mListener = (OnSaveNoteClickListener) context;
+        if (context instanceof OnFinishEditClickListener) {
+            mListener = (OnFinishEditClickListener) context;
         }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -58,33 +75,61 @@ public class DetailsNoteFragment extends Fragment implements View.OnClickListene
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.btn_save).setOnClickListener(this);
-        Bundle args = getArguments();
-        if (args != null) {
-            mTargetNote = args.getParcelable(TARGET_NOTE);
+        mEtTitle = view.findViewById(R.id.et_note_title);
+        mEtText = view.findViewById(R.id.et_note_text);
+        if (getArguments() != null) {
+            mTargetNote = getArguments().getParcelable(TARGET_NOTE);
             if (mTargetNote != null) {
-                ((EditText) view.findViewById(R.id.et_note_title)).setText(mTargetNote.getTitle());
-                ((EditText) view.findViewById(R.id.et_note_text)).setText(mTargetNote.getText());
+                mEtTitle.setText(mTargetNote.getTitle());
+                mEtText.setText(mTargetNote.getText());
             }
         }
+        mPresenter = new DetailsNotePresenter<>();
+        mPresenter.attachView(this);
+    }
 
+    @Override
+    public void onDestroyView() {
+        mPresenter.detachView();
+        mPresenter = null;
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.details_note_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.mi_remove_note) {
+            mPresenter.deleteNote(mTargetNote);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void onClick(View v) {
-        View view = getView();
-        if (view != null) {
-            String title = ((EditText) view.findViewById(R.id.et_note_title)).getText().toString();
-            String text = ((EditText) view.findViewById(R.id.et_note_text)).getText().toString();
+        if (v.getId() == R.id.btn_save) {
+            String title = mEtTitle.getText().toString();
+            String text = mEtText.getText().toString();
             if (mTargetNote == null) {
-                NotesApp.getDataManager().createNote(title, text);
+                mPresenter.createNote(title, text);
             } else {
-                NotesApp.getDataManager().updateNote(mTargetNote, title, text);
+                mPresenter.updateNote(mTargetNote, title, text);
             }
-            mListener.sendResult();
+            mListener.closeEditNote();
         }
     }
 
-    public interface OnSaveNoteClickListener {
-        void sendResult();
+    @Override
+    public void finishEditing() {
+        mListener.closeEditNote();
+    }
+
+    public interface OnFinishEditClickListener {
+        void closeEditNote();
     }
 }

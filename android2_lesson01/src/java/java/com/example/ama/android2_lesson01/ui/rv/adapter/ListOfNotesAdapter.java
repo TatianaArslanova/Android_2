@@ -1,4 +1,4 @@
-package com.example.ama.android2_lesson01.ui.rv;
+package com.example.ama.android2_lesson01.ui.rv.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.example.ama.android2_lesson01.R;
 import com.example.ama.android2_lesson01.model.Note;
+import com.example.ama.android2_lesson01.ui.rv.ListOfNotesFragment;
 
 import java.util.ArrayList;
 
@@ -18,11 +19,10 @@ import java.util.ArrayList;
  */
 
 public class ListOfNotesAdapter extends RecyclerView.Adapter<ListOfNotesHolder> {
-    private ArrayList<Note> mData;
+    private ArrayList<Note> mData = new ArrayList<>();
     private ListOfNotesHolder.OnNoteClickListener mListener;
 
-    public ListOfNotesAdapter(ArrayList<Note> mData, ListOfNotesHolder.OnNoteClickListener listener) {
-        this.mData = mData;
+    public ListOfNotesAdapter(ListOfNotesHolder.OnNoteClickListener listener) {
         mListener = listener;
     }
 
@@ -56,12 +56,13 @@ public class ListOfNotesAdapter extends RecyclerView.Adapter<ListOfNotesHolder> 
     }
 
     /**
-     * Set ArrayList of all displaying {@link Note} objects
+     * Set ArrayList of all displaying {@link Note} objects and notify adapter about changes
      *
      * @param mData ArrayList of notes
      */
 
     public void setmData(ArrayList<Note> mData) {
         this.mData = mData;
+        notifyDataSetChanged();
     }
 }

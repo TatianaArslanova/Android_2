@@ -5,4 +5,6 @@
     <string name="menu_item_add_note">Добавить заметку</string>
     <string name="btn_save_text">Сохранить</string>
     <string name="delete_btn_content_description">delete this note</string>
+    <string name="tv_no_notes">Заметок нет</string>
+    <string name="menu_item_delete_this_note">Удалить текущую заметку</string>
 </resources>

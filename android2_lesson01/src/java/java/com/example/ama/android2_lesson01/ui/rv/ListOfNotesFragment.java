@@ -8,12 +8,20 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.example.ama.android2_lesson01.NotesApp;
 import com.example.ama.android2_lesson01.R;
+import com.example.ama.android2_lesson01.ui.base.Presenter;
 import com.example.ama.android2_lesson01.model.Note;
+import com.example.ama.android2_lesson01.ui.rv.adapter.ListOfNotesAdapter;
+import com.example.ama.android2_lesson01.ui.rv.adapter.ListOfNotesHolder;
+import com.example.ama.android2_lesson01.ui.rv.mvp.ListOfNotesPresenter;
+import com.example.ama.android2_lesson01.ui.rv.mvp.ListOfNotesView;
 
 import java.util.ArrayList;
 
@@ -21,10 +29,18 @@ import java.util.ArrayList;
  * Class of fragment that contains RecyclerView for displaying notes
  */
 
-public class ListOfNotesFragment extends Fragment {
-    private ArrayList<Note> mData;
-    private ListOfNotesHolder.OnNoteClickListener mListener;
+public class ListOfNotesFragment extends Fragment
+        implements ListOfNotesHolder.OnNoteClickListener,
+        ListOfNotesView {
+
+    private static final int RV_SPAN_COUNT = 2;
+
+    private OnDetailsClickListener mListener;
     private ListOfNotesAdapter mAdapter;
+    private Presenter<ListOfNotesView> mPresenter;
+
+    private RecyclerView mNoteList;
+    private TextView mNoNotesMessage;
 
     public static ListOfNotesFragment newInstance() {
         return new ListOfNotesFragment();
@@ -33,45 +49,85 @@ public class ListOfNotesFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof ListOfNotesHolder.OnNoteClickListener) {
-            mListener = (ListOfNotesHolder.OnNoteClickListener) context;
+        if (context instanceof OnDetailsClickListener) {
+            mListener = (OnDetailsClickListener) context;
         }
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_list_of_notes, container, false);
-        mData = NotesApp.getDataManager().getListOfAllNotes();
-        return rootView;
+        return inflater.inflate(R.layout.fragment_list_of_notes, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView rv = view.findViewById(R.id.rv_list_of_notes);
-        rv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        mAdapter = new ListOfNotesAdapter(mData, mListener);
-        rv.setAdapter(mAdapter);
+        mNoNotesMessage = view.findViewById(R.id.tv_no_notes_message);
+        mNoteList = view.findViewById(R.id.rv_list_of_notes);
+        mNoteList.setLayoutManager(new GridLayoutManager(getActivity(), RV_SPAN_COUNT));
+        mAdapter = new ListOfNotesAdapter(this);
+        mNoteList.setAdapter(mAdapter);
+        mPresenter = new ListOfNotesPresenter<>();
+        mPresenter.attachView(this);
+        mPresenter.loadData();
     }
 
-    /**
-     * Get new data from the database and update the list
-     */
+    @Override
+    public void onDestroyView() {
+        mPresenter.detachView();
+        mPresenter = null;
+        super.onDestroyView();
+    }
 
-    public void refresh() {
-        mData = NotesApp.getDataManager().getListOfAllNotes();
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.list_of_notes_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.mi_add_note) {
+            mListener.openEditNote(null);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void showNoteList(ArrayList<Note> mData) {
         mAdapter.setmData(mData);
-        mAdapter.notifyDataSetChanged();
     }
 
-    /**
-     * Delete given note from the list
-     *
-     * @param note the note to delete
-     */
+    @Override
+    public void showEmptyMessage() {
+        mNoNotesMessage.setVisibility(View.VISIBLE);
+        mNoteList.setVisibility(View.INVISIBLE);
+    }
 
-    public void deleteNote(Note note) {
-        NotesApp.getDataManager().removeNote(note);
-        refresh();
+    @Override
+    public void hideEmptyMessage() {
+        mNoNotesMessage.setVisibility(View.INVISIBLE);
+        mNoteList.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onEditNoteClick(Note note) {
+        mListener.openEditNote(note);
+    }
+
+    @Override
+    public void onDeleteNoteClick(Note note) {
+        mPresenter.deleteNote(note);
+    }
+
+    public interface OnDetailsClickListener {
+        void openEditNote(Note note);
     }
 }
