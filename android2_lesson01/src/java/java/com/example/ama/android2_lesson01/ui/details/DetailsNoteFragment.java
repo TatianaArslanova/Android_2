@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.example.ama.android2_lesson01.R;
-import com.example.ama.android2_lesson01.ui.base.Presenter;
 import com.example.ama.android2_lesson01.model.Note;
+import com.example.ama.android2_lesson01.ui.base.Presenter;
 import com.example.ama.android2_lesson01.ui.details.mvp.DetailsNotePresenter;
 import com.example.ama.android2_lesson01.ui.details.mvp.DetailsNoteView;
 
