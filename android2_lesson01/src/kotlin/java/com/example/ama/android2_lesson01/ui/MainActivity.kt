@@ -1,28 +1,22 @@
 package com.example.ama.android2_lesson01.ui
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import com.example.ama.android2_lesson01.R
 import com.example.ama.android2_lesson01.model.Note
-import com.example.ama.android2_lesson01.ui.details.DetailsNoteActivity
 import com.example.ama.android2_lesson01.ui.details.DetailsNoteFragment
 import com.example.ama.android2_lesson01.ui.rv.ListOfNotesFragment
-import com.example.ama.android2_lesson01.ui.rv.ListOfNotesHolder
 
 /**
- * Class of main activity with the list of notes
+ * Class of list_of_notes_menu activity with the list of notes
  */
 
 class MainActivity : AppCompatActivity(),
-        ListOfNotesHolder.OnNoteClickListener {
+        ListOfNotesFragment.OnDetailsClickListener {
 
     companion object {
         const val LIST_OF_NOTES_FRAGMENT = "list_of_notes_fragment"
-        const val NOTE_EDITED_REQUEST = 1
+        const val DETAILS_NOTE_FRAGMENT = "details_note_fragment"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,38 +33,22 @@ class MainActivity : AppCompatActivity(),
                         else supportFragmentManager.findFragmentByTag(LIST_OF_NOTES_FRAGMENT),
                         LIST_OF_NOTES_FRAGMENT)
                 .commit()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.mi_add_note) {
-            openEditNote(null)
-            return true
-        }
-        return false
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == NOTE_EDITED_REQUEST && resultCode == Activity.RESULT_OK) {
-            (supportFragmentManager.findFragmentByTag(LIST_OF_NOTES_FRAGMENT) as ListOfNotesFragment).refresh()
+        if (supportFragmentManager.findFragmentByTag(DETAILS_NOTE_FRAGMENT) != null) {
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.fl_container_list_of_notes,
+                            supportFragmentManager.findFragmentByTag(DETAILS_NOTE_FRAGMENT),
+                            DETAILS_NOTE_FRAGMENT)
+                    .addToBackStack(null)
+                    .commit()
         }
     }
 
-    override fun onNoteClick(note: Note) {
-        openEditNote(note)
-    }
-
-    override fun onDeleteNoteClick(note: Note) {
-        (supportFragmentManager.findFragmentByTag(LIST_OF_NOTES_FRAGMENT) as ListOfNotesFragment).deleteNote(note)
-    }
-
-    private fun openEditNote(note: Note?) {
-        val intent = Intent(this, DetailsNoteActivity::class.java)
-        intent.putExtra(DetailsNoteFragment.TARGET_NOTE, note)
-        startActivityForResult(intent, NOTE_EDITED_REQUEST)
+    override fun openEditNote(note: Note?) {
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_container_list_of_notes,
+                        DetailsNoteFragment.newInstance(note),
+                        DETAILS_NOTE_FRAGMENT)
+                .addToBackStack(null)
+                .commit()
     }
 }

@@ -13,6 +13,6 @@ interface Presenter<T : NoteView> {
     fun detachView()
     fun loadData()
     fun createNote(title: String, text: String)
-    fun deleteNote(note: Note)
+    fun deleteNote(note: Note?)
     fun updateNote(targetNote: Note, newTitle: String, newText: String)
 }

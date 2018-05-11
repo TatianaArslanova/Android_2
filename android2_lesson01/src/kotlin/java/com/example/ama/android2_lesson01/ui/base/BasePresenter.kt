@@ -47,7 +47,7 @@ abstract class BasePresenter<T : NoteView> : Presenter<T> {
      * Do nothing. Needs to override for specific implementation
      */
 
-    override fun deleteNote(note: Note) {
+    override fun deleteNote(note: Note?) {
     }
 
     /**

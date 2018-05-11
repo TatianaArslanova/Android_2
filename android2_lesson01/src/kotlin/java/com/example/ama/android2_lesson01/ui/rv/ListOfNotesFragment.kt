@@ -4,32 +4,43 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.example.ama.android2_lesson01.NotesApp
+import android.view.*
 import com.example.ama.android2_lesson01.R
 import com.example.ama.android2_lesson01.model.Note
+import com.example.ama.android2_lesson01.ui.base.Presenter
+import com.example.ama.android2_lesson01.ui.rv.adapter.ListOfNotesAdapter
+import com.example.ama.android2_lesson01.ui.rv.adapter.ListOfNotesHolder
+import com.example.ama.android2_lesson01.ui.rv.mvp.ListOfNotesPresenter
+import com.example.ama.android2_lesson01.ui.rv.mvp.ListOfNotesView
 import kotlinx.android.synthetic.main.fragment_list_of_notes.*
 
 /**
  * Class of fragment that contains RecyclerView for displaying notes
  */
 
-class ListOfNotesFragment : Fragment() {
+class ListOfNotesFragment : Fragment(),
+        ListOfNotesHolder.OnNoteClickListener,
+        ListOfNotesView {
 
     companion object {
+        const val RV_SPAN_COUNT = 2
+
         fun newInstance(): ListOfNotesFragment = ListOfNotesFragment()
     }
 
-    private lateinit var mData: ArrayList<Note>
     private lateinit var mAdapter: ListOfNotesAdapter
-    private lateinit var mListener: ListOfNotesHolder.OnNoteClickListener
+    private lateinit var mListener: OnDetailsClickListener
+    private var mPresenter: Presenter<ListOfNotesView>? = null
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        if (context is ListOfNotesHolder.OnNoteClickListener)
+        if (context is OnDetailsClickListener)
             mListener = context
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -38,30 +49,56 @@ class ListOfNotesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mData = NotesApp.dataManager.getListOfAllNotes()
-        rv_list_of_notes.layoutManager = GridLayoutManager(context, 2)
-        mAdapter = ListOfNotesAdapter(mData, mListener)
+        rv_list_of_notes.layoutManager = GridLayoutManager(context, RV_SPAN_COUNT)
+        mAdapter = ListOfNotesAdapter(this)
         rv_list_of_notes.adapter = mAdapter
+        mPresenter = ListOfNotesPresenter()
+        mPresenter?.attachView(this)
+        mPresenter?.loadData()
     }
 
-    /**
-     * Get new data from the database and update the list
-     */
+    override fun onDestroyView() {
+        mPresenter?.detachView()
+        mPresenter = null
+        super.onDestroyView()
+    }
 
-    fun refresh() {
-        mData = NotesApp.dataManager.getListOfAllNotes()
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.list_of_notes_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.mi_add_note) {
+            mListener.openEditNote(null)
+            return true
+        }
+        return false
+    }
+
+    override fun showNoteList(mData: ArrayList<Note>) {
         mAdapter.setmData(mData)
-        mAdapter.notifyDataSetChanged()
     }
 
-    /**
-     * Delete given note from the list
-     *
-     * @param note the note to delete
-     */
+    override fun showEmptyMessage() {
+        tv_no_notes_message.visibility = View.VISIBLE
+        rv_list_of_notes.visibility = View.INVISIBLE
+    }
 
-    fun deleteNote(note: Note) {
-        NotesApp.dataManager.removeNote(note)
-        refresh()
+    override fun hideEmptyMessage() {
+        tv_no_notes_message.visibility = View.INVISIBLE
+        rv_list_of_notes.visibility = View.VISIBLE
+    }
+
+    override fun onEditNoteClick(note: Note) {
+        mListener.openEditNote(note)
+    }
+
+    override fun onDeleteNoteClick(note: Note) {
+        mPresenter?.deleteNote(note)
+    }
+
+    interface OnDetailsClickListener {
+        fun openEditNote(note: Note?)
     }
 }

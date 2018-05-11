@@ -1,4 +1,4 @@
-package com.example.ama.android2_lesson01.ui.rv
+package com.example.ama.android2_lesson01.ui.rv.adapter
 
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
@@ -9,9 +9,9 @@ import com.example.ama.android2_lesson01.model.Note
 import kotlinx.android.synthetic.main.item_rv.view.*
 
 /**
- * Class of holder for RecyclerView from [ListOfNotesFragment]
+ * Class of holder for RecyclerView from [com.example.ama.android2_lesson01.ui.rv.ListOfNotesFragment]
  *
- * @see ListOfNotesFragment
+ * @see com.example.ama.android2_lesson01.ui.rv.ListOfNotesFragment
  */
 
 class ListOfNotesHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -21,7 +21,7 @@ class ListOfNotesHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun getNoteView(): CardView = itemView.cv_note
 
     interface OnNoteClickListener {
-        fun onNoteClick(note: Note)
+        fun onEditNoteClick(note: Note)
         fun onDeleteNoteClick(note: Note)
     }
 }
