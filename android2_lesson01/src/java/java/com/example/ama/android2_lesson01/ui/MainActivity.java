@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.fl_container_list_of_notes,
                             mFragmentManager.findFragmentByTag(DETAILS_NOTE_FRAGMENT),
                             DETAILS_NOTE_FRAGMENT)
-                    .addToBackStack(null)
                     .commit();
         }
     }
@@ -60,6 +59,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void closeEditNote() {
-        mFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        mFragmentManager.popBackStack();
     }
 }
