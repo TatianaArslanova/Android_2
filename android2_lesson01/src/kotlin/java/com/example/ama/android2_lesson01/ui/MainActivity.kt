@@ -12,7 +12,8 @@ import com.example.ama.android2_lesson01.ui.rv.ListOfNotesFragment
  */
 
 class MainActivity : AppCompatActivity(),
-        ListOfNotesFragment.OnDetailsClickListener {
+        ListOfNotesFragment.OnDetailsClickListener,
+        DetailsNoteFragment.OnFinishEditClickListener {
 
     companion object {
         const val LIST_OF_NOTES_FRAGMENT = "list_of_notes_fragment"
@@ -38,7 +39,6 @@ class MainActivity : AppCompatActivity(),
                     .replace(R.id.fl_container_list_of_notes,
                             supportFragmentManager.findFragmentByTag(DETAILS_NOTE_FRAGMENT),
                             DETAILS_NOTE_FRAGMENT)
-                    .addToBackStack(null)
                     .commit()
         }
     }
@@ -50,5 +50,9 @@ class MainActivity : AppCompatActivity(),
                         DETAILS_NOTE_FRAGMENT)
                 .addToBackStack(null)
                 .commit()
+    }
+
+    override fun closeEditNote() {
+        supportFragmentManager.popBackStack()
     }
 }
