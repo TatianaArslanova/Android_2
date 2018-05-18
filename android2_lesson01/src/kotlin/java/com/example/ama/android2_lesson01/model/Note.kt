@@ -61,24 +61,10 @@ class Note(val id: Long,
         var text = NotesApp.instance.resources.getString(R.string.default_note_text)!!
             private set
 
-        /**
-         * Set id for the future note
-         *
-         * @param id id for the note
-         * @return current NoteBuilder
-         */
-
         fun id(id: Long): NoteBuilder {
             this.id = id
             return this
         }
-
-        /**
-         * Set title for the future note
-         *
-         * @param title title for the note
-         * @return current NoteBuilder
-         */
 
         fun title(title: String): NoteBuilder {
             if (title != "") {
@@ -87,13 +73,6 @@ class Note(val id: Long,
             return this
         }
 
-        /**
-         * Set text for the future note
-         *
-         * @param text id for the note
-         * @return current NoteBuilder
-         */
-
         fun text(text: String): NoteBuilder {
             if (text != "") {
                 this.text = text
@@ -101,13 +80,6 @@ class Note(val id: Long,
             return this
         }
 
-        /**
-         * Build new note
-         *
-         * @return new note
-         */
-
-        fun build(): Note = Note(id, title, text)
-
+        fun build() = Note(id, title, text)
     }
 }

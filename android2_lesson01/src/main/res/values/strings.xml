@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android2_lesson01</string>
+    <string name="app_name">Заметки</string>
     <string name="default_note_title">Новая заметка</string>
     <string name="default_note_text">Нет текста</string>
     <string name="menu_item_add_note">Добавить заметку</string>
