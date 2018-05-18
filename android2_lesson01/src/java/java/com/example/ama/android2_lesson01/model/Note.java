@@ -69,31 +69,13 @@ public class Note implements Parcelable {
         dest.writeString(mText);
     }
 
-    /**
-     * Get the note title
-     *
-     * @return note title
-     */
-
     public String getTitle() {
         return mTitle;
     }
 
-    /**
-     * Get the note text
-     *
-     * @return note text
-     */
-
     public String getText() {
         return mText;
     }
-
-    /**
-     * Get the note id in database
-     *
-     * @return note id in database
-     */
 
     public long getmId() {
         return mId;
@@ -108,24 +90,10 @@ public class Note implements Parcelable {
         private String mTitle = NotesApp.getInstance().getString(R.string.default_note_title);
         private String mText = NotesApp.getInstance().getString(R.string.default_note_text);
 
-        /**
-         * Set id for the future note
-         *
-         * @param mId id for the note
-         * @return current NoteBuilder
-         */
-
         public NoteBuilder id(long mId) {
             this.mId = mId;
             return this;
         }
-
-        /**
-         * Set title for the future note
-         *
-         * @param mTitle title for the note
-         * @return current NoteBuilder
-         */
 
         public NoteBuilder title(String mTitle) {
             if (mTitle != null && !mTitle.equals("")) {
@@ -134,25 +102,12 @@ public class Note implements Parcelable {
             return this;
         }
 
-        /**
-         * Set text for the future note
-         *
-         * @param mText id for the note
-         * @return current NoteBuilder
-         */
-
         public NoteBuilder text(String mText) {
             if (mText != null && !mText.equals("")) {
                 this.mText = mText;
             }
             return this;
         }
-
-        /**
-         * Build new note
-         *
-         * @return new note
-         */
 
         public Note build() {
             return new Note(mId, mTitle, mText);

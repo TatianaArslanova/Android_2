@@ -1,6 +1,5 @@
 package com.example.ama.android2_lesson01.ui.rv;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,8 +15,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.ama.android2_lesson01.R;
-import com.example.ama.android2_lesson01.ui.base.Presenter;
 import com.example.ama.android2_lesson01.model.Note;
+import com.example.ama.android2_lesson01.ui.Launcher;
+import com.example.ama.android2_lesson01.ui.MainActivity;
+import com.example.ama.android2_lesson01.ui.base.Presenter;
 import com.example.ama.android2_lesson01.ui.rv.adapter.ListOfNotesAdapter;
 import com.example.ama.android2_lesson01.ui.rv.adapter.ListOfNotesHolder;
 import com.example.ama.android2_lesson01.ui.rv.mvp.ListOfNotesPresenter;
@@ -29,13 +30,10 @@ import java.util.ArrayList;
  * Class of fragment that contains RecyclerView for displaying notes
  */
 
-public class ListOfNotesFragment extends Fragment
-        implements ListOfNotesHolder.OnNoteClickListener,
-        ListOfNotesView {
+public class ListOfNotesFragment extends Fragment implements ListOfNotesView {
 
     private static final int RV_SPAN_COUNT = 2;
 
-    private OnDetailsClickListener mListener;
     private ListOfNotesAdapter mAdapter;
     private Presenter<ListOfNotesView> mPresenter;
 
@@ -44,14 +42,6 @@ public class ListOfNotesFragment extends Fragment
 
     public static ListOfNotesFragment newInstance() {
         return new ListOfNotesFragment();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnDetailsClickListener) {
-            mListener = (OnDetailsClickListener) context;
-        }
     }
 
     @Override
@@ -71,18 +61,32 @@ public class ListOfNotesFragment extends Fragment
         mNoNotesMessage = view.findViewById(R.id.tv_no_notes_message);
         mNoteList = view.findViewById(R.id.rv_list_of_notes);
         mNoteList.setLayoutManager(new GridLayoutManager(getActivity(), RV_SPAN_COUNT));
-        mAdapter = new ListOfNotesAdapter(this);
+        mAdapter = new ListOfNotesAdapter(new ListOfNotesHolder.OnNoteClickListener() {
+            @Override
+            public void onEditNoteClick(Note note) {
+                Launcher.runDetalisNoteFragment((MainActivity) getActivity(), true, note);
+            }
+
+            @Override
+            public void onDeleteNoteClick(Note note) {
+                mPresenter.deleteNote(note);
+            }
+        });
         mNoteList.setAdapter(mAdapter);
         mPresenter = new ListOfNotesPresenter<>();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         mPresenter.attachView(this);
         mPresenter.loadData();
     }
 
     @Override
-    public void onDestroyView() {
+    public void onStop() {
+        super.onStop();
         mPresenter.detachView();
-        mPresenter = null;
-        super.onDestroyView();
     }
 
     @Override
@@ -94,7 +98,7 @@ public class ListOfNotesFragment extends Fragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.mi_add_note) {
-            mListener.openEditNote(null);
+            Launcher.runDetalisNoteFragment((MainActivity) getActivity(), true, null);
             return true;
         }
         return false;
@@ -115,19 +119,5 @@ public class ListOfNotesFragment extends Fragment
     public void hideEmptyMessage() {
         mNoNotesMessage.setVisibility(View.INVISIBLE);
         mNoteList.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onEditNoteClick(Note note) {
-        mListener.openEditNote(note);
-    }
-
-    @Override
-    public void onDeleteNoteClick(Note note) {
-        mPresenter.deleteNote(note);
-    }
-
-    public interface OnDetailsClickListener {
-        void openEditNote(Note note);
     }
 }

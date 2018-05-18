@@ -19,6 +19,7 @@ import java.util.ArrayList;
  */
 
 public class ListOfNotesAdapter extends RecyclerView.Adapter<ListOfNotesHolder> {
+
     private ArrayList<Note> mData = new ArrayList<>();
     private ListOfNotesHolder.OnNoteClickListener mListener;
 
@@ -35,8 +36,7 @@ public class ListOfNotesAdapter extends RecyclerView.Adapter<ListOfNotesHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ListOfNotesHolder holder, int position) {
-        holder.getNoteTitle().setText(mData.get(position).getTitle());
-        holder.getNoteText().setText(mData.get(position).getText());
+        holder.bind(mData.get(position));
     }
 
     @Override

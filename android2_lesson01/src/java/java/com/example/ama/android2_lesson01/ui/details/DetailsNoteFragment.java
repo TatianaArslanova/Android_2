@@ -1,6 +1,5 @@
 package com.example.ama.android2_lesson01.ui.details;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +14,8 @@ import android.widget.EditText;
 
 import com.example.ama.android2_lesson01.R;
 import com.example.ama.android2_lesson01.model.Note;
+import com.example.ama.android2_lesson01.ui.Launcher;
+import com.example.ama.android2_lesson01.ui.MainActivity;
 import com.example.ama.android2_lesson01.ui.base.Presenter;
 import com.example.ama.android2_lesson01.ui.details.mvp.DetailsNotePresenter;
 import com.example.ama.android2_lesson01.ui.details.mvp.DetailsNoteView;
@@ -24,12 +25,10 @@ import com.example.ama.android2_lesson01.ui.details.mvp.DetailsNoteView;
  */
 
 public class DetailsNoteFragment extends Fragment
-        implements View.OnClickListener,
-        DetailsNoteView {
+        implements DetailsNoteView {
 
     private static final String TARGET_NOTE = "target_note";
 
-    private OnFinishEditClickListener mListener;
     private Presenter<DetailsNoteView> mPresenter;
     private Note mTargetNote;
 
@@ -53,14 +52,6 @@ public class DetailsNoteFragment extends Fragment
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFinishEditClickListener) {
-            mListener = (OnFinishEditClickListener) context;
-        }
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
@@ -74,7 +65,6 @@ public class DetailsNoteFragment extends Fragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.btn_save).setOnClickListener(this);
         mEtTitle = view.findViewById(R.id.et_note_title);
         mEtText = view.findViewById(R.id.et_note_text);
         if (getArguments() != null) {
@@ -84,15 +74,25 @@ public class DetailsNoteFragment extends Fragment
                 mEtText.setText(mTargetNote.getText());
             }
         }
+        view.findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSaveButtonClick();
+            }
+        });
         mPresenter = new DetailsNotePresenter<>();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         mPresenter.attachView(this);
     }
 
     @Override
-    public void onDestroyView() {
+    public void onStop() {
+        super.onStop();
         mPresenter.detachView();
-        mPresenter = null;
-        super.onDestroyView();
     }
 
     @Override
@@ -110,26 +110,21 @@ public class DetailsNoteFragment extends Fragment
         return false;
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btn_save) {
-            String title = mEtTitle.getText().toString();
-            String text = mEtText.getText().toString();
-            if (mTargetNote == null) {
-                mPresenter.createNote(title, text);
-            } else {
-                mPresenter.updateNote(mTargetNote, title, text);
-            }
-            mListener.closeEditNote();
+    public void onSaveButtonClick() {
+        String title = mEtTitle.getText().toString();
+        String text = mEtText.getText().toString();
+        if (mTargetNote != null) {
+            mPresenter.updateNote(mTargetNote, title, text);
+        } else {
+            mPresenter.createNote(title, text);
         }
+        finishEditing();
     }
 
     @Override
     public void finishEditing() {
-        mListener.closeEditNote();
-    }
-
-    public interface OnFinishEditClickListener {
-        void closeEditNote();
+        if (getActivity() != null) {
+            Launcher.back((MainActivity) getActivity());
+        }
     }
 }
