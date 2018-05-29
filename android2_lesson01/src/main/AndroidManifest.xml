@@ -17,6 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name=".db.NotesProvider"
+            android:authorities="com.example.ama.android2_lesson01.provider"
+            android:exported="false" />
     </application>
 
 </manifest>

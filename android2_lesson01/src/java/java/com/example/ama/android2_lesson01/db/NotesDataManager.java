@@ -1,24 +1,29 @@
 package com.example.ama.android2_lesson01.db;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.net.Uri;
 
 import com.example.ama.android2_lesson01.model.Note;
 
 import java.util.ArrayList;
 
+import static com.example.ama.android2_lesson01.db.NotesDatabaseContract.CONTENT_URI_ITEM;
 import static com.example.ama.android2_lesson01.db.NotesDatabaseContract.NotesTable;
 
 /**
  * Class for managing notes on the database
  */
 
-public class NotesDataManager extends NotesDbHelper {
+public class NotesDataManager {
+
+    private Context context;
 
     public NotesDataManager(Context context) {
-        super(context);
+        this.context = context;
     }
 
     /**
@@ -32,24 +37,30 @@ public class NotesDataManager extends NotesDbHelper {
 
     public void getListOfAllNotes(LoadDataCallback callback) {
         ArrayList<Note> listOfNotes = new ArrayList<>();
-        Cursor allNotes = getAllNotesCursor(NotesTable.TABLE_NAME);
+        Cursor allNotes = null;
         try {
-            if (allNotes.moveToFirst()) {
-                int idColomn = allNotes.getColumnIndex(NotesTable._ID);
-                int titleColomn = allNotes.getColumnIndex(NotesTable.COLUMN_NAME_TITLE);
-                int textColomn = allNotes.getColumnIndex(NotesTable.COLUMN_NAME_TEXT);
-                do {
-                    listOfNotes.add(Note.builder()
-                            .id(allNotes.getLong(idColomn))
-                            .title(allNotes.getString(titleColomn))
-                            .text(allNotes.getString(textColomn))
-                            .build());
-                } while (allNotes.moveToNext());
+            allNotes = context.getContentResolver()
+                    .query(NotesDatabaseContract.CONTENT_URI, null, null, null, null);
+            if (allNotes != null) {
+                if (allNotes.moveToFirst()) {
+                    int idColomn = allNotes.getColumnIndex(NotesTable._ID);
+                    int titleColomn = allNotes.getColumnIndex(NotesTable.COLUMN_NAME_TITLE);
+                    int textColomn = allNotes.getColumnIndex(NotesTable.COLUMN_NAME_TEXT);
+                    do {
+                        listOfNotes.add(Note.builder()
+                                .id(allNotes.getLong(idColomn))
+                                .title(allNotes.getString(titleColomn))
+                                .text(allNotes.getString(textColomn))
+                                .build());
+                    } while (allNotes.moveToNext());
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            allNotes.close();
+            if (allNotes != null && !allNotes.isClosed()) {
+                allNotes.close();
+            }
         }
         callback.onLoad(listOfNotes);
     }
@@ -68,7 +79,7 @@ public class NotesDataManager extends NotesDbHelper {
         ContentValues values = new ContentValues();
         values.put(NotesTable.COLUMN_NAME_TITLE, title);
         values.put(NotesTable.COLUMN_NAME_TEXT, text);
-        insertRow(NotesTable.TABLE_NAME, values);
+        context.getContentResolver().insert(NotesDatabaseContract.CONTENT_URI, values);
         callback.onDataChanged();
     }
 
@@ -84,8 +95,8 @@ public class NotesDataManager extends NotesDbHelper {
      */
 
     public void removeNote(Note note, DataChangedCallback callback) {
-        String[] args = {String.valueOf(note.getmId())};
-        deleteRow(NotesTable.TABLE_NAME, NotesTable.SQL_WHERE_ID, args);
+        Uri uriForNote = ContentUris.withAppendedId(NotesDatabaseContract.CONTENT_URI_ITEM, note.getmId());
+        context.getContentResolver().delete(uriForNote, null, null);
         callback.onDataChanged();
     }
 
@@ -106,8 +117,8 @@ public class NotesDataManager extends NotesDbHelper {
         ContentValues values = new ContentValues();
         values.put(NotesTable.COLUMN_NAME_TITLE, newTitle);
         values.put(NotesTable.COLUMN_NAME_TEXT, newText);
-        String[] args = {String.valueOf(targetNote.getmId())};
-        updateRow(NotesTable.TABLE_NAME, values, NotesTable.SQL_WHERE_ID, args);
+        Uri uriForNote = ContentUris.withAppendedId(CONTENT_URI_ITEM, targetNote.getmId());
+        context.getContentResolver().update(uriForNote, values, null, null);
         callback.onDataChanged();
     }
 

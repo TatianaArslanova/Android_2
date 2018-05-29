@@ -46,14 +46,16 @@ public class NotesDbHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Get all entries from the table of the database
+     * Get entries from the table of the database
      *
-     * @param tableName name of the table
+     * @param tableName     name of the table
+     * @param selection     where condition for sql query
+     * @param selectionArgs arguments for where condition
      * @return {@link Cursor} object that contains all entries from the table
      */
 
-    public Cursor getAllNotesCursor(String tableName) {
-        return getReadableDatabase().query(tableName, null, null, null, null, null, null);
+    public Cursor getNotesCursor(String tableName, String selection, String[] selectionArgs) {
+        return getReadableDatabase().query(tableName, null, selection, selectionArgs, null, null, null);
     }
 
     /**
@@ -63,8 +65,8 @@ public class NotesDbHelper extends SQLiteOpenHelper {
      * @param values    values to insert
      */
 
-    public void insertRow(String tableName, ContentValues values) {
-        getWritableDatabase().insert(tableName, null, values);
+    public long insertRow(String tableName, ContentValues values) {
+        return getWritableDatabase().insert(tableName, null, values);
     }
 
     /**
@@ -75,8 +77,8 @@ public class NotesDbHelper extends SQLiteOpenHelper {
      * @param args      arguments for where condition
      */
 
-    public void deleteRow(String tableName, String whereSql, String[] args) {
-        getWritableDatabase().delete(tableName, whereSql, args);
+    public int deleteRow(String tableName, String whereSql, String[] args) {
+        return getWritableDatabase().delete(tableName, whereSql, args);
     }
 
     /**
@@ -88,7 +90,7 @@ public class NotesDbHelper extends SQLiteOpenHelper {
      * @param args      arguments for where condition
      */
 
-    public void updateRow(String tableName, ContentValues values, String whereSql, String[] args) {
-        getWritableDatabase().update(tableName, values, whereSql, args);
+    public int updateRow(String tableName, ContentValues values, String whereSql, String[] args) {
+        return getWritableDatabase().update(tableName, values, whereSql, args);
     }
 }
