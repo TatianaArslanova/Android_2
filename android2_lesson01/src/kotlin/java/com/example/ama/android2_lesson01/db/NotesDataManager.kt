@@ -1,7 +1,9 @@
 package com.example.ama.android2_lesson01.db
 
+import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.SQLException
 import com.example.ama.android2_lesson01.model.Note
 
@@ -9,7 +11,7 @@ import com.example.ama.android2_lesson01.model.Note
  * Class for managing notes
  */
 
-class NotesDataManager(context: Context) : NotesDbHelper(context) {
+class NotesDataManager(private val context: Context) {
 
     /**
      * Create ArrayList with all data from database table described [NotesTable]
@@ -22,12 +24,13 @@ class NotesDataManager(context: Context) : NotesDbHelper(context) {
 
     fun getListOfAllNotes(callback: LoadDataCallback) {
         val listOfNotes = ArrayList<Note>()
-        val allNotes = getAllNotesCursor(NotesTable.TABLE_NAME)
+        var allNotes: Cursor? = null
         try {
+            allNotes = context.contentResolver.query(NotesProvider.CONTENT_URI, null, null, null, null)
             if (allNotes.moveToFirst()) {
-                val idColomn = allNotes.getColumnIndex(NotesTable.COLOMN_NAME_ID)
-                val titleColomn = allNotes.getColumnIndex(NotesTable.COLOMN_NAME_TITLE)
-                val textColomn = allNotes.getColumnIndex(NotesTable.COLOMN_NAME_TEXT)
+                val idColomn = allNotes.getColumnIndex(NotesTable.COLUMN_NAME_ID)
+                val titleColomn = allNotes.getColumnIndex(NotesTable.COLUMN_NAME_TITLE)
+                val textColomn = allNotes.getColumnIndex(NotesTable.COLUMN_NAME_TEXT)
                 do {
                     listOfNotes.add(Note.builder()
                             .id(allNotes.getLong(idColomn))
@@ -39,7 +42,9 @@ class NotesDataManager(context: Context) : NotesDbHelper(context) {
         } catch (e: SQLException) {
             e.printStackTrace()
         } finally {
-            allNotes.close()
+            if (allNotes != null && !allNotes.isClosed) {
+                allNotes.close()
+            }
         }
         callback.onLoad(listOfNotes)
     }
@@ -56,9 +61,9 @@ class NotesDataManager(context: Context) : NotesDbHelper(context) {
 
     fun createNote(title: String, text: String, callback: DataChangedCallback) {
         val values = ContentValues()
-        values.put(NotesTable.COLOMN_NAME_TITLE, title)
-        values.put(NotesTable.COLOMN_NAME_TEXT, text)
-        insertRow(NotesTable.TABLE_NAME, values)
+        values.put(NotesTable.COLUMN_NAME_TITLE, title)
+        values.put(NotesTable.COLUMN_NAME_TEXT, text)
+        context.contentResolver.insert(NotesProvider.CONTENT_URI, values)
         callback.onDataChanged()
     }
 
@@ -74,8 +79,8 @@ class NotesDataManager(context: Context) : NotesDbHelper(context) {
      */
 
     fun removeNote(note: Note, callback: DataChangedCallback) {
-        val args = arrayOf(note.id.toString())
-        deleteRow(NotesTable.TABLE_NAME, NotesTable.SQL_WHERE_ID, args)
+        val uriForNote = ContentUris.withAppendedId(NotesProvider.CONTENT_URI_ITEM, note.id)
+        context.contentResolver.delete(uriForNote, null, null)
         callback.onDataChanged()
     }
 
@@ -94,10 +99,10 @@ class NotesDataManager(context: Context) : NotesDbHelper(context) {
 
     fun updateNote(note: Note, newTitle: String, newText: String, callback: DataChangedCallback) {
         val values = ContentValues()
-        values.put(NotesTable.COLOMN_NAME_TITLE, newTitle)
-        values.put(NotesTable.COLOMN_NAME_TEXT, newText)
-        val args = arrayOf(note.id.toString())
-        updateRow(NotesTable.TABLE_NAME, values, NotesTable.SQL_WHERE_ID, args)
+        values.put(NotesTable.COLUMN_NAME_TITLE, newTitle)
+        values.put(NotesTable.COLUMN_NAME_TEXT, newText)
+        val uriForNote = ContentUris.withAppendedId(NotesProvider.CONTENT_URI_ITEM, note.id)
+        context.contentResolver.update(uriForNote, values, null, null)
         callback.onDataChanged()
     }
 

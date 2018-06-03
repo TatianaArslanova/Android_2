@@ -10,12 +10,12 @@ import android.database.sqlite.SQLiteOpenHelper
  * Class for for working with the database
  */
 
-open class NotesDbHelper(context: Context)
+class NotesDbHelper(context: Context)
     : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
         const val DATABASE_NAME = "notes.db"
-        const val DATABASE_VERSION = 2
+        const val DATABASE_VERSION = 3
     }
 
     /**
@@ -40,18 +40,48 @@ open class NotesDbHelper(context: Context)
         onCreate(db)
     }
 
-    fun getAllNotesCursor(tableName: String): Cursor =
-            readableDatabase.query(tableName, null, null, null, null, null, null)
+    /**
+     * Get entries from the table of the database
+     *
+     * @param tableName     name of the table
+     * @param selection     where condition for sql query
+     * @param selectionArgs arguments for where condition
+     * @return [Cursor] object that contains entries from the table
+     */
 
-    fun insertRow(tableName: String, values: ContentValues) {
-        writableDatabase.insert(tableName, null, values)
-    }
+    fun getNotesCursor(tableName: String, selection: String?, selectionArgs: Array<out String>?): Cursor =
+            readableDatabase.query(tableName, null, selection, selectionArgs, null, null, null)
 
-    fun deleteRow(tableName: String, whereSql: String, args: Array<String>) {
-        writableDatabase.delete(tableName, whereSql, args)
-    }
+    /**
+     * Insert new row to the table of the database
+     *
+     * @param tableName name of the table
+     * @param values    values to insert
+     */
 
-    fun updateRow(tableName: String, values: ContentValues, whereSql: String, args: Array<String>) {
-        writableDatabase.update(tableName, values, whereSql, args)
-    }
+    fun insertRow(tableName: String, values: ContentValues?): Long =
+            writableDatabase.insert(tableName, null, values)
+
+    /**
+     * Delete the row from the table of the database
+     *
+     * @param tableName name of the table
+     * @param whereSql  where condition for sql query
+     * @param args      arguments for where condition
+     */
+
+    fun deleteRow(tableName: String, whereSql: String?, args: Array<out String>?): Int =
+            writableDatabase.delete(tableName, whereSql, args)
+
+    /**
+     * Update the row from the table on the database
+     *
+     * @param tableName name of the table
+     * @param values    values to update
+     * @param whereSql  where condition for sql query
+     * @param args      arguments for where condition
+     */
+
+    fun updateRow(tableName: String, values: ContentValues?, whereSql: String?, args: Array<out String>?): Int =
+            writableDatabase.update(tableName, values, whereSql, args)
 }
