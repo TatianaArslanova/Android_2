@@ -10,8 +10,8 @@ import com.example.ama.android2_lesson01.ui.rv.ListOfNotesFragment
 object Launcher {
 
     /**
-     * Find [ListOfNotesFragment] if exists or create new instance if it's not. Replace fragment to
-     * container on the given activity. Parameter addToBackStack is false by default.
+     * Replace [ListOfNotesFragment] fragment to container on the given activity.
+     * Parameter addToBackStack is false by default.
      *
      * @param activity activity to place the fragment
      * @param addToBackStack add transaction to the back stack if true
@@ -19,10 +19,7 @@ object Launcher {
      */
 
     fun runListOfNotesFragment(activity: MainActivity, addToBackStack: Boolean = false) {
-        var fragment: Fragment? = activity.supportFragmentManager
-                .findFragmentByTag(ListOfNotesFragment::class.java.simpleName)
-        if (fragment == null) fragment = ListOfNotesFragment.newInstance()
-        runFragment(activity, R.id.fl_main_container, fragment, addToBackStack)
+        runFragment(activity, R.id.fl_main_container, ListOfNotesFragment.newInstance(), addToBackStack)
     }
 
     /**
@@ -38,23 +35,6 @@ object Launcher {
 
     fun runDetailsNoteFragment(activity: MainActivity, addToBackStack: Boolean = false, note: Note?) {
         runFragment(activity, R.id.fl_main_container, DetailsNoteFragment.newInstance(note), addToBackStack)
-    }
-
-    /**
-     * Find [DetailsNoteFragment] on the given activity. Replace if exists and do nothing if it's not.
-     * Paramener addToBackStack is false by default.
-     *
-     * @param activity activity to find and place the fragment
-     * @param addToBackStack add transaction to the back stack if true
-     * @see DetailsNoteFragment
-     */
-
-    fun tryToRestoreDetailsNoteFragment(activity: MainActivity, addToBackStack: Boolean = false) {
-        val fragment: Fragment? = activity.supportFragmentManager
-                .findFragmentByTag(DetailsNoteFragment::class.java.simpleName)
-        if (fragment != null) {
-            runFragment(activity, R.id.fl_main_container, fragment, addToBackStack)
-        }
     }
 
     fun back(activity: AppCompatActivity) {

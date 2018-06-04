@@ -9,7 +9,7 @@ import com.example.ama.android2_lesson01.R
  * Class describing notes
  */
 
-class Note(val id: Long,
+data class Note(val id: Long,
            val title: String,
            val text: String)
     : Parcelable {
