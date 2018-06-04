@@ -64,7 +64,7 @@ public class ListOfNotesFragment extends Fragment implements ListOfNotesView {
         mAdapter = new ListOfNotesAdapter(new ListOfNotesHolder.OnNoteClickListener() {
             @Override
             public void onEditNoteClick(Note note) {
-                Launcher.runDetalisNoteFragment((MainActivity) getActivity(), true, note);
+                Launcher.runDetailsNoteFragment((MainActivity) getActivity(), true, note);
             }
 
             @Override
@@ -98,7 +98,7 @@ public class ListOfNotesFragment extends Fragment implements ListOfNotesView {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.mi_add_note) {
-            Launcher.runDetalisNoteFragment((MainActivity) getActivity(), true, null);
+            Launcher.runDetailsNoteFragment((MainActivity) getActivity(), true, null);
             return true;
         }
         return false;

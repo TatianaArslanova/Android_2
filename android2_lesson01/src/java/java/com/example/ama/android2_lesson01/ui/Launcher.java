@@ -16,8 +16,7 @@ import com.example.ama.android2_lesson01.ui.rv.ListOfNotesFragment;
 public class Launcher {
 
     /**
-     * Find {@link ListOfNotesFragment} if exists or create new instance if it's not. Replace fragment to
-     * container on the given activity.
+     * Replace {@link ListOfNotesFragment} fragment to container on the given activity.
      *
      * @param activity       activity to place the fragment
      * @param addToBackStack add transaction to the back stack if true
@@ -25,10 +24,7 @@ public class Launcher {
      */
 
     public static void runListOfNotesFragment(MainActivity activity, boolean addToBackStack) {
-        Fragment fragment = activity.getSupportFragmentManager()
-                .findFragmentByTag(ListOfNotesFragment.class.getSimpleName());
-        if (fragment == null) fragment = ListOfNotesFragment.newInstance();
-        runFragment(activity, R.id.fl_main_container, fragment, addToBackStack);
+        runFragment(activity, R.id.fl_main_container, ListOfNotesFragment.newInstance(), addToBackStack);
     }
 
     /**
@@ -42,25 +38,8 @@ public class Launcher {
      * @see Note
      */
 
-    public static void runDetalisNoteFragment(MainActivity activity, boolean addToBackStack, Note note) {
+    public static void runDetailsNoteFragment(MainActivity activity, boolean addToBackStack, Note note) {
         runFragment(activity, R.id.fl_main_container, DetailsNoteFragment.newInstance(note), addToBackStack);
-    }
-
-    /**
-     * Find {@link DetailsNoteFragment} on the given activity. Replace if exists and do nothing
-     * if it's not.
-     *
-     * @param activity       activity to find and place the fragment
-     * @param addToBackStack add transaction to the back stack if true
-     * @see DetailsNoteFragment
-     */
-
-    public static void tryToRestoreDetalisNoteFragment(MainActivity activity, boolean addToBackStack) {
-        Fragment fragment = activity.getSupportFragmentManager()
-                .findFragmentByTag(DetailsNoteFragment.class.getSimpleName());
-        if (fragment != null) {
-            runFragment(activity, R.id.fl_main_container, fragment, addToBackStack);
-        }
     }
 
     public static void back(AppCompatActivity activity) {
