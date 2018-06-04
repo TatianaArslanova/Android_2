@@ -1,9 +1,12 @@
 package com.example.ama.android2_lesson01.ui.details.mvp
 
 import com.example.ama.android2_lesson01.NotesApp
-import com.example.ama.android2_lesson01.db.NotesDataManager
+import com.example.ama.android2_lesson01.db.NotesProviderDataManager
+import com.example.ama.android2_lesson01.db.base.NotesDataManager
 import com.example.ama.android2_lesson01.model.Note
 import com.example.ama.android2_lesson01.ui.base.BasePresenter
+import com.example.ama.android2_lesson01.ui.details.mvp.base.DetailsNoteView
+import com.example.ama.android2_lesson01.ui.details.mvp.base.DetailsPresenter
 
 /**
  * Presenter implementation for [DetailsNoteView]
@@ -11,14 +14,16 @@ import com.example.ama.android2_lesson01.ui.base.BasePresenter
  * @param <T> view for which to work
  */
 
-class DetailsNotePresenter<T : DetailsNoteView> : BasePresenter<T>() {
+class DetailsNotePresenter<T : DetailsNoteView> :
+        BasePresenter<T>(),
+        DetailsPresenter<T> {
 
     /**
      * Send data for note creation on the database and notify view about changes
      *
      * @param title title for the note to create
      * @param text  text for the note to create
-     * @see NotesDataManager
+     * @see NotesProviderDataManager
      */
 
     override fun createNote(title: String, text: String) {
@@ -34,13 +39,13 @@ class DetailsNotePresenter<T : DetailsNoteView> : BasePresenter<T>() {
      * Send data for note deleting from the database and notify view about changes
      *
      * @param note note to delete
-     * @see NotesDataManager
+     * @see NotesProviderDataManager
      * @see Note
      */
 
     override fun deleteNote(note: Note?) {
         if (note != null) {
-            NotesApp.dataManager.removeNote(note,
+            NotesApp.dataManager.deleteNote(note,
                     object : NotesDataManager.DataChangedCallback {
                         override fun onDataChanged() {
                             view?.finishEditing()
@@ -57,7 +62,7 @@ class DetailsNotePresenter<T : DetailsNoteView> : BasePresenter<T>() {
      * @param targetNote note for updating
      * @param newTitle   new title for the note
      * @param newText    new text for the note
-     * @see NotesDataManager
+     * @see NotesProviderDataManager
      * @see Note
      */
 

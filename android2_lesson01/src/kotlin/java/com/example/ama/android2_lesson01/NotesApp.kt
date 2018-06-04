@@ -1,7 +1,8 @@
 package com.example.ama.android2_lesson01
 
 import android.app.Application
-import com.example.ama.android2_lesson01.db.NotesDataManager
+import com.example.ama.android2_lesson01.db.NotesProviderDataManager
+import com.example.ama.android2_lesson01.db.base.NotesDataManager
 
 class NotesApp : Application() {
 
@@ -13,6 +14,6 @@ class NotesApp : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        dataManager=NotesDataManager(applicationContext)
+        dataManager = NotesProviderDataManager(applicationContext)
     }
 }

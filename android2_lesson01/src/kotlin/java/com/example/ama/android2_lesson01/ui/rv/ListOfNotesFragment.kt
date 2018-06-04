@@ -11,7 +11,8 @@ import com.example.ama.android2_lesson01.ui.MainActivity
 import com.example.ama.android2_lesson01.ui.base.Presenter
 import com.example.ama.android2_lesson01.ui.rv.adapter.ListOfNotesAdapter
 import com.example.ama.android2_lesson01.ui.rv.mvp.ListOfNotesPresenter
-import com.example.ama.android2_lesson01.ui.rv.mvp.ListOfNotesView
+import com.example.ama.android2_lesson01.ui.rv.mvp.base.ListOfNotesView
+import com.example.ama.android2_lesson01.ui.rv.mvp.base.ListPresenter
 import kotlinx.android.synthetic.main.fragment_list_of_notes.*
 
 /**
@@ -27,7 +28,7 @@ class ListOfNotesFragment : Fragment(), ListOfNotesView {
     }
 
     private lateinit var mAdapter: ListOfNotesAdapter
-    private var mPresenter: Presenter<ListOfNotesView>? = null
+    private var mPresenter: ListPresenter<ListOfNotesView>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

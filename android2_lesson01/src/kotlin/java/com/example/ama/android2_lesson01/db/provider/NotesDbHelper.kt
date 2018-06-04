@@ -1,4 +1,4 @@
-package com.example.ama.android2_lesson01.db
+package com.example.ama.android2_lesson01.db.provider
 
 import android.content.ContentValues
 import android.content.Context

@@ -11,8 +11,7 @@ import com.example.ama.android2_lesson01.model.Note
 interface Presenter<T : NoteView> {
     fun attachView(view: T)
     fun detachView()
-    fun loadData()
-    fun createNote(title: String, text: String)
+
     fun deleteNote(note: Note?)
-    fun updateNote(targetNote: Note, newTitle: String, newText: String)
+
 }

@@ -7,9 +7,9 @@ import android.view.*
 import com.example.ama.android2_lesson01.R
 import com.example.ama.android2_lesson01.model.Note
 import com.example.ama.android2_lesson01.ui.Launcher
-import com.example.ama.android2_lesson01.ui.base.Presenter
 import com.example.ama.android2_lesson01.ui.details.mvp.DetailsNotePresenter
-import com.example.ama.android2_lesson01.ui.details.mvp.DetailsNoteView
+import com.example.ama.android2_lesson01.ui.details.mvp.base.DetailsNoteView
+import com.example.ama.android2_lesson01.ui.details.mvp.base.DetailsPresenter
 import kotlinx.android.synthetic.main.fragment_details_note.*
 
 /**
@@ -39,7 +39,7 @@ class DetailsNoteFragment : Fragment(), DetailsNoteView {
     }
 
     private var mTargetNote: Note? = null
-    private var mPresenter: Presenter<DetailsNoteView>? = null
+    private var mPresenter: DetailsPresenter<DetailsNoteView>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)

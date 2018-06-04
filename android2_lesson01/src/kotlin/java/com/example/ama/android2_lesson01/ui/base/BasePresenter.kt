@@ -28,32 +28,4 @@ abstract class BasePresenter<T : NoteView> : Presenter<T> {
     override fun detachView() {
         view = null
     }
-
-    /**
-     * Do nothing. Needs to override for specific implementation
-     */
-
-    override fun loadData() {
-    }
-
-    /**
-     * Do nothing. Needs to override for specific implementation
-     */
-
-    override fun createNote(title: String, text: String) {
-    }
-
-    /**
-     * Do nothing. Needs to override for specific implementation
-     */
-
-    override fun deleteNote(note: Note?) {
-    }
-
-    /**
-     * Do nothing. Needs to override for specific implementation
-     */
-
-    override fun updateNote(targetNote: Note, newTitle: String, newText: String) {
-    }
 }
