@@ -1,9 +1,11 @@
 package com.example.ama.android2_lesson01.ui.details.mvp;
 
 import com.example.ama.android2_lesson01.NotesApp;
-import com.example.ama.android2_lesson01.ui.base.BasePresenter;
-import com.example.ama.android2_lesson01.db.NotesDataManager;
+import com.example.ama.android2_lesson01.db.base.NotesDataManager;
 import com.example.ama.android2_lesson01.model.Note;
+import com.example.ama.android2_lesson01.ui.base.BasePresenter;
+import com.example.ama.android2_lesson01.ui.details.mvp.base.DetailsNoteView;
+import com.example.ama.android2_lesson01.ui.details.mvp.base.DetailsPresenter;
 
 /**
  * Presenter implementation for {@link DetailsNoteView}
@@ -11,7 +13,9 @@ import com.example.ama.android2_lesson01.model.Note;
  * @param <T> view for which to work
  */
 
-public class DetailsNotePresenter<T extends DetailsNoteView> extends BasePresenter<T> {
+public class DetailsNotePresenter<T extends DetailsNoteView>
+        extends BasePresenter<T>
+        implements DetailsPresenter<T> {
 
     /**
      * Send data for note creation on the database and notify view about changes
@@ -62,7 +66,7 @@ public class DetailsNotePresenter<T extends DetailsNoteView> extends BasePresent
     @Override
     public void deleteNote(Note note) {
         if (note != null) {
-            NotesApp.getDataManager().removeNote(note, new NotesDataManager.DataChangedCallback() {
+            NotesApp.getDataManager().deleteNote(note, new NotesDataManager.DataChangedCallback() {
                 @Override
                 public void onDataChanged() {
                     view.finishEditing();

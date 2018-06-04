@@ -2,7 +2,8 @@ package com.example.ama.android2_lesson01;
 
 import android.app.Application;
 
-import com.example.ama.android2_lesson01.db.NotesDataManager;
+import com.example.ama.android2_lesson01.db.NotesProviderDataManager;
+import com.example.ama.android2_lesson01.db.base.NotesDataManager;
 
 public class NotesApp extends Application {
     private static NotesDataManager sDataManager;
@@ -20,6 +21,6 @@ public class NotesApp extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        sDataManager = new NotesDataManager(getApplicationContext());
+        sDataManager = new NotesProviderDataManager(getApplicationContext());
     }
 }

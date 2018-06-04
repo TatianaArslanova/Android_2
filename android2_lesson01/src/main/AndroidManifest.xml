@@ -19,7 +19,7 @@
         </activity>
 
         <provider
-            android:name=".db.NotesProvider"
+            android:name=".db.provider.NotesProvider"
             android:authorities="com.example.ama.android2_lesson01.provider"
             android:exported="false" />
     </application>

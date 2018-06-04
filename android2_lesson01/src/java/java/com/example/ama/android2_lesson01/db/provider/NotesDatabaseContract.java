@@ -1,4 +1,4 @@
-package com.example.ama.android2_lesson01.db;
+package com.example.ama.android2_lesson01.db.provider;
 
 import android.net.Uri;
 import android.provider.BaseColumns;

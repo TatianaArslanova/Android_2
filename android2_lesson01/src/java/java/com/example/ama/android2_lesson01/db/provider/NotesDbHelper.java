@@ -1,4 +1,4 @@
-package com.example.ama.android2_lesson01.db;
+package com.example.ama.android2_lesson01.db.provider;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import static com.example.ama.android2_lesson01.db.NotesDatabaseContract.NotesTable;
+import static com.example.ama.android2_lesson01.db.provider.NotesDatabaseContract.NotesTable;
 
 /**
  * Class for for working with the database

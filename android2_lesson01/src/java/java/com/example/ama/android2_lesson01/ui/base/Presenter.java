@@ -14,11 +14,7 @@ public interface Presenter<T extends NoteView> {
 
     void detachView();
 
-    void loadData();
-
-    void createNote(String title, String text);
-
     void deleteNote(Note note);
 
-    void updateNote(Note targetNote, String newTitle, String newText);
+
 }

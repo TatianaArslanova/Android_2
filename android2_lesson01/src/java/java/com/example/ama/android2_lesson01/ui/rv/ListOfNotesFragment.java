@@ -18,11 +18,11 @@ import com.example.ama.android2_lesson01.R;
 import com.example.ama.android2_lesson01.model.Note;
 import com.example.ama.android2_lesson01.ui.Launcher;
 import com.example.ama.android2_lesson01.ui.MainActivity;
-import com.example.ama.android2_lesson01.ui.base.Presenter;
 import com.example.ama.android2_lesson01.ui.rv.adapter.ListOfNotesAdapter;
 import com.example.ama.android2_lesson01.ui.rv.adapter.ListOfNotesHolder;
 import com.example.ama.android2_lesson01.ui.rv.mvp.ListOfNotesPresenter;
-import com.example.ama.android2_lesson01.ui.rv.mvp.ListOfNotesView;
+import com.example.ama.android2_lesson01.ui.rv.mvp.base.ListOfNotesView;
+import com.example.ama.android2_lesson01.ui.rv.mvp.base.ListPresenter;
 
 import java.util.ArrayList;
 
@@ -35,7 +35,7 @@ public class ListOfNotesFragment extends Fragment implements ListOfNotesView {
     private static final int RV_SPAN_COUNT = 2;
 
     private ListOfNotesAdapter mAdapter;
-    private Presenter<ListOfNotesView> mPresenter;
+    private ListPresenter<ListOfNotesView> mPresenter;
 
     private RecyclerView mNoteList;
     private TextView mNoNotesMessage;

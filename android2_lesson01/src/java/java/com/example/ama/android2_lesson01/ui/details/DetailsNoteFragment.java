@@ -16,9 +16,9 @@ import com.example.ama.android2_lesson01.R;
 import com.example.ama.android2_lesson01.model.Note;
 import com.example.ama.android2_lesson01.ui.Launcher;
 import com.example.ama.android2_lesson01.ui.MainActivity;
-import com.example.ama.android2_lesson01.ui.base.Presenter;
 import com.example.ama.android2_lesson01.ui.details.mvp.DetailsNotePresenter;
-import com.example.ama.android2_lesson01.ui.details.mvp.DetailsNoteView;
+import com.example.ama.android2_lesson01.ui.details.mvp.base.DetailsNoteView;
+import com.example.ama.android2_lesson01.ui.details.mvp.base.DetailsPresenter;
 
 /**
  * Class of fragment for note editing
@@ -29,7 +29,7 @@ public class DetailsNoteFragment extends Fragment
 
     private static final String TARGET_NOTE = "target_note";
 
-    private Presenter<DetailsNoteView> mPresenter;
+    private DetailsPresenter<DetailsNoteView> mPresenter;
     private Note mTargetNote;
 
     private EditText mEtTitle;

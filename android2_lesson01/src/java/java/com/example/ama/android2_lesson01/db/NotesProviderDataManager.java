@@ -1,29 +1,26 @@
 package com.example.ama.android2_lesson01.db;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.net.Uri;
 
+import com.example.ama.android2_lesson01.db.base.BaseProviderDataManager;
+import com.example.ama.android2_lesson01.db.base.NotesDataManager;
 import com.example.ama.android2_lesson01.model.Note;
 
 import java.util.ArrayList;
 
-import static com.example.ama.android2_lesson01.db.NotesDatabaseContract.CONTENT_URI_ITEM;
-import static com.example.ama.android2_lesson01.db.NotesDatabaseContract.NotesTable;
+import static com.example.ama.android2_lesson01.db.provider.NotesDatabaseContract.NotesTable;
 
 /**
  * Class for managing notes on the database
  */
 
-public class NotesDataManager {
+public class NotesProviderDataManager extends BaseProviderDataManager implements NotesDataManager {
 
-    private Context context;
-
-    public NotesDataManager(Context context) {
-        this.context = context;
+    public NotesProviderDataManager(Context context) {
+        super(context);
     }
 
     /**
@@ -35,12 +32,12 @@ public class NotesDataManager {
      * @see Note
      */
 
-    public void getListOfAllNotes(LoadDataCallback callback) {
+    @Override
+    public void loadListOfAllNotes(LoadDataCallback callback) {
         ArrayList<Note> listOfNotes = new ArrayList<>();
         Cursor allNotes = null;
         try {
-            allNotes = context.getContentResolver()
-                    .query(NotesDatabaseContract.CONTENT_URI, null, null, null, null);
+            allNotes = query();
             if (allNotes != null) {
                 if (allNotes.moveToFirst()) {
                     int idColomn = allNotes.getColumnIndex(NotesTable._ID);
@@ -75,11 +72,12 @@ public class NotesDataManager {
      * @see NotesTable
      */
 
+    @Override
     public void createNote(String title, String text, DataChangedCallback callback) {
         ContentValues values = new ContentValues();
         values.put(NotesTable.COLUMN_NAME_TITLE, title);
         values.put(NotesTable.COLUMN_NAME_TEXT, text);
-        context.getContentResolver().insert(NotesDatabaseContract.CONTENT_URI, values);
+        insert(values);
         callback.onDataChanged();
     }
 
@@ -88,15 +86,15 @@ public class NotesDataManager {
      * corresponding to the given {@link Note} by it's id on the database
      * and notify changes by callback
      *
-     * @param note     the {@link Note} to remove
-     * @param callback callback for notify changes
+     * @param targetNote the {@link Note} to remove
+     * @param callback   callback for notify changes
      * @see NotesTable
      * @see Note
      */
 
-    public void removeNote(Note note, DataChangedCallback callback) {
-        Uri uriForNote = ContentUris.withAppendedId(NotesDatabaseContract.CONTENT_URI_ITEM, note.getmId());
-        context.getContentResolver().delete(uriForNote, null, null);
+    @Override
+    public void deleteNote(Note targetNote, DataChangedCallback callback) {
+        delete(targetNote.getmId());
         callback.onDataChanged();
     }
 
@@ -113,27 +111,12 @@ public class NotesDataManager {
      * @see Note
      */
 
+    @Override
     public void updateNote(Note targetNote, String newTitle, String newText, DataChangedCallback callback) {
         ContentValues values = new ContentValues();
         values.put(NotesTable.COLUMN_NAME_TITLE, newTitle);
         values.put(NotesTable.COLUMN_NAME_TEXT, newText);
-        Uri uriForNote = ContentUris.withAppendedId(CONTENT_URI_ITEM, targetNote.getmId());
-        context.getContentResolver().update(uriForNote, values, null, null);
+        update(targetNote.getmId(), values);
         callback.onDataChanged();
-    }
-
-    /**
-     * Interface for loading data callback
-     */
-
-    public interface LoadDataCallback {
-        void onLoad(ArrayList<Note> mData);
-    }
-
-    /**
-     * Interface for changing data callback
-     */
-    public interface DataChangedCallback {
-        void onDataChanged();
     }
 }
