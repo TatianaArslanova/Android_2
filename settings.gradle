@@ -1,1 +1,1 @@
-include ':app', ':android2_lesson01'
+include ':android2_lesson01', ':android2_lesson03'
