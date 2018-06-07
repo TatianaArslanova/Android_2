@@ -3,7 +3,7 @@ package com.example.ama.android2_lesson03.base;
 import com.example.ama.android2_lesson03.model.UserQueryManager;
 import com.example.ama.android2_lesson03.model.base.QueryManager;
 
-abstract public class BasePresenter<T extends SearchAddressView> implements Presenter<T> {
+abstract public class BasePresenter<T extends PocketMapView> implements Presenter<T> {
     protected T view;
     protected QueryManager queryManager;
 

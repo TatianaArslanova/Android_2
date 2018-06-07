@@ -6,6 +6,7 @@ import android.net.Uri;
 import com.example.ama.android2_lesson03.PocketMap;
 import com.example.ama.android2_lesson03.model.base.LocManager;
 import com.example.ama.android2_lesson03.model.base.QueryManager;
+import com.google.android.gms.maps.model.LatLng;
 
 public class UserQueryManager implements QueryManager {
     private LocManager locManager;
@@ -26,11 +27,13 @@ public class UserQueryManager implements QueryManager {
     public void getFullLocationName(String query, OnFullNamePreparedCallback callback) {
         Address address = locManager.findAddressByQuery(PocketMap.getInstance(), query);
         StringBuilder fullLocationName = new StringBuilder();
-        int index = address.getMaxAddressLineIndex();
-        for (int i = 0; i <= index; i++) {
-            if (fullLocationName.length() != 0) fullLocationName.append(", ");
-            fullLocationName.append(address.getAddressLine(i));
+        if (address != null) {
+            int index = address.getMaxAddressLineIndex();
+            for (int i = 0; i <= index; i++) {
+                if (fullLocationName.length() != 0) fullLocationName.append(", ");
+                fullLocationName.append(address.getAddressLine(i));
+            }
+            callback.onSuccess(fullLocationName.toString(), new LatLng(address.getLatitude(), address.getLongitude()));
         }
-        callback.onSuccess(fullLocationName.toString());
     }
 }
