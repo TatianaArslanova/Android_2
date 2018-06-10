@@ -8,6 +8,12 @@ import com.google.android.gms.maps.model.LatLng;
 public interface SearchOnTheMapView extends PocketMapView {
     void showOnGMapsApp(Uri uri);
 
-    void showOnInnerMap(String address, LatLng latLng);
+    void showOnInnerMap(String address, LatLng latLng, float zoom);
+
+    void requestPermission(String permission, int requestCode);
+
+    void showErrorMessage(String message);
+
+    void zoomToLocation(LatLng latLng);
 
 }

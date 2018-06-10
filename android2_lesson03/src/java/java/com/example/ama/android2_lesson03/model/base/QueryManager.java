@@ -9,11 +9,23 @@ public interface QueryManager {
 
     void getFullLocationName(String query, OnFullNamePreparedCallback callback);
 
+    void getFullLocationName(LatLng latLng, OnFullNamePreparedCallback callback);
+
+    void getMyLocation(OnLocationSearchResultCallback callback);
+
     interface OnUriPreparedCallback {
         void onSuccess(Uri uri);
     }
 
     interface OnFullNamePreparedCallback {
-        void onSuccess(String fullLocationName, LatLng latLng);
+        void onSuccess(String fullLocationName, LatLng latLng, float zoom);
+    }
+
+    interface OnLocationSearchResultCallback {
+        void onLocationFound(LatLng latLng);
+
+        void onNotFound();
+
+        void onPermissionRequired(String permission, int requestCode);
     }
 }

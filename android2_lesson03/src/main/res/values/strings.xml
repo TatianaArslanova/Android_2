@@ -3,4 +3,5 @@
     <string name="button_text_search">search</string>
     <string name="edit_text_hint_find_address">Найти адрес на карте</string>
     <string name="button_text_send_to_google_maps">on GoogleMaps</string>
+    <string name="message_location_not_found">Location not found. Please, try later.</string>
 </resources>
