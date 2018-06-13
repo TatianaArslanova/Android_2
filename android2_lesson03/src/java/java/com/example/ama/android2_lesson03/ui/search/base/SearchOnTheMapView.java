@@ -2,7 +2,7 @@ package com.example.ama.android2_lesson03.ui.search.base;
 
 import android.net.Uri;
 
-import com.example.ama.android2_lesson03.base.PocketMapView;
+import com.example.ama.android2_lesson03.ui.base.PocketMapView;
 import com.google.android.gms.maps.model.LatLng;
 
 public interface SearchOnTheMapView extends PocketMapView {

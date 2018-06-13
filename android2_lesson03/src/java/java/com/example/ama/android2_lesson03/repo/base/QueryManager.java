@@ -1,4 +1,4 @@
-package com.example.ama.android2_lesson03.model.base;
+package com.example.ama.android2_lesson03.repo.base;
 
 import android.net.Uri;
 

@@ -1,4 +1,4 @@
-package com.example.ama.android2_lesson03.model;
+package com.example.ama.android2_lesson03.repo.data;
 
 import android.Manifest;
 import android.content.Context;
@@ -6,8 +6,8 @@ import android.location.Location;
 import android.location.LocationManager;
 
 import com.example.ama.android2_lesson03.PocketMap;
-import com.example.ama.android2_lesson03.model.base.BaseLocationManager;
-import com.example.ama.android2_lesson03.model.base.QueryManager;
+import com.example.ama.android2_lesson03.repo.data.base.BaseLocationManager;
+import com.example.ama.android2_lesson03.repo.base.QueryManager;
 import com.example.ama.android2_lesson03.utils.PermissionManager;
 import com.google.android.gms.maps.model.LatLng;
 

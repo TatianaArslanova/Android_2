@@ -1,14 +1,14 @@
-package com.example.ama.android2_lesson03.base;
+package com.example.ama.android2_lesson03.ui.base;
 
-import com.example.ama.android2_lesson03.model.UserQueryManager;
-import com.example.ama.android2_lesson03.model.base.QueryManager;
+import com.example.ama.android2_lesson03.repo.SearchQueryManager;
+import com.example.ama.android2_lesson03.repo.base.QueryManager;
 
 abstract public class BasePresenter<T extends PocketMapView> implements Presenter<T> {
     protected T view;
     protected QueryManager queryManager;
 
     public BasePresenter() {
-        queryManager = new UserQueryManager();
+        queryManager = new SearchQueryManager();
     }
 
     @Override

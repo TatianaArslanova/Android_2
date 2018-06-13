@@ -4,8 +4,8 @@ import android.net.Uri;
 
 import com.example.ama.android2_lesson03.PocketMap;
 import com.example.ama.android2_lesson03.R;
-import com.example.ama.android2_lesson03.base.BasePresenter;
-import com.example.ama.android2_lesson03.model.base.QueryManager;
+import com.example.ama.android2_lesson03.ui.base.BasePresenter;
+import com.example.ama.android2_lesson03.repo.base.QueryManager;
 import com.example.ama.android2_lesson03.ui.search.base.SearchOnTheMapView;
 import com.example.ama.android2_lesson03.ui.search.base.SearchPresenter;
 import com.google.android.gms.maps.model.LatLng;

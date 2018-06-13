@@ -1,6 +1,6 @@
 package com.example.ama.android2_lesson03.ui.search.base;
 
-import com.example.ama.android2_lesson03.base.Presenter;
+import com.example.ama.android2_lesson03.ui.base.Presenter;
 import com.google.android.gms.maps.model.LatLng;
 
 public interface SearchPresenter<T extends SearchOnTheMapView> extends Presenter<T> {
