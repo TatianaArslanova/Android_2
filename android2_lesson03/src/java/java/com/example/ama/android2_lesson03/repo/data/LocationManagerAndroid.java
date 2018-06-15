@@ -7,13 +7,13 @@ import android.location.LocationManager;
 
 import com.example.ama.android2_lesson03.PocketMap;
 import com.example.ama.android2_lesson03.repo.data.base.BaseLocationManager;
-import com.example.ama.android2_lesson03.repo.base.QueryManager;
+import com.example.ama.android2_lesson03.repo.base.SearchManager;
 import com.example.ama.android2_lesson03.utils.PermissionManager;
 import com.google.android.gms.maps.model.LatLng;
 
 public class LocationManagerAndroid extends BaseLocationManager {
     @Override
-    public void findMyLocation(QueryManager.OnLocationSearchResultCallback callback) {
+    public void findMyLocation(SearchManager.OnLocationSearchResultCallback callback) {
         LocationManager locManager = (LocationManager) PocketMap.getInstance().getSystemService(Context.LOCATION_SERVICE);
         if (PermissionManager.checkPermission(PocketMap.getInstance(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
             if (locManager != null) {

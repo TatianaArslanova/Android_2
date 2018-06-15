@@ -1,38 +1,52 @@
 package com.example.ama.android2_lesson03.repo;
 
 import android.location.Address;
-import android.net.Uri;
 
-import com.example.ama.android2_lesson03.repo.data.base.LocManager;
-import com.example.ama.android2_lesson03.repo.base.QueryManager;
+import com.example.ama.android2_lesson03.PocketMap;
+import com.example.ama.android2_lesson03.R;
+import com.example.ama.android2_lesson03.repo.base.MarkerListManager;
+import com.example.ama.android2_lesson03.repo.base.SearchManager;
 import com.example.ama.android2_lesson03.repo.data.LocationManagerAndroid;
+import com.example.ama.android2_lesson03.repo.data.PreferencesMarkerManager;
+import com.example.ama.android2_lesson03.repo.data.UriManager;
+import com.example.ama.android2_lesson03.repo.data.base.LocManager;
+import com.example.ama.android2_lesson03.repo.data.base.MarkerManager;
+import com.example.ama.android2_lesson03.repo.model.SimpleMarker;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
-public class SearchQueryManager implements QueryManager {
+public class SearchQueryManager implements SearchManager, MarkerListManager {
     private LocManager locManager;
+    private UriManager uriManager;
+    private MarkerManager markerManager;
+
+    private SimpleMarker savedMarker;
 
     public static final float DEFAULT_ZOOM = 15f;
 
-    private static final String BASE_GEO_QUERY = "geo:0,0?q=";
-
     public SearchQueryManager() {
         locManager = new LocationManagerAndroid();
+        uriManager = new UriManager();
+        markerManager = new PreferencesMarkerManager();
     }
 
     @Override
-    public void prepareGMapUri(String query, OnUriPreparedCallback callback) {
-        Uri uri = Uri.parse(BASE_GEO_QUERY + query);
-        callback.onSuccess(uri);
+    public void getPreparedUri(boolean isMarkerOnTheMap, LatLng cameraPosition, float zoom, OnUriPreparedCallback callback) {
+        if (!isMarkerOnTheMap) {
+            uriManager.prepareUriByCameraPosition(cameraPosition, zoom);
+        }
+        callback.onSuccess(uriManager.getPreparedUri());
     }
 
     @Override
     public void getFullLocationName(String query, OnFullNamePreparedCallback callback) {
         Address address = locManager.findAddressByQuery(query);
         if (address != null) {
+            uriManager.prepareUriByQuery(query);
             callback.onSuccess(
                     buildFullName(address),
                     new LatLng(address.getLatitude(), address.getLongitude()),
-                    chooseZoom(address));
+                    DEFAULT_ZOOM);
         }
     }
 
@@ -40,10 +54,12 @@ public class SearchQueryManager implements QueryManager {
     public void getFullLocationName(LatLng latLng, OnFullNamePreparedCallback callback) {
         Address address = locManager.findAddressByCoords(latLng);
         if (address != null) {
+            String fullName = buildFullName(address);
+            uriManager.prepareUriByMarkerLocation(latLng, fullName);
             callback.onSuccess(
-                    buildFullName(address),
+                    fullName,
                     latLng,
-                    chooseZoom(address)
+                    DEFAULT_ZOOM
             );
         }
     }
@@ -51,6 +67,53 @@ public class SearchQueryManager implements QueryManager {
     @Override
     public void getMyLocation(OnLocationSearchResultCallback callback) {
         locManager.findMyLocation(callback);
+    }
+
+    @Override
+    public void prepareSaveMarkerDialog(Marker marker, OnDialogDataPrepared callback) {
+        callback.onSuccess(
+                PocketMap.getInstance().getString(R.string.save_marker_dialog_title),
+                PocketMap.getInstance().getString(R.string.save_marker_dialog_message),
+                marker
+        );
+    }
+
+    @Override
+    public void saveMarker(Marker marker, OnMarkerSavedCallback callback) {
+        markerManager.addMarker(SimpleMarker.getFromMarker(marker));
+        callback.onSuccess(PocketMap.getInstance().getString(R.string.marker_saved_message));
+    }
+
+    @Override
+    public void getAllMarkers(OnGetMarkersCallback callback) {
+        callback.onSuccess(markerManager.getAllMarkers());
+    }
+
+    @Override
+    public void updateMarker(SimpleMarker marker, String newName, OnGetMarkersCallback callback) {
+        markerManager.updateMarker(marker, newName);
+        getAllMarkers(callback);
+    }
+
+    @Override
+    public void deleteMarker(SimpleMarker marker, OnGetMarkersCallback callback) {
+        markerManager.deleteMarker(marker);
+        getAllMarkers(callback);
+    }
+
+    @Override
+    public void sendMarker(SimpleMarker marker) {
+        savedMarker = marker;
+    }
+
+    @Override
+    public void getCurrentMarker(OnLoadMarkerCallback callback) {
+        if (savedMarker != null) {
+            callback.onSuccess(savedMarker);
+            savedMarker = null;
+        } else {
+            callback.onNotFound();
+        }
     }
 
     private String buildFullName(Address address) {
@@ -63,10 +126,5 @@ public class SearchQueryManager implements QueryManager {
             }
         }
         return fullLocationName.toString();
-    }
-
-    private float chooseZoom(Address address) {
-        //TODO: chooseZoom
-        return DEFAULT_ZOOM;
     }
 }

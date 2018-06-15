@@ -1,7 +1,15 @@
 <resources>
-    <string name="app_name">android2_lesson03</string>
-    <string name="button_text_search">search</string>
+    <string name="app_name">Pocket Map</string>
+    <string name="button_text_search">поиск</string>
     <string name="edit_text_hint_find_address">Найти адрес на карте</string>
     <string name="button_text_send_to_google_maps">on GoogleMaps</string>
-    <string name="message_location_not_found">Location not found. Please, try later.</string>
+    <string name="message_location_not_found">Местоположение не найдено. Попробуйте позже.</string>
+    <string name="search_fragment_menu_item_settings_title">Сохраненные маркеры</string>
+    <string name="save_marker_dialog_title">Сохранение маркера</string>
+    <string name="save_marker_dialog_message">Сохранить этот маркер?</string>
+    <string name="edit_dialog_message_marker_name">Имя маркера:</string>
+    <string name="marker_saved_message">Маркер сохранен</string>
+    <string name="button_ok_text">OK</string>
+    <string name="button_text_cancel">Отмена</string>
+    <string name="marker_list_fragment_context_menu_item_delete">Удалить</string>
 </resources>
