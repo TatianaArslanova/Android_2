@@ -24,6 +24,9 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_search.*
 
+/**
+ * Fragment for getting search user queries and showing on the map
+ */
 class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
 
     private lateinit var mapView: MapView
@@ -177,7 +180,7 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
         map?.setOnMapClickListener {
             map?.clear()
             et_search.text.clear()
-            tv_address.text=""
+            tv_address.text = ""
             isMarkerOnTheMap = false
         }
         map?.setOnMarkerClickListener { marker ->

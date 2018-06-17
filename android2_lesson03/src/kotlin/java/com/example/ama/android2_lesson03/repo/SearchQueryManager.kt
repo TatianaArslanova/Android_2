@@ -16,6 +16,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import java.lang.StringBuilder
 
+/**
+ * Class for execute presenter's queries
+ */
 class SearchQueryManager : SearchManager, MarkerListManager {
 
     companion object {

@@ -14,6 +14,9 @@ import com.example.ama.android2_lesson03.ui.markers.base.MarkerPresenter
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerView
 import com.example.ama.android2_lesson03.ui.markers.mvp.MarkerListPresenter
 
+/**
+ * List fragment for work with favorites markers
+ */
 class MarkerListFragment : ListFragment(), MarkerView {
 
     private lateinit var adapter: ArrayAdapter<SimpleMarker>

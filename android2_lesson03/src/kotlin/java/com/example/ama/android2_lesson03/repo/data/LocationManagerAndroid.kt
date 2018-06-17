@@ -10,6 +10,9 @@ import com.example.ama.android2_lesson03.utils.FIND_MY_LOCATION_REQUEST
 import com.example.ama.android2_lesson03.utils.PermissionManager
 import com.google.android.gms.maps.model.LatLng
 
+/**
+ * Class for locating by android.location
+ */
 class LocationManagerAndroid : BaseLocationManager() {
     override fun findMyLocation(found: (latLng: LatLng, zoom: Float) -> Unit, notFound: (message: String) -> Unit, permissionRequired: (permission: String, requestCode: Int) -> Unit) {
         val locationManager = PocketMap.instance.getSystemService(Context.LOCATION_SERVICE) as LocationManager

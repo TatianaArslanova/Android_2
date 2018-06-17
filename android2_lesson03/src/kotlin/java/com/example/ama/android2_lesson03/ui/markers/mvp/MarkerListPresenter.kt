@@ -7,6 +7,11 @@ import com.example.ama.android2_lesson03.ui.base.BasePresenter
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerPresenter
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerView
 
+/**
+ * Presenter implementation for [MarkerView]
+ *
+ * @param <T> view for work with
+ */
 class MarkerListPresenter<T : MarkerView> : BasePresenter<T>(), MarkerPresenter<T> {
 
     private val markerManager: MarkerListManager = PocketMap.queryManager as MarkerListManager

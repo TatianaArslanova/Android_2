@@ -4,6 +4,9 @@ import android.net.Uri
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 
+/**
+ * Interface describes methods for search manager queries
+ */
 interface SearchManager {
     fun getPreparedUri(isMarkerOnTheMap: Boolean, cameraPosition: LatLng?, zoom: Float?, callback: (uri: Uri) -> Unit)
 

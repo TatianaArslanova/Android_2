@@ -8,6 +8,9 @@ import com.google.android.gms.maps.model.LatLng
 import org.json.JSONException
 import org.json.JSONObject
 
+/**
+ * Class for managing favorite markers, working with SharedPreferences
+ */
 class PreferencesMarkerManager : MarkerManager {
 
     companion object {

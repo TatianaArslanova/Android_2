@@ -3,6 +3,9 @@ package com.example.ama.android2_lesson03.repo.data
 import android.net.Uri
 import com.google.android.gms.maps.model.LatLng
 
+/**
+ * Class for preparing Uri for sending to another apps
+ */
 class UriManager {
 
     companion object {

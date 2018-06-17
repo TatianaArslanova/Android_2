@@ -6,6 +6,9 @@ import com.example.ama.android2_lesson03.PocketMap
 import com.google.android.gms.maps.model.LatLng
 import java.io.IOException
 
+/**
+ * Base implementation for [LocManager]
+ */
 abstract class BaseLocationManager : LocManager {
     private val geocoder = Geocoder(PocketMap.instance)
 

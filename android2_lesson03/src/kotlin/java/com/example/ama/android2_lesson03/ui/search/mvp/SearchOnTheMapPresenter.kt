@@ -8,6 +8,10 @@ import com.example.ama.android2_lesson03.ui.search.base.SearchPresenter
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 
+/**
+ * Presenter implementation for [SearchOnTheMapView]
+ * @param <T> view for work with
+ */
 class SearchOnTheMapPresenter<T : SearchOnTheMapView> : BasePresenter<T>(), SearchPresenter<T> {
 
     private val queryManager: SearchManager = PocketMap.queryManager
