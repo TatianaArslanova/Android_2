@@ -5,21 +5,22 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.example.ama.android2_lesson03.PocketMap
 import com.example.ama.android2_lesson03.R
 import com.example.ama.android2_lesson03.ui.Launcher
+import com.example.ama.android2_lesson03.ui.MainActivity
 import com.example.ama.android2_lesson03.ui.search.base.SearchOnTheMapView
 import com.example.ama.android2_lesson03.ui.search.base.SearchPresenter
 import com.example.ama.android2_lesson03.ui.search.mvp.SearchOnTheMapPresenter
+import com.example.ama.android2_lesson03.utils.FIND_MY_LOCATION_REQUEST
 import com.example.ama.android2_lesson03.utils.PermissionManager
 import com.example.ama.android2_lesson03.utils.TUNE_MAP_REQUEST
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_search.*
 
@@ -36,46 +37,35 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
         fun newInstance() = SearchOnTheMapFragment()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_search, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         presenter = SearchOnTheMapPresenter()
+        addListeners()
         mapView = mv_main_map
         mapView.onCreate(savedInstanceState)
+        mapView.getMapAsync({ it ->
+            map = it
+            tuneMap()
+            tuneMyLocation()
+        })
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun addListeners() {
         btn_search.setOnClickListener { presenter?.findAddressByQuery(et_search.text.toString()) }
         btn_ongmap.setOnClickListener {
             presenter?.sendQueryToGMapsApp(
                     isMarkerOnTheMap,
                     map?.cameraPosition?.target,
                     map?.cameraPosition?.zoom)
-        }
-        mapView.getMapAsync({ it ->
-            map = it
-            tuneMyLocation()
-            tuneMap()
-        })
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-    private fun tuneMyLocation() {
-        if (PermissionManager.checkPermission(PocketMap.instance, android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
-            map?.isMyLocationEnabled = true
-            map?.uiSettings?.isMyLocationButtonEnabled = true
-            presenter?.findMyLocation()
-        } else {
-            requestPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION, TUNE_MAP_REQUEST)
-        }
-    }
-
-    private fun tuneMap() {
-        map?.uiSettings?.setAllGesturesEnabled(true)
-        map?.uiSettings?.isZoomControlsEnabled = true
-        map?.setOnMapLongClickListener { latLng -> presenter?.findAddressByLatLng(latLng) }
-        map?.setOnMapClickListener {
-            map?.clear()
-            isMarkerOnTheMap = false
         }
     }
 
@@ -120,8 +110,21 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
         if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             when (requestCode) {
                 TUNE_MAP_REQUEST -> tuneMyLocation()
+                FIND_MY_LOCATION_REQUEST -> presenter?.findMyLocation()
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.search_fragment_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.mi_showsettings -> Launcher.runMarkerListFragment(activity as MainActivity, true)
+        }
+        return true
     }
 
     override fun showOnGMapsApp(uri: Uri) {
@@ -146,6 +149,43 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
         PermissionManager.requestPermission(this, permission, requestCode)
     }
 
+    override fun showDialog(title: String, message: String, marker: Marker) {
+        Launcher.showDialog(activity, title, message,
+                okListener = { dialogInterface, i ->
+                    presenter?.saveMarker(marker)
+                    dialogInterface.cancel()
+                },
+                cancelListener = { dialogInterface, i ->
+                    dialogInterface.cancel()
+                })
+    }
+
+    private fun tuneMyLocation() {
+        if (PermissionManager.checkPermission(PocketMap.instance, android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            map?.isMyLocationEnabled = true
+            map?.uiSettings?.isMyLocationButtonEnabled = true
+            presenter?.getCurrentMarker()
+        } else {
+            requestPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION, TUNE_MAP_REQUEST)
+        }
+    }
+
+    private fun tuneMap() {
+        map?.uiSettings?.setAllGesturesEnabled(true)
+        map?.uiSettings?.isZoomControlsEnabled = true
+        map?.setOnMapLongClickListener { latLng -> presenter?.findAddressByLatLng(latLng) }
+        map?.setOnMapClickListener {
+            map?.clear()
+            et_search.text.clear()
+            tv_address.text=""
+            isMarkerOnTheMap = false
+        }
+        map?.setOnMarkerClickListener { marker ->
+            presenter?.onSaveMarkerClick(marker)
+            true
+        }
+    }
+
     private fun setMarkerOnTheMap(address: String, latlng: LatLng, zoom: Float) {
         map?.clear()
         map?.addMarker(MarkerOptions()
@@ -154,5 +194,4 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
         isMarkerOnTheMap = true
         zoomToLocation(latlng, zoom)
     }
-
 }

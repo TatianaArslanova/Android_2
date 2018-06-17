@@ -1,15 +1,16 @@
 package com.example.ama.android2_lesson03.ui.search.mvp
 
 import com.example.ama.android2_lesson03.PocketMap
-import com.example.ama.android2_lesson03.repo.base.QueryManager
+import com.example.ama.android2_lesson03.repo.base.SearchManager
 import com.example.ama.android2_lesson03.ui.base.BasePresenter
 import com.example.ama.android2_lesson03.ui.search.base.SearchOnTheMapView
 import com.example.ama.android2_lesson03.ui.search.base.SearchPresenter
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 
 class SearchOnTheMapPresenter<T : SearchOnTheMapView> : BasePresenter<T>(), SearchPresenter<T> {
 
-    private val queryManager: QueryManager = PocketMap.queryManager
+    private val queryManager: SearchManager = PocketMap.queryManager
 
     override fun findAddressByQuery(query: String) {
         queryManager.getFullLocationName(query,
@@ -31,4 +32,21 @@ class SearchOnTheMapPresenter<T : SearchOnTheMapView> : BasePresenter<T>(), Sear
                 notFound = { message -> view?.showMessage(message) },
                 permissionRequired = { permission, requestCode -> view?.requestPermission(permission, requestCode) })
     }
+
+    override fun saveMarker(marker: Marker) {
+        queryManager.saveMarkerToList(marker)
+        { message -> view?.showMessage(message) }
+    }
+
+    override fun onSaveMarkerClick(marker: Marker) {
+        queryManager.prepareSaveMarkerDialog(marker)
+        { title, message, marker -> view?.showDialog(title, message, marker) }
+    }
+
+    override fun getCurrentMarker() {
+        queryManager.getCurrentMarker(
+                found = { title, position, zoom -> view?.showOnInnerMap(title, position, zoom) },
+                notFound = { findMyLocation() })
+    }
+
 }
