@@ -10,6 +10,10 @@ import com.example.ama.android2_lesson03.ui.search.base.SearchPresenter;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+/**
+ * Presenter implementation for {@link SearchOnTheMapView}
+ * @param <T> view for work with
+ */
 public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
         extends BasePresenter<T>
         implements SearchPresenter<T> {

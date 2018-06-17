@@ -34,6 +34,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+/**
+ * Fragment for getting search user queries and showing on the map
+ */
 public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapView {
 
     private EditText etSearch;

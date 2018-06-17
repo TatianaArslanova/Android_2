@@ -15,6 +15,9 @@ import com.example.ama.android2_lesson03.repo.model.SimpleMarker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+/**
+ * Class for execute presenter's queries
+ */
 public class SearchQueryManager implements SearchManager, MarkerListManager {
     private LocManager locManager;
     private UriManager uriManager;
@@ -102,7 +105,7 @@ public class SearchQueryManager implements SearchManager, MarkerListManager {
     }
 
     @Override
-    public void sendMarker(SimpleMarker marker) {
+    public void saveCurrentMarker(SimpleMarker marker) {
         savedMarker = marker;
     }
 

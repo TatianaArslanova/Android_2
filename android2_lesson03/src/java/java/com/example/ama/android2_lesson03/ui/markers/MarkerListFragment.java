@@ -19,6 +19,9 @@ import com.example.ama.android2_lesson03.ui.markers.mvp.MarkerListPresenter;
 
 import java.util.ArrayList;
 
+/**
+ * List fragment for work with favorites markers
+ */
 public class MarkerListFragment extends ListFragment implements MarkerView {
     private ArrayAdapter<SimpleMarker> adapter;
     private MarkerPresenter<MarkerView> presenter;

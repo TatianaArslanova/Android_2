@@ -15,6 +15,9 @@ import com.example.ama.android2_lesson03.R;
 import com.example.ama.android2_lesson03.ui.markers.MarkerListFragment;
 import com.example.ama.android2_lesson03.ui.search.SearchOnTheMapFragment;
 
+/**
+ * Class for navigation
+ */
 public class Launcher {
 
     private static final String GOOGLE_MAP_PACKAGE_NAME = "com.google.android.apps.maps";

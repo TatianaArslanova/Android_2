@@ -9,6 +9,9 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Base implementation for {@link LocManager}
+ */
 public abstract class BaseLocationManager implements LocManager {
 
     private Geocoder geocoder;

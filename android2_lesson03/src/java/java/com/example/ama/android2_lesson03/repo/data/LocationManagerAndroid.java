@@ -13,7 +13,16 @@ import com.example.ama.android2_lesson03.repo.data.base.BaseLocationManager;
 import com.example.ama.android2_lesson03.utils.PermissionManager;
 import com.google.android.gms.maps.model.LatLng;
 
+/**
+ * Class for locating by android.location
+ */
 public class LocationManagerAndroid extends BaseLocationManager {
+
+    /**
+     * Find user location by Passive Provider and notify about result by callback
+     *
+     * @param callback for sending result
+     */
     @Override
     public void findMyLocation(SearchManager.OnLocationSearchResultCallback callback) {
         LocationManager locManager = (LocationManager) PocketMap.getInstance().getSystemService(Context.LOCATION_SERVICE);

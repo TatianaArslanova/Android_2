@@ -9,6 +9,11 @@ import com.example.ama.android2_lesson03.ui.markers.base.MarkerView;
 
 import java.util.ArrayList;
 
+/**
+ * Presenter implementation for {@link MarkerView}
+ *
+ * @param <T> view for work with
+ */
 public class MarkerListPresenter<T extends MarkerView> extends BasePresenter<T> implements MarkerPresenter<T> {
 
     private MarkerListManager markerManager;
@@ -31,7 +36,7 @@ public class MarkerListPresenter<T extends MarkerView> extends BasePresenter<T> 
 
     @Override
     public void sendMarker(SimpleMarker marker) {
-        markerManager.sendMarker(marker);
+        markerManager.saveCurrentMarker(marker);
     }
 
     @Override

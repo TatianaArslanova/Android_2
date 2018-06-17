@@ -14,8 +14,16 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+/**
+ * Class for locating by Google Maps API
+ */
 public class LocationManagerGoogle extends BaseLocationManager {
 
+    /**
+     * Find user location by {@link FusedLocationProviderClient} and notify about result by callback
+     *
+     * @param callback for sending result
+     */
     @Override
     public void findMyLocation(final SearchManager.OnLocationSearchResultCallback callback) {
         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(PocketMap.getInstance());

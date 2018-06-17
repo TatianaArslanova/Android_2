@@ -3,6 +3,9 @@ package com.example.ama.android2_lesson03.repo.model;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+/**
+ * Model with basic marker parameters for saving to favorites
+ */
 public class SimpleMarker {
     private LatLng position;
     private String title;

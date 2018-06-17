@@ -5,6 +5,9 @@ import android.net.Uri;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+/**
+ * Interface describes methods for search manager queries
+ */
 public interface SearchManager {
     void getPreparedUri(boolean isMarkerOnTheMap, LatLng cameraPosition, float zoom, OnUriPreparedCallback callback);
 

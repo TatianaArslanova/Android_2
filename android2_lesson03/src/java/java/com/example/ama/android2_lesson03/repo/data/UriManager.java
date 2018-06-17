@@ -4,6 +4,9 @@ import android.net.Uri;
 
 import com.google.android.gms.maps.model.LatLng;
 
+/**
+ * Class for preparing Uri for sending to another apps
+ */
 public class UriManager {
     private static final String URI_GEO_SHEME = "geo:";
     private static final String BASE_GEO_QUERY = "geo:0,0?q=";

@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Class for managing favorite markers, working with SharedPreferences
+ */
 public class PreferencesMarkerManager implements MarkerManager {
     private static final String PREFERENCES_FILE_NAME = "marker_preferences";
     private static final String MARKERS_KEY = "all_markers";

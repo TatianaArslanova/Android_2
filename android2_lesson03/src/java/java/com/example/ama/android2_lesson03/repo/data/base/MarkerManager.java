@@ -4,6 +4,9 @@ import com.example.ama.android2_lesson03.repo.model.SimpleMarker;
 
 import java.util.ArrayList;
 
+/**
+ * Interface describes basic methods for managing favorites markers
+ */
 public interface MarkerManager {
     ArrayList<SimpleMarker> getAllMarkers();
 

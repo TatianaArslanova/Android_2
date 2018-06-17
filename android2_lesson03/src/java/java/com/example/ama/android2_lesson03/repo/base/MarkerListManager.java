@@ -4,6 +4,9 @@ import com.example.ama.android2_lesson03.repo.model.SimpleMarker;
 
 import java.util.ArrayList;
 
+/**
+ * Interface describes basic methods for managing markers by presenter's queries
+ */
 public interface MarkerListManager {
     void getAllMarkers(OnGetMarkersCallback callback);
 
@@ -11,7 +14,7 @@ public interface MarkerListManager {
 
     void deleteMarker(SimpleMarker marker, OnGetMarkersCallback callback);
 
-    void sendMarker(SimpleMarker marker);
+    void saveCurrentMarker(SimpleMarker marker);
 
     interface OnGetMarkersCallback {
         void onSuccess(ArrayList<SimpleMarker> markers);
