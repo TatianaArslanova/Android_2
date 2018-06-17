@@ -6,8 +6,10 @@ import android.location.Location;
 import android.location.LocationManager;
 
 import com.example.ama.android2_lesson03.PocketMap;
-import com.example.ama.android2_lesson03.repo.data.base.BaseLocationManager;
+import com.example.ama.android2_lesson03.R;
+import com.example.ama.android2_lesson03.repo.SearchQueryManager;
 import com.example.ama.android2_lesson03.repo.base.SearchManager;
+import com.example.ama.android2_lesson03.repo.data.base.BaseLocationManager;
 import com.example.ama.android2_lesson03.utils.PermissionManager;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -20,10 +22,11 @@ public class LocationManagerAndroid extends BaseLocationManager {
                 Location location = locManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
                 if (location != null) {
                     callback.onLocationFound(new LatLng(
-                            location.getLatitude(),
-                            location.getLongitude()));
+                                    location.getLatitude(),
+                                    location.getLongitude()),
+                            SearchQueryManager.DEFAULT_ZOOM);
                 } else {
-                    callback.onNotFound();
+                    callback.onNotFound(PocketMap.getInstance().getString(R.string.message_location_not_found));
                 }
             }
         } else {

@@ -3,9 +3,7 @@ package com.example.ama.android2_lesson03.ui.search.mvp;
 import android.net.Uri;
 
 import com.example.ama.android2_lesson03.PocketMap;
-import com.example.ama.android2_lesson03.R;
 import com.example.ama.android2_lesson03.repo.base.SearchManager;
-import com.example.ama.android2_lesson03.repo.model.SimpleMarker;
 import com.example.ama.android2_lesson03.ui.base.BasePresenter;
 import com.example.ama.android2_lesson03.ui.search.base.SearchOnTheMapView;
 import com.example.ama.android2_lesson03.ui.search.base.SearchPresenter;
@@ -56,13 +54,13 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
     public void findMyLocation() {
         queryManager.getMyLocation(new SearchManager.OnLocationSearchResultCallback() {
             @Override
-            public void onLocationFound(LatLng latLng) {
-                view.zoomToLocation(latLng);
+            public void onLocationFound(LatLng latLng, float zoom) {
+                view.zoomToLocation(latLng, zoom);
             }
 
             @Override
-            public void onNotFound() {
-                view.showMessage(PocketMap.getInstance().getString(R.string.message_location_not_found));
+            public void onNotFound(String message) {
+                view.showMessage(message);
             }
 
             @Override
@@ -96,8 +94,8 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
     public void getCurrentMarker() {
         queryManager.getCurrentMarker(new SearchManager.OnLoadMarkerCallback() {
             @Override
-            public void onSuccess(SimpleMarker marker) {
-                view.showOnInnerMap(marker.getTitle(), marker.getPosition(), 10f);
+            public void onSuccess(String title, LatLng position, float zoom) {
+                view.showOnInnerMap(title, position, zoom);
             }
 
             @Override

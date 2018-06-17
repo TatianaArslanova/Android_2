@@ -15,7 +15,7 @@ public interface SearchOnTheMapView extends PocketMapView {
 
     void showMessage(String message);
 
-    void zoomToLocation(LatLng latLng);
+    void zoomToLocation(LatLng latLng, float zoom);
 
     void showDialog(String title, String message, Marker marker);
 }

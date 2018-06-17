@@ -49,12 +49,12 @@ public class Launcher {
                                   String message,
                                   DialogInterface.OnClickListener okButton,
                                   DialogInterface.OnClickListener cancelButton) {
-        AlertDialog dialog = new AlertDialog.Builder(context)
+        new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(PocketMap.getInstance().getString(R.string.button_ok_text), okButton)
                 .setNegativeButton(PocketMap.getInstance().getString(R.string.button_text_cancel), cancelButton)
-                .create();
-        dialog.show();
+                .create()
+                .show();
     }
 }

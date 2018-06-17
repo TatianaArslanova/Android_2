@@ -2,7 +2,6 @@ package com.example.ama.android2_lesson03.repo.base;
 
 import android.net.Uri;
 
-import com.example.ama.android2_lesson03.repo.model.SimpleMarker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -26,7 +25,7 @@ public interface SearchManager {
     }
 
     interface OnLoadMarkerCallback {
-        void onSuccess(SimpleMarker marker);
+        void onSuccess(String title, LatLng position, float zoom);
 
         void onNotFound();
     }
@@ -44,9 +43,9 @@ public interface SearchManager {
     }
 
     interface OnLocationSearchResultCallback {
-        void onLocationFound(LatLng latLng);
+        void onLocationFound(LatLng latLng, float zoom);
 
-        void onNotFound();
+        void onNotFound(String message);
 
         void onPermissionRequired(String permission, int requestCode);
     }

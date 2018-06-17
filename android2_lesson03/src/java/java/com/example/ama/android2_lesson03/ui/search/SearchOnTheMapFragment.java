@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.example.ama.android2_lesson03.PocketMap;
 import com.example.ama.android2_lesson03.R;
-import com.example.ama.android2_lesson03.repo.SearchQueryManager;
 import com.example.ama.android2_lesson03.ui.Launcher;
 import com.example.ama.android2_lesson03.ui.MainActivity;
 import com.example.ama.android2_lesson03.ui.search.base.SearchOnTheMapView;
@@ -72,8 +71,8 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
-                tuneMyLocation();
                 tuneMap();
+                tuneMyLocation();
             }
         });
         super.onViewCreated(view, savedInstanceState);
@@ -104,6 +103,7 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
         if (PermissionManager.checkPermission(PocketMap.getInstance(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
             map.setMyLocationEnabled(true);
             map.getUiSettings().setMyLocationButtonEnabled(true);
+            presenter.getCurrentMarker();
         } else {
             requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION, PermissionManager.TUNE_MAP_REQUEST);
         }
@@ -122,6 +122,8 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
             @Override
             public void onMapClick(LatLng latLng) {
                 map.clear();
+                etSearch.getText().clear();
+                tvAddress.setText("");
                 isMarkerOnTheMap = false;
             }
         });
@@ -132,7 +134,6 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
                 return true;
             }
         });
-        presenter.getCurrentMarker();
     }
 
     @Override
@@ -236,8 +237,8 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
     }
 
     @Override
-    public void zoomToLocation(LatLng latLng) {
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, SearchQueryManager.DEFAULT_ZOOM));
+    public void zoomToLocation(LatLng latLng, float zoom) {
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
     private void startSearching(String query) {
@@ -257,7 +258,7 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
                 .position(latLng)
                 .title(address));
         isMarkerOnTheMap = true;
-        zoomToLocation(latLng);
+        zoomToLocation(latLng, zoom);
     }
 
     @Override

@@ -12,8 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,12 +36,6 @@ public class PreferencesMarkerManager implements MarkerManager {
         for (String o : markerSet) {
             markers.add(simpleMarkerFromJson(o));
         }
-        Collections.sort(markers, new Comparator<SimpleMarker>() {
-            @Override
-            public int compare(SimpleMarker marker, SimpleMarker t1) {
-                return 0;
-            }
-        });
         return markers;
     }
 

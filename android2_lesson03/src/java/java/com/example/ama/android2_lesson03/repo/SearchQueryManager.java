@@ -109,8 +109,7 @@ public class SearchQueryManager implements SearchManager, MarkerListManager {
     @Override
     public void getCurrentMarker(OnLoadMarkerCallback callback) {
         if (savedMarker != null) {
-            callback.onSuccess(savedMarker);
-            savedMarker = null;
+            callback.onSuccess(savedMarker.getTitle(), savedMarker.getPosition(), DEFAULT_ZOOM);
         } else {
             callback.onNotFound();
         }
