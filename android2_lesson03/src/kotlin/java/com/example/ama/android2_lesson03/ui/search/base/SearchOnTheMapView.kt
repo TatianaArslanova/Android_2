@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.LatLng
 interface SearchOnTheMapView : PocketMapView {
     fun showOnGMapsApp(uri: Uri)
     fun showOnInnerMap(address: String, latLng: LatLng, zoom: Float)
-    fun showErrorMessage(message: String)
-    fun zoomToLocation(latLng: LatLng)
+    fun showMessage(message: String)
+    fun zoomToLocation(latLng: LatLng, zoom: Float)
     fun requestPermission(permission: String, requestCode: Int)
 }
