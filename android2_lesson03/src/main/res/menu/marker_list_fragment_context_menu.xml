@@ -3,4 +3,7 @@
     <item
         android:id="@+id/mi_delete"
         android:title="@string/marker_list_fragment_context_menu_item_delete" />
+    <item
+        android:id="@+id/mi_rename"
+        android:title="@string/marker_list_fragment_context_menu_item_rename" />
 </menu>

@@ -9,7 +9,7 @@ interface SearchPresenter<T : SearchOnTheMapView> : Presenter<T> {
     fun findAddressByLatLng(latLng: LatLng)
     fun sendQueryToGMapsApp(isMarkerOnTheMap: Boolean, cameraPosition: LatLng?, zoom: Float?)
     fun findMyLocation()
-    fun saveMarker(marker: Marker)
+    fun saveMarker(marker: Marker, customName: String)
     fun onSaveMarkerClick(marker: Marker)
     fun getCurrentMarker()
 }

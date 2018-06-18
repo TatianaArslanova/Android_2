@@ -8,4 +8,5 @@ interface MarkerPresenter<T : MarkerView> : Presenter<T> {
     fun sendMarker(marker: SimpleMarker)
     fun editMarkerName(marker: SimpleMarker, newName: String)
     fun deleteMarker(marker: SimpleMarker)
+    fun onUpdateMarker(marker: SimpleMarker)
 }

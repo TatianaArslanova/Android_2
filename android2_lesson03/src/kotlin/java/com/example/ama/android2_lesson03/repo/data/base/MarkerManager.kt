@@ -10,4 +10,5 @@ interface MarkerManager {
     fun addMarker(marker: SimpleMarker)
     fun deleteMarker(marker: SimpleMarker)
     fun updateMarker(marker: SimpleMarker, newName: String)
+    fun isMarkerExists(marker: SimpleMarker): Boolean
 }

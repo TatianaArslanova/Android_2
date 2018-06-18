@@ -18,12 +18,12 @@ class SearchOnTheMapPresenter<T : SearchOnTheMapView> : BasePresenter<T>(), Sear
 
     override fun findAddressByQuery(query: String) {
         queryManager.getFullLocationName(query,
-                { fullLocationName, latLng, zoom -> view?.showOnInnerMap(fullLocationName, latLng, zoom) })
+                { fullLocationName, latLng, zoom -> view?.showOnInnerMap(null, fullLocationName, latLng, zoom) })
     }
 
     override fun findAddressByLatLng(latLng: LatLng) {
         queryManager.getFullLocationName(latLng,
-                { fullLocationName, latLng, zoom -> view?.showOnInnerMap(fullLocationName, latLng, zoom) })
+                { fullLocationName, latLng, zoom -> view?.showOnInnerMap(null, fullLocationName, latLng, zoom) })
     }
 
     override fun sendQueryToGMapsApp(isMarkerOnTheMap: Boolean, cameraPosition: LatLng?, zoom: Float?) {
@@ -37,19 +37,20 @@ class SearchOnTheMapPresenter<T : SearchOnTheMapView> : BasePresenter<T>(), Sear
                 permissionRequired = { permission, requestCode -> view?.requestPermission(permission, requestCode) })
     }
 
-    override fun saveMarker(marker: Marker) {
-        queryManager.saveMarkerToList(marker)
+    override fun saveMarker(marker: Marker, customName: String) {
+        queryManager.saveMarkerToList(marker, customName)
         { message -> view?.showMessage(message) }
     }
 
     override fun onSaveMarkerClick(marker: Marker) {
-        queryManager.prepareSaveMarkerDialog(marker)
-        { title, message, marker -> view?.showDialog(title, message, marker) }
+        queryManager.prepareSaveMarkerDialog(marker,
+                success = { dialogTitle, dialogMessage, marker -> view?.showEditDialog(dialogTitle, dialogMessage, marker) },
+                alreadyExists = { message -> view?.showMessage(message) })
     }
 
     override fun getCurrentMarker() {
         queryManager.getCurrentMarker(
-                found = { title, position, zoom -> view?.showOnInnerMap(title, position, zoom) },
+                found = { markerTitle, address, position, zoom -> view?.showOnInnerMap(markerTitle, address, position, zoom) },
                 notFound = { findMyLocation() })
     }
 

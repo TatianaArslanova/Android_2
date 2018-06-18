@@ -5,4 +5,5 @@ import com.example.ama.android2_lesson03.ui.base.PocketMapView
 
 interface MarkerView : PocketMapView {
     fun showMarkerList(markers: ArrayList<SimpleMarker>)
+    fun showEditDialog(dialogTitle: String, dialogMessage: String, marker: SimpleMarker)
 }

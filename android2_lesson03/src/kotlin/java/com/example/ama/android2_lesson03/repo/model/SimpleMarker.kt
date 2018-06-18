@@ -6,10 +6,16 @@ import com.google.android.gms.maps.model.Marker
 /**
  * Model with basic marker parameters for saving to favorites
  */
-data class SimpleMarker(var title: String, val position: LatLng) {
+data class SimpleMarker(val address: String, val position: LatLng) {
+    var title: String = address
 
     companion object {
-        fun getFromMarker(marker: Marker): SimpleMarker = SimpleMarker(marker.title, marker.position)
+        fun getFromMarker(marker: Marker): SimpleMarker = SimpleMarker(marker.snippet, marker.position)
+        fun simpleMarkerWithTitle(title: String, address: String, position: LatLng): SimpleMarker {
+            val marker = SimpleMarker(address, position)
+            marker.title = title
+            return marker
+        }
     }
 
     override fun toString() = title

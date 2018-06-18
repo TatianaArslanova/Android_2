@@ -10,4 +10,5 @@ interface MarkerListManager {
     fun updateMarker(marker: SimpleMarker, newName: String, callback: (markers: ArrayList<SimpleMarker>) -> Unit)
     fun deleteMarker(marker: SimpleMarker, callback: (markers: ArrayList<SimpleMarker>) -> Unit)
     fun saveCurrentMarker(marker: SimpleMarker)
+    fun prepareEditMarkerNameDialog(marker: SimpleMarker, callback: (dialogName: String, dialogMessage: String, marker: SimpleMarker)-> Unit)
 }

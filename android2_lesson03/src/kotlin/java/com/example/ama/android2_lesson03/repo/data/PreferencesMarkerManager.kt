@@ -18,6 +18,7 @@ class PreferencesMarkerManager : MarkerManager {
         const val MARKERS_KEY = "all_markers"
 
         const val MARKER_TITLE_KEY = "title"
+        const val MARKER_ADDRESS_KEY = "address"
         const val MARKER_LATITUDE_KEY = "latitude"
         const val MARKER_LONGITUDE_KEY = "longitude"
     }
@@ -48,6 +49,9 @@ class PreferencesMarkerManager : MarkerManager {
         putInPreferences(markerSet)
     }
 
+    override fun isMarkerExists(marker: SimpleMarker) =
+            getAllMarkers().contains(marker)
+
     private fun getFromPreferences(): Set<String> =
             preferences.getStringSet(MARKERS_KEY, HashSet<String>())
 
@@ -59,6 +63,7 @@ class PreferencesMarkerManager : MarkerManager {
         val jsonObject = JSONObject()
         try {
             jsonObject.put(MARKER_TITLE_KEY, marker.title)
+            jsonObject.put(MARKER_ADDRESS_KEY, marker.address)
             jsonObject.put(MARKER_LATITUDE_KEY, marker.position.latitude)
             jsonObject.put(MARKER_LONGITUDE_KEY, marker.position.longitude)
             return jsonObject.toString()
@@ -71,8 +76,9 @@ class PreferencesMarkerManager : MarkerManager {
     private fun simpleMarkerFromJson(json: String): SimpleMarker? {
         try {
             val jsonObject = JSONObject(json)
-            return SimpleMarker(
+            return SimpleMarker.simpleMarkerWithTitle(
                     jsonObject.getString(MARKER_TITLE_KEY),
+                    jsonObject.getString(MARKER_ADDRESS_KEY),
                     LatLng(jsonObject.getDouble(MARKER_LATITUDE_KEY), jsonObject.getDouble(MARKER_LONGITUDE_KEY))
             )
         } catch (e: JSONException) {

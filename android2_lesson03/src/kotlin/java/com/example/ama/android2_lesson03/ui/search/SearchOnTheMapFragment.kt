@@ -134,10 +134,10 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
         Launcher.sendGoogleMapsIntent(activity as AppCompatActivity, uri)
     }
 
-    override fun showOnInnerMap(address: String, latLng: LatLng, zoom: Float) {
+    override fun showOnInnerMap(markerTitle: String?, address: String, latLng: LatLng, zoom: Float) {
         et_search.setText(address)
         tv_address.text = address
-        setMarkerOnTheMap(address, latLng, zoom)
+        setMarkerOnTheMap(markerTitle, address, latLng, zoom)
     }
 
     override fun showMessage(message: String) {
@@ -152,15 +152,9 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
         PermissionManager.requestPermission(this, permission, requestCode)
     }
 
-    override fun showDialog(title: String, message: String, marker: Marker) {
-        Launcher.showDialog(activity, title, message,
-                okListener = { dialogInterface, i ->
-                    presenter?.saveMarker(marker)
-                    dialogInterface.cancel()
-                },
-                cancelListener = { dialogInterface, i ->
-                    dialogInterface.cancel()
-                })
+    override fun showEditDialog(dialogTitle: String, dialogMessage: String, marker: Marker) {
+        Launcher.showDialog(activity, dialogTitle, dialogMessage, marker.title)
+        { newName -> presenter?.saveMarker(marker, newName) }
     }
 
     private fun tuneMyLocation() {
@@ -178,9 +172,7 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
         map?.uiSettings?.isZoomControlsEnabled = true
         map?.setOnMapLongClickListener { latLng -> presenter?.findAddressByLatLng(latLng) }
         map?.setOnMapClickListener {
-            map?.clear()
-            et_search.text.clear()
-            tv_address.text = ""
+            clearMap()
             isMarkerOnTheMap = false
         }
         map?.setOnMarkerClickListener { marker ->
@@ -189,12 +181,22 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
         }
     }
 
-    private fun setMarkerOnTheMap(address: String, latlng: LatLng, zoom: Float) {
+    private fun clearMap() {
         map?.clear()
-        map?.addMarker(MarkerOptions()
-                .title(address)
-                .position(latlng))
-        isMarkerOnTheMap = true
+        et_search.text.clear()
+        tv_address.text = ""
+    }
+
+    private fun setMarkerOnTheMap(title: String?, address: String, latlng: LatLng, zoom: Float) {
+        map?.clear()
         zoomToLocation(latlng, zoom)
+        val markerOptions = MarkerOptions()
+                .title(title ?: address)
+                .position(latlng)
+        if (!title.equals(address)||title==null) {
+            markerOptions.snippet(address)
+        }
+        map?.addMarker(markerOptions)?.showInfoWindow()
+        isMarkerOnTheMap = true
     }
 }

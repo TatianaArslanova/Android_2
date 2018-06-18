@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import com.example.ama.android2_lesson03.R
 import com.example.ama.android2_lesson03.repo.model.SimpleMarker
+import com.example.ama.android2_lesson03.ui.Launcher
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerPresenter
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerView
 import com.example.ama.android2_lesson03.ui.markers.mvp.MarkerListPresenter
@@ -55,8 +56,15 @@ class MarkerListFragment : ListFragment(), MarkerView {
         when (item.itemId) {
             R.id.mi_delete ->
                 presenter?.deleteMarker(adapter.getItem(info.position))
+            R.id.mi_rename ->
+                presenter?.onUpdateMarker(adapter.getItem(info.position))
         }
         return super.onContextItemSelected(item)
+    }
+
+    override fun showEditDialog(dialogTitle: String, dialogMessage: String, marker: SimpleMarker) {
+        Launcher.showDialog(activity, dialogTitle, dialogMessage, marker.title)
+        { newName -> presenter?.editMarkerName(marker, newName) }
     }
 
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {

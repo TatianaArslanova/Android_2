@@ -18,9 +18,11 @@ interface SearchManager {
                       notFound: (message: String) -> Unit,
                       permissionRequired: (permission: String, requestCode: Int) -> Unit)
 
-    fun prepareSaveMarkerDialog(marker: Marker, callback: (title: String, message: String, marker: Marker) -> Unit)
+    fun prepareSaveMarkerDialog(marker: Marker,
+                                success: (dialogTitle: String, dialogMessage: String, marker: Marker) -> Unit,
+                                alreadyExists: (message: String) -> Unit)
 
-    fun saveMarkerToList(marker: Marker, callback: (message: String) -> Unit)
+    fun saveMarkerToList(marker: Marker, customName: String, callback: (message: String) -> Unit)
 
-    fun getCurrentMarker(found: (title: String, position: LatLng, zoom: Float) -> Unit, notFound: () -> Unit)
+    fun getCurrentMarker(found: (markerTitle: String, address: String, position: LatLng, zoom: Float) -> Unit, notFound: () -> Unit)
 }

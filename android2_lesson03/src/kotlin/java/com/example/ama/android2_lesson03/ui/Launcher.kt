@@ -1,12 +1,13 @@
 package com.example.ama.android2_lesson03.ui
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.widget.EditText
 import android.widget.Toast
 import com.example.ama.android2_lesson03.PocketMap
 import com.example.ama.android2_lesson03.R
@@ -35,16 +36,21 @@ object Launcher {
         Toast.makeText(PocketMap.instance, message, Toast.LENGTH_SHORT).show()
     }
 
-    fun showDialog(context: Context, title: String, message: String,
-                   okListener: (dialogInterface: DialogInterface, i: Int) -> Unit,
-                   cancelListener: (dialogInterface: DialogInterface, i: Int) -> Unit) {
+    fun showDialog(context: Context, dialogTitle: String, dialogMessage: String, etText: String,
+                   okListener: (newName: String) -> Unit) {
+        val view = LayoutInflater.from(context).inflate(R.layout.edit_marker_dialog, null)
+        val etName = view.findViewById<EditText>(R.id.et_marker_name)
+        etName.setText(etText)
+        etName.selectAll()
         AlertDialog.Builder(context)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(R.string.button_ok_text, okListener)
-                .setNegativeButton(R.string.button_text_cancel, cancelListener)
+                .setView(view)
+                .setTitle(dialogTitle)
+                .setMessage(dialogMessage)
+                .setPositiveButton(R.string.button_ok_text, { dialogInterface, i -> okListener.invoke(etName.text.toString()) })
+                .setNegativeButton(R.string.button_text_cancel, { dialogInterface, i -> dialogInterface.cancel() })
                 .create()
                 .show()
+
     }
 
     private fun runFragment(activity: AppCompatActivity, container: Int, fragment: Fragment, addToBackStack: Boolean) {

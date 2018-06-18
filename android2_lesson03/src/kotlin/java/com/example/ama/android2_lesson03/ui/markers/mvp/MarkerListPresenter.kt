@@ -31,4 +31,10 @@ class MarkerListPresenter<T : MarkerView> : BasePresenter<T>(), MarkerPresenter<
     override fun deleteMarker(marker: SimpleMarker) {
         markerManager.deleteMarker(marker) { markers -> view?.showMarkerList(markers) }
     }
+
+    override fun onUpdateMarker(marker: SimpleMarker) {
+        markerManager.prepareEditMarkerNameDialog(marker)
+        { dialogName, dialogMessage, marker -> view?.showEditDialog(dialogName, dialogMessage, marker) }
+    }
+
 }

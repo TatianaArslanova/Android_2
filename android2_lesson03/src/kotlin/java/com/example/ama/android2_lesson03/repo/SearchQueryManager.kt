@@ -68,18 +68,28 @@ class SearchQueryManager : SearchManager, MarkerListManager {
         locManager.findMyLocation(found, notFound, permissionRequired)
     }
 
-    override fun saveCurrentMarker(marker: SimpleMarker) {
-        savedMarker = marker
+    override fun prepareSaveMarkerDialog(marker: Marker,
+                                         success: (dialogTitle: String, dialogMessage: String, marker: Marker) -> Unit,
+                                         alreadyExists: (message: String) -> Unit) {
+        if (markerManager.isMarkerExists(SimpleMarker.getFromMarker(marker))) {
+            alreadyExists.invoke(PocketMap.instance.getString(R.string.message_marker_already_exists))
+        } else {
+            success.invoke(PocketMap.instance.getString(R.string.save_marker_dialog_title),
+                    PocketMap.instance.getString(R.string.save_marker_dialog_message),
+                    marker)
+        }
     }
 
-    override fun prepareSaveMarkerDialog(marker: Marker, callback: (title: String, message: String, marker: Marker) -> Unit) {
-        callback.invoke(PocketMap.instance.getString(R.string.save_marker_dialog_title),
-                PocketMap.instance.getString(R.string.save_marker_dialog_message),
-                marker
-        )
+    override fun prepareEditMarkerNameDialog(marker: SimpleMarker, callback: (dialogName: String, dialogMessage: String, marker: SimpleMarker) -> Unit) {
+        callback.invoke(
+                PocketMap.instance.getString(R.string.edit_dialog_title),
+                PocketMap.instance.getString(R.string.edit_dialog_message_marker_name),
+                marker)
     }
 
-    override fun saveMarkerToList(marker: Marker, callback: (message: String) -> Unit) {
+
+    override fun saveMarkerToList(marker: Marker, customName: String, callback: (message: String) -> Unit) {
+        marker.title = customName
         markerManager.addMarker(SimpleMarker.getFromMarker(marker))
         callback.invoke(PocketMap.instance.getString(R.string.marker_saved_message))
     }
@@ -99,10 +109,15 @@ class SearchQueryManager : SearchManager, MarkerListManager {
         getAllMarkers(callback)
     }
 
-    override fun getCurrentMarker(found: (title: String, position: LatLng, zoom: Float) -> Unit, notFound: () -> Unit) {
+    override fun saveCurrentMarker(marker: SimpleMarker) {
+        savedMarker = marker
+    }
+
+    override fun getCurrentMarker(found: (markerTitle: String, address: String, position: LatLng, zoom: Float) -> Unit, notFound: () -> Unit) {
         if (savedMarker != null) {
             found.invoke(
                     savedMarker?.title!!,
+                    savedMarker?.address!!,
                     savedMarker?.position!!,
                     DEFAULT_ZOOM)
         } else {
