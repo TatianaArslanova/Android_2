@@ -131,19 +131,14 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
         Launcher.sendGoogleMapsIntent(activity as AppCompatActivity, uri)
     }
 
-    override fun showOnInnerMap(markerTitle: String?, address: String, latLng: LatLng, zoom: Float, cameraAnimation: Boolean) {
+    override fun showOnInnerMap(markerTitle: String?, address: String, latLng: LatLng) {
         map?.clear()
         et_search.setText(address)
         tv_address.text = address
-        if (cameraAnimation) {
-            zoomToLocation(latLng, zoom)
+        currentMarker = if (markerTitle == null || markerTitle == address) {
+            setMarkerOnTheMap(address, latLng)
         } else {
-            setOnLocation(latLng, zoom)
-        }
-        if (markerTitle == null || markerTitle == address) {
-            currentMarker = setMarkerOnTheMap(address, latLng)
-        } else {
-            currentMarker = setMarkerOnTheMapWithTitle(markerTitle, address, latLng)
+            setMarkerOnTheMapWithTitle(markerTitle, address, latLng)
         }
         currentMarker?.showInfoWindow()
     }
@@ -152,8 +147,12 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
         Launcher.showToast(message)
     }
 
-    override fun zoomToLocation(latLng: LatLng, zoom: Float) {
-        map?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+    override fun moveMapCamera(latLng: LatLng, zoom: Float, cameraAnimation: Boolean) {
+        if (cameraAnimation) {
+            zoomToLocation(latLng, zoom)
+        } else {
+            setOnLocation(latLng, zoom)
+        }
     }
 
     override fun requestPermission(permission: String, requestCode: Int) {
@@ -181,6 +180,10 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
 
     private fun setOnLocation(latLng: LatLng, zoom: Float) {
         map?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+    }
+
+    private fun zoomToLocation(latLng: LatLng, zoom: Float) {
+        map?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
     }
 
     private fun tuneMap() {

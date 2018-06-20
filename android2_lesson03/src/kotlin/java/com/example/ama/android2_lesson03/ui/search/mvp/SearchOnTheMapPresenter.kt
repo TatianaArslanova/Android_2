@@ -18,12 +18,18 @@ class SearchOnTheMapPresenter<T : SearchOnTheMapView> : BasePresenter<T>(), Sear
 
     override fun findAddressByQuery(query: String) {
         queryManager.getFullLocationName(query,
-                { fullLocationName, position, zoom -> view?.showOnInnerMap(null, fullLocationName, position, zoom) })
+                { fullLocationName, position, zoom ->
+                    view?.moveMapCamera(position, zoom, true)
+                    view?.showOnInnerMap(null, fullLocationName, position)
+                })
     }
 
     override fun findAddressByLatLng(latLng: LatLng) {
         queryManager.getFullLocationName(latLng,
-                { fullLocationName, position, zoom -> view?.showOnInnerMap(null, fullLocationName, position, zoom) })
+                { fullLocationName, position, zoom ->
+                    view?.moveMapCamera(position, zoom, true)
+                    view?.showOnInnerMap(null, fullLocationName, position)
+                })
     }
 
     override fun sendQueryToGMapsApp(currentMarker: Marker?, cameraPosition: LatLng?, zoom: Float?) {
@@ -32,9 +38,11 @@ class SearchOnTheMapPresenter<T : SearchOnTheMapView> : BasePresenter<T>(), Sear
 
     override fun findMyLocation() {
         queryManager.getMyLocation(
-                found = { latLng, zoom -> view?.zoomToLocation(latLng, zoom) },
+                found = { latLng, zoom -> view?.moveMapCamera(latLng, zoom, true) },
                 notFound = { message -> view?.showMessage(message) },
-                permissionRequired = { permission, requestCode -> view?.requestPermission(permission, requestCode) })
+                permissionRequired = { permission, requestCode ->
+                    view?.requestPermission(permission, requestCode)
+                })
     }
 
     override fun saveMarker(marker: Marker, customName: String) {
@@ -44,7 +52,9 @@ class SearchOnTheMapPresenter<T : SearchOnTheMapView> : BasePresenter<T>(), Sear
 
     override fun onMarkerClick(marker: Marker) {
         queryManager.prepareSaveMarkerDialog(marker,
-                { dialogTitle, dialogMessage, savingMarker -> view?.showEditDialog(dialogTitle, dialogMessage, savingMarker) })
+                { dialogTitle, dialogMessage, savingMarker ->
+                    view?.showEditDialog(dialogTitle, dialogMessage, savingMarker)
+                })
     }
 
     override fun saveState(currentMarker: Marker?) {
@@ -52,6 +62,9 @@ class SearchOnTheMapPresenter<T : SearchOnTheMapView> : BasePresenter<T>(), Sear
     }
 
     override fun loadSavedState() {
-        queryManager.loadSavedState { markerTitle, address, position, zoom -> view?.showOnInnerMap(markerTitle, address, position, zoom, false) }
+        queryManager.loadSavedState { markerTitle, address, position, zoom ->
+            view?.moveMapCamera(position, zoom, false)
+            view?.showOnInnerMap(markerTitle, address, position)
+        }
     }
 }
