@@ -1,6 +1,6 @@
 package com.example.ama.android2_lesson03.repo.data.base
 
-import com.example.ama.android2_lesson03.repo.model.SimpleMarker
+import com.example.ama.android2_lesson03.repo.data.model.SimpleMarker
 
 /**
  * Interface describes basic methods for managing favorites markers

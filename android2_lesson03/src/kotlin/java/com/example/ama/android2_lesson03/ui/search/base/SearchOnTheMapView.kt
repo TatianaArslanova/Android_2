@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.Marker
 
 interface SearchOnTheMapView : PocketMapView {
     fun showOnGMapsApp(uri: Uri)
-    fun showOnInnerMap(markerTitle: String?, address: String, latLng: LatLng, zoom: Float)
+    fun showOnInnerMap(markerTitle: String?, address: String, latLng: LatLng, zoom: Float, cameraAnimation: Boolean = true)
     fun showMessage(message: String)
     fun zoomToLocation(latLng: LatLng, zoom: Float)
     fun requestPermission(permission: String, requestCode: Int)

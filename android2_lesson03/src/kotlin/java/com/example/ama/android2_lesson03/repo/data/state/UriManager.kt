@@ -1,4 +1,4 @@
-package com.example.ama.android2_lesson03.repo.data
+package com.example.ama.android2_lesson03.repo.data.state
 
 import android.net.Uri
 import com.google.android.gms.maps.model.LatLng

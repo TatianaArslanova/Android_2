@@ -4,14 +4,14 @@ import android.location.Address
 import android.net.Uri
 import com.example.ama.android2_lesson03.PocketMap
 import com.example.ama.android2_lesson03.R
-import com.example.ama.android2_lesson03.repo.base.MarkerListManager
 import com.example.ama.android2_lesson03.repo.base.SearchManager
-import com.example.ama.android2_lesson03.repo.data.LocationManagerAndroid
-import com.example.ama.android2_lesson03.repo.data.PreferencesMarkerManager
-import com.example.ama.android2_lesson03.repo.data.UriManager
 import com.example.ama.android2_lesson03.repo.data.base.LocManager
 import com.example.ama.android2_lesson03.repo.data.base.MarkerManager
-import com.example.ama.android2_lesson03.repo.model.SimpleMarker
+import com.example.ama.android2_lesson03.repo.data.location.LocationManagerAndroid
+import com.example.ama.android2_lesson03.repo.data.markers.PreferencesMarkerManager
+import com.example.ama.android2_lesson03.repo.data.model.SimpleMarker
+import com.example.ama.android2_lesson03.repo.data.state.SearchOnTheMapStateSaver
+import com.example.ama.android2_lesson03.repo.data.state.UriManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import java.lang.StringBuilder
@@ -19,7 +19,7 @@ import java.lang.StringBuilder
 /**
  * Class for execute presenter's queries
  */
-class SearchQueryManager : SearchManager, MarkerListManager {
+class SearchQueryManager : SearchManager {
 
     companion object {
         const val DEFAULT_ZOOM: Float = 15f
@@ -29,16 +29,14 @@ class SearchQueryManager : SearchManager, MarkerListManager {
     private val uriManager = UriManager()
     private val markerManager: MarkerManager = PreferencesMarkerManager()
 
-    private var savedMarker: SimpleMarker? = null
-
-    override fun getPreparedUri(isMarkerOnTheMap: Boolean, cameraPosition: LatLng?, zoom: Float?, callback: (uri: Uri) -> Unit) {
-        if (!isMarkerOnTheMap) {
+    override fun prepareUriForGMaps(currentMarker: Marker?, cameraPosition: LatLng?, zoom: Float?, callback: (uri: Uri) -> Unit) {
+        if (currentMarker == null) {
             uriManager.prepareUriByCameraPosition(cameraPosition, zoom)
         }
         callback.invoke(uriManager.preparedUri)
     }
 
-    override fun getFullLocationName(query: String, callback: (fullLocationName: String, latLng: LatLng, zoom: Float) -> Unit) {
+    override fun getFullLocationName(query: String, callback: (fullLocationName: String, position: LatLng, zoom: Float) -> Unit) {
         val address = locManager.findAddressByQuery(query)
         if (address != null) {
             uriManager.prepareUriByQuery(query)
@@ -50,7 +48,7 @@ class SearchQueryManager : SearchManager, MarkerListManager {
         }
     }
 
-    override fun getFullLocationName(latLng: LatLng, callback: (fullLocationName: String, latLng: LatLng, zoom: Float) -> Unit) {
+    override fun getFullLocationName(latLng: LatLng, callback: (fullLocationName: String, position: LatLng, zoom: Float) -> Unit) {
         val address = locManager.findAddressByLatLng(latLng)
         if (address != null) {
             val fullLocationName = buildFullName(address)
@@ -68,60 +66,39 @@ class SearchQueryManager : SearchManager, MarkerListManager {
         locManager.findMyLocation(found, notFound, permissionRequired)
     }
 
-    override fun prepareSaveMarkerDialog(marker: Marker,
-                                         success: (dialogTitle: String, dialogMessage: String, marker: Marker) -> Unit,
-                                         alreadyExists: (message: String) -> Unit) {
-        if (markerManager.isMarkerExists(SimpleMarker.getFromMarker(marker))) {
-            alreadyExists.invoke(PocketMap.instance.getString(R.string.message_marker_already_exists))
-        } else {
+    override fun prepareSaveMarkerDialog(marker: Marker, success: (dialogTitle: String, dialogMessage: String, savingMarker: Marker) -> Unit) {
+        val savingMarker = SimpleMarker.getFromMarker(marker)
+        if (savingMarker != null) {
             success.invoke(PocketMap.instance.getString(R.string.save_marker_dialog_title),
-                    PocketMap.instance.getString(R.string.save_marker_dialog_message),
+                    if (!markerManager.isMarkerExists(savingMarker))
+                        PocketMap.instance.getString(R.string.save_marker_dialog_message)
+                    else
+                        PocketMap.instance.getString(R.string.message_marker_already_exists),
                     marker)
         }
     }
 
-    override fun prepareEditMarkerNameDialog(marker: SimpleMarker, callback: (dialogName: String, dialogMessage: String, marker: SimpleMarker) -> Unit) {
-        callback.invoke(
-                PocketMap.instance.getString(R.string.edit_dialog_title),
-                PocketMap.instance.getString(R.string.edit_dialog_message_marker_name),
-                marker)
-    }
-
-
     override fun saveMarkerToList(marker: Marker, customName: String, callback: (message: String) -> Unit) {
-        marker.title = customName
-        markerManager.addMarker(SimpleMarker.getFromMarker(marker))
-        callback.invoke(PocketMap.instance.getString(R.string.marker_saved_message))
+        val savingMarker = SimpleMarker.getFromMarker(marker)
+        if (savingMarker != null) {
+            if (markerManager.isMarkerExists(savingMarker)) {
+                markerManager.updateMarker(savingMarker, customName)
+            } else {
+                markerManager.addMarker(savingMarker)
+            }
+            callback.invoke(PocketMap.instance.getString(R.string.marker_saved_message))
+        }
     }
 
-
-    override fun getAllMarkers(callback: (markers: ArrayList<SimpleMarker>) -> Unit) {
-        callback.invoke(markerManager.getAllMarkers())
+    override fun saveState(currentMarker: Marker?) {
+        SearchOnTheMapStateSaver.saveCurrentMarker(SimpleMarker.getFromMarker(currentMarker))
     }
 
-    override fun updateMarker(marker: SimpleMarker, newName: String, callback: (markers: ArrayList<SimpleMarker>) -> Unit) {
-        markerManager.updateMarker(marker, newName)
-        getAllMarkers(callback)
-    }
-
-    override fun deleteMarker(marker: SimpleMarker, callback: (markers: ArrayList<SimpleMarker>) -> Unit) {
-        markerManager.deleteMarker(marker)
-        getAllMarkers(callback)
-    }
-
-    override fun saveCurrentMarker(marker: SimpleMarker) {
-        savedMarker = marker
-    }
-
-    override fun getCurrentMarker(found: (markerTitle: String, address: String, position: LatLng, zoom: Float) -> Unit, notFound: () -> Unit) {
-        if (savedMarker != null) {
-            found.invoke(
-                    savedMarker?.title!!,
-                    savedMarker?.address!!,
-                    savedMarker?.position!!,
-                    DEFAULT_ZOOM)
-        } else {
-            notFound.invoke()
+    override fun loadSavedState(onSuccess: (markerTitle: String, address: String, position: LatLng, zoom: Float) -> Unit) {
+        val marker = SearchOnTheMapStateSaver.loadCurrentMarker()
+        if (marker != null) {
+            uriManager.prepareUriByMarkerLocation(marker.position, marker.address)
+            onSuccess.invoke(marker.title, marker.address, marker.position, DEFAULT_ZOOM)
         }
     }
 

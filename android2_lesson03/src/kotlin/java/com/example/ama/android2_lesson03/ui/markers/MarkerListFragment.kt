@@ -9,7 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import com.example.ama.android2_lesson03.R
-import com.example.ama.android2_lesson03.repo.model.SimpleMarker
+import com.example.ama.android2_lesson03.repo.data.model.SimpleMarker
 import com.example.ama.android2_lesson03.ui.Launcher
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerPresenter
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerView
@@ -68,7 +68,7 @@ class MarkerListFragment : ListFragment(), MarkerView {
     }
 
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
-        presenter?.sendMarker(adapter.getItem(position))
+        presenter?.tuneMapCurrentMarker(adapter.getItem(position))
         activity.supportFragmentManager.popBackStack()
     }
 

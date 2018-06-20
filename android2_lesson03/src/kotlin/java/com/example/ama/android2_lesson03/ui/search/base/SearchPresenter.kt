@@ -7,9 +7,10 @@ import com.google.android.gms.maps.model.Marker
 interface SearchPresenter<T : SearchOnTheMapView> : Presenter<T> {
     fun findAddressByQuery(query: String)
     fun findAddressByLatLng(latLng: LatLng)
-    fun sendQueryToGMapsApp(isMarkerOnTheMap: Boolean, cameraPosition: LatLng?, zoom: Float?)
+    fun sendQueryToGMapsApp(currentMarker: Marker?, cameraPosition: LatLng?, zoom: Float?)
     fun findMyLocation()
     fun saveMarker(marker: Marker, customName: String)
-    fun onSaveMarkerClick(marker: Marker)
-    fun getCurrentMarker()
+    fun onMarkerClick(marker: Marker)
+    fun saveState(currentMarker: Marker?)
+    fun loadSavedState()
 }

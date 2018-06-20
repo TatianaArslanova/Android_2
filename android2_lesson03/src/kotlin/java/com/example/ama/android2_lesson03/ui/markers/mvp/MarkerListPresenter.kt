@@ -1,8 +1,8 @@
 package com.example.ama.android2_lesson03.ui.markers.mvp
 
-import com.example.ama.android2_lesson03.PocketMap
+import com.example.ama.android2_lesson03.repo.MarkerListQueryManager
 import com.example.ama.android2_lesson03.repo.base.MarkerListManager
-import com.example.ama.android2_lesson03.repo.model.SimpleMarker
+import com.example.ama.android2_lesson03.repo.data.model.SimpleMarker
 import com.example.ama.android2_lesson03.ui.base.BasePresenter
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerPresenter
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerView
@@ -14,13 +14,13 @@ import com.example.ama.android2_lesson03.ui.markers.base.MarkerView
  */
 class MarkerListPresenter<T : MarkerView> : BasePresenter<T>(), MarkerPresenter<T> {
 
-    private val markerManager: MarkerListManager = PocketMap.queryManager as MarkerListManager
+    private val markerManager: MarkerListManager = MarkerListQueryManager()
 
     override fun getMarkerList() {
         markerManager.getAllMarkers { markers -> view?.showMarkerList(markers) }
     }
 
-    override fun sendMarker(marker: SimpleMarker) {
+    override fun tuneMapCurrentMarker(marker: SimpleMarker) {
         markerManager.saveCurrentMarker(marker)
     }
 
@@ -34,7 +34,7 @@ class MarkerListPresenter<T : MarkerView> : BasePresenter<T>(), MarkerPresenter<
 
     override fun onUpdateMarker(marker: SimpleMarker) {
         markerManager.prepareEditMarkerNameDialog(marker)
-        { dialogName, dialogMessage, marker -> view?.showEditDialog(dialogName, dialogMessage, marker) }
+        { dialogName, dialogMessage, editingMarker -> view?.showEditDialog(dialogName, dialogMessage, editingMarker) }
     }
 
 }

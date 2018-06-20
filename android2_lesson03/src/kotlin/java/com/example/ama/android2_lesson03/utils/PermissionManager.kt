@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 
-const val TUNE_MAP_REQUEST = 1
+const val TUNE_MY_LOCATION_REQUEST = 1
 const val FIND_MY_LOCATION_REQUEST = 2
 
 object PermissionManager {
