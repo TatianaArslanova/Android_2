@@ -9,7 +9,7 @@ import com.google.android.gms.maps.model.Marker;
  * Interface describes methods for search manager queries
  */
 public interface SearchManager {
-    void getPreparedUri(boolean isMarkerOnTheMap, LatLng cameraPosition, float zoom, OnUriPreparedCallback callback);
+    void prepareUriForGMaps(Marker currentMarker, LatLng cameraPosition, float zoom, OnUriPreparedCallback callback);
 
     void getFullLocationName(String query, OnFullNamePreparedCallback callback);
 
@@ -19,18 +19,18 @@ public interface SearchManager {
 
     void prepareSaveMarkerDialog(Marker marker, OnDialogDataPrepared callback);
 
-    void saveMarker(Marker marker, OnMarkerSavedCallback callback);
+    void saveMarkerToList(Marker marker, String customName, OnMarkerSavedCallback callback);
 
-    void getCurrentMarker(OnLoadMarkerCallback callback);
+    void saveState(Marker currentMarker);
+
+    void loadSavedState(OnMarkerPreparedCallback callback);
 
     interface OnDialogDataPrepared {
         void onSuccess(String title, String message, Marker marker);
     }
 
-    interface OnLoadMarkerCallback {
-        void onSuccess(String title, LatLng position, float zoom);
-
-        void onNotFound();
+    interface OnMarkerPreparedCallback {
+        void onSuccess(String title, String address, LatLng position, float zoom);
     }
 
     interface OnMarkerSavedCallback {
@@ -42,7 +42,7 @@ public interface SearchManager {
     }
 
     interface OnFullNamePreparedCallback {
-        void onSuccess(String fullLocationName, LatLng latLng, float zoom);
+        void onSuccess(String address, LatLng latLng, float zoom);
     }
 
     interface OnLocationSearchResultCallback {

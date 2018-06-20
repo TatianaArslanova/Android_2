@@ -1,4 +1,4 @@
-package com.example.ama.android2_lesson03.repo.data;
+package com.example.ama.android2_lesson03.repo.data.location;
 
 import android.Manifest;
 import android.content.Context;

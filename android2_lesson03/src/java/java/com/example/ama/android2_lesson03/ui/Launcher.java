@@ -8,6 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ama.android2_lesson03.PocketMap;
@@ -50,14 +53,34 @@ public class Launcher {
     public static void showDialog(Context context,
                                   String title,
                                   String message,
-                                  DialogInterface.OnClickListener okButton,
-                                  DialogInterface.OnClickListener cancelButton) {
+                                  String markerName,
+                                  final OnDialogResult okListener) {
+        View view = LayoutInflater.from(context).inflate(R.layout.edit_marker_dialog, null);
+        final EditText etName = view.findViewById(R.id.et_marker_name);
+        etName.setText(markerName);
+        etName.selectAll();
         new AlertDialog.Builder(context)
+                .setView(view)
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(PocketMap.getInstance().getString(R.string.button_ok_text), okButton)
-                .setNegativeButton(PocketMap.getInstance().getString(R.string.button_text_cancel), cancelButton)
+                .setPositiveButton(PocketMap.getInstance().getString(R.string.button_ok_text), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        okListener.onPositiveResult(etName.getText().toString());
+                        dialogInterface.cancel();
+                    }
+                })
+                .setNegativeButton(PocketMap.getInstance().getString(R.string.button_text_cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                })
                 .create()
                 .show();
+    }
+
+    public interface OnDialogResult {
+        void onPositiveResult(String inputText);
     }
 }

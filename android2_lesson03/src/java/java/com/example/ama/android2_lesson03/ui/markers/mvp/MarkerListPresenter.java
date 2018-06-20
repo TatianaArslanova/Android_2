@@ -1,8 +1,8 @@
 package com.example.ama.android2_lesson03.ui.markers.mvp;
 
-import com.example.ama.android2_lesson03.PocketMap;
+import com.example.ama.android2_lesson03.repo.MarkerListQueryManager;
 import com.example.ama.android2_lesson03.repo.base.MarkerListManager;
-import com.example.ama.android2_lesson03.repo.model.SimpleMarker;
+import com.example.ama.android2_lesson03.repo.data.model.SimpleMarker;
 import com.example.ama.android2_lesson03.ui.base.BasePresenter;
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerPresenter;
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerView;
@@ -19,9 +19,7 @@ public class MarkerListPresenter<T extends MarkerView> extends BasePresenter<T> 
     private MarkerListManager markerManager;
 
     public MarkerListPresenter() {
-        if (PocketMap.getQueryManager() instanceof MarkerListManager) {
-            markerManager = (MarkerListManager) PocketMap.getQueryManager();
-        }
+        markerManager = new MarkerListQueryManager();
     }
 
     @Override
@@ -35,7 +33,7 @@ public class MarkerListPresenter<T extends MarkerView> extends BasePresenter<T> 
     }
 
     @Override
-    public void sendMarker(SimpleMarker marker) {
+    public void tuneMapCurrentMarker(SimpleMarker marker) {
         markerManager.saveCurrentMarker(marker);
     }
 
@@ -55,6 +53,16 @@ public class MarkerListPresenter<T extends MarkerView> extends BasePresenter<T> 
             @Override
             public void onSuccess(ArrayList<SimpleMarker> markers) {
                 view.showMarkerList(markers);
+            }
+        });
+    }
+
+    @Override
+    public void onUpdateMarker(SimpleMarker marker) {
+        markerManager.prepareEditMarkerNameDialog(marker, new MarkerListManager.OnDialogPreparedCallback() {
+            @Override
+            public void onSuccess(String dialogTitle, String dialogMessage, SimpleMarker targetMarker) {
+                view.showEditDialog(dialogTitle, dialogMessage, targetMarker);
             }
         });
     }

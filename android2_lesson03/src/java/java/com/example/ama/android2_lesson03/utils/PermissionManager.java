@@ -7,7 +7,7 @@ import android.support.v4.content.ContextCompat;
 
 public class PermissionManager {
 
-    public static final int TUNE_MAP_REQUEST = 1;
+    public static final int TUNE_MY_LOCATION_REQUEST = 1;
     public static final int FIND_MY_LOCATION_REQUEST = 3;
 
     public static boolean checkPermission(Context context, String permission) {

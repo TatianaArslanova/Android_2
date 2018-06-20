@@ -1,7 +1,6 @@
 package com.example.ama.android2_lesson03.ui.search;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,7 +45,7 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
     private SearchPresenter<SearchOnTheMapView> presenter;
     private GoogleMap map;
 
-    private boolean isMarkerOnTheMap;
+    private Marker currentMarker;
 
     public static SearchOnTheMapFragment newInstance() {
         return new SearchOnTheMapFragment();
@@ -70,71 +69,21 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
         initUI(view);
         addListeners(view);
         mapView.onCreate(savedInstanceState);
+        getMap();
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void getMap() {
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
                 tuneMap();
                 tuneMyLocation();
-            }
-        });
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    private void initUI(View view) {
-        etSearch = view.findViewById(R.id.et_search);
-        tvAddress = view.findViewById(R.id.tv_address);
-        mapView = view.findViewById(R.id.mv_main_map);
-    }
-
-    private void addListeners(View view) {
-        view.findViewById(R.id.btn_search).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startSearching(etSearch.getText().toString());
-            }
-        });
-        view.findViewById(R.id.btn_ongmap).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                prepareToGMap();
-            }
-        });
-    }
-
-    public void tuneMyLocation() {
-        if (PermissionManager.checkPermission(PocketMap.getInstance(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
-            map.setMyLocationEnabled(true);
-            map.getUiSettings().setMyLocationButtonEnabled(true);
-            presenter.getCurrentMarker();
-        } else {
-            requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION, PermissionManager.TUNE_MAP_REQUEST);
-        }
-    }
-
-    public void tuneMap() {
-        map.getUiSettings().setZoomControlsEnabled(true);
-        map.getUiSettings().setAllGesturesEnabled(true);
-        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                presenter.findAddressByLatLng(latLng);
-            }
-        });
-        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                map.clear();
-                etSearch.getText().clear();
-                tvAddress.setText("");
-                isMarkerOnTheMap = false;
-            }
-        });
-        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                presenter.onSaveMarkerClick(marker);
-                return true;
+                presenter.loadSavedState();
+                if (currentMarker == null) {
+                    presenter.findMyLocation();
+                }
             }
         });
     }
@@ -160,6 +109,7 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
 
     @Override
     public void onStop() {
+        presenter.saveState(currentMarker);
         presenter.detachView();
         mapView.onStop();
         super.onStop();
@@ -194,16 +144,17 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
         switch (item.getItemId()) {
             case R.id.mi_showsettings:
                 Launcher.runMarkerListFragment((MainActivity) getActivity(), true);
-                break;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return true;
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             switch (requestCode) {
-                case PermissionManager.TUNE_MAP_REQUEST: {
+                case PermissionManager.TUNE_MY_LOCATION_REQUEST: {
                     tuneMyLocation();
                     break;
                 }
@@ -223,10 +174,16 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
     }
 
     @Override
-    public void showOnInnerMap(String address, LatLng latLng, float zoom) {
+    public void showOnInnerMap(String title, String address, LatLng latLng) {
+        map.clear();
         tvAddress.setText(address);
         etSearch.setText(address);
-        setMarkerOnTheMap(address, latLng, zoom);
+        if (title == null || title.equals(address)) {
+            currentMarker = setMarkerOnTheMap(address, latLng);
+        } else {
+            currentMarker = setMarkerOnTheMapWithTitle(title, address, latLng);
+        }
+        currentMarker.showInfoWindow();
     }
 
     @Override
@@ -240,8 +197,91 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
     }
 
     @Override
-    public void zoomToLocation(LatLng latLng, float zoom) {
+    public void moveMapCamera(LatLng latLng, float zoom, boolean cameraAnimation) {
+        if (cameraAnimation) {
+            zoomToLocation(latLng, zoom);
+        } else {
+            setOnLocation(latLng, zoom);
+        }
+    }
+
+    @Override
+    public void showDialog(String title, String message, final Marker marker) {
+        Launcher.showDialog(getActivity(), title, message, marker.getTitle(), new Launcher.OnDialogResult() {
+            @Override
+            public void onPositiveResult(String inputText) {
+                presenter.saveMarker(marker, inputText);
+            }
+        });
+    }
+
+    private void initUI(View view) {
+        etSearch = view.findViewById(R.id.et_search);
+        tvAddress = view.findViewById(R.id.tv_address);
+        mapView = view.findViewById(R.id.mv_main_map);
+    }
+
+    private void addListeners(View view) {
+        view.findViewById(R.id.btn_search).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startSearching(etSearch.getText().toString());
+            }
+        });
+        view.findViewById(R.id.btn_ongmap).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                prepareToGMap();
+            }
+        });
+    }
+
+    private void tuneMyLocation() {
+        if (PermissionManager.checkPermission(PocketMap.getInstance(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            map.setMyLocationEnabled(true);
+            map.getUiSettings().setMyLocationButtonEnabled(true);
+        } else {
+            requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION, PermissionManager.TUNE_MY_LOCATION_REQUEST);
+        }
+    }
+
+    private void tuneMap() {
+        map.getUiSettings().setZoomControlsEnabled(true);
+        map.getUiSettings().setAllGesturesEnabled(true);
+        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                presenter.findAddressByLatLng(latLng);
+            }
+        });
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                clearMap();
+            }
+        });
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                presenter.onMarkerClick(marker);
+                return true;
+            }
+        });
+    }
+
+    private void zoomToLocation(LatLng latLng, float zoom) {
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+    }
+
+    private void setOnLocation(LatLng latLng, float zoom) {
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+    }
+
+    private void clearMap() {
+        map.clear();
+        etSearch.getText().clear();
+        tvAddress.setText("");
+        currentMarker = null;
     }
 
     private void startSearching(String query) {
@@ -250,35 +290,21 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
 
     private void prepareToGMap() {
         presenter.sendQueryToGMapsApp(
-                isMarkerOnTheMap,
+                currentMarker,
                 map.getCameraPosition().target,
                 map.getCameraPosition().zoom);
     }
 
-    public void setMarkerOnTheMap(String address, LatLng latLng, float zoom) {
-        map.clear();
-        map.addMarker(new MarkerOptions()
-                .position(latLng)
-                .title(address));
-        isMarkerOnTheMap = true;
-        zoomToLocation(latLng, zoom);
+    private Marker setMarkerOnTheMapWithTitle(String title, String address, LatLng position) {
+        return map.addMarker(new MarkerOptions()
+                .title(title)
+                .snippet(address)
+                .position(position));
     }
 
-    @Override
-    public void showDialog(String title, String message, final Marker marker) {
-        Launcher.showDialog(getActivity(), title, message,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        presenter.saveMarker(marker);
-                        dialogInterface.cancel();
-                    }
-                },
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
+    private Marker setMarkerOnTheMap(String address, LatLng position) {
+        return map.addMarker(new MarkerOptions()
+                .title(address)
+                .position(position));
     }
 }

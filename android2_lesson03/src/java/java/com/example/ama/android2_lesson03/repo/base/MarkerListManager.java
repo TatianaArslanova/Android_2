@@ -1,6 +1,6 @@
 package com.example.ama.android2_lesson03.repo.base;
 
-import com.example.ama.android2_lesson03.repo.model.SimpleMarker;
+import com.example.ama.android2_lesson03.repo.data.model.SimpleMarker;
 
 import java.util.ArrayList;
 
@@ -16,7 +16,13 @@ public interface MarkerListManager {
 
     void saveCurrentMarker(SimpleMarker marker);
 
+    void prepareEditMarkerNameDialog(SimpleMarker marker, OnDialogPreparedCallback callback);
+
     interface OnGetMarkersCallback {
         void onSuccess(ArrayList<SimpleMarker> markers);
+    }
+
+    interface OnDialogPreparedCallback {
+        void onSuccess(String dialogTitle, String dialogMessage, SimpleMarker targetMarker);
     }
 }

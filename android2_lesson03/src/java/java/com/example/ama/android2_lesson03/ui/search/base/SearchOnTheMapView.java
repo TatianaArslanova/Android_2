@@ -9,13 +9,13 @@ import com.google.android.gms.maps.model.Marker;
 public interface SearchOnTheMapView extends PocketMapView {
     void showOnGMapsApp(Uri uri);
 
-    void showOnInnerMap(String address, LatLng latLng, float zoom);
+    void showOnInnerMap(String markerTitle, String address, LatLng latLng);
 
     void requestPermission(String permission, int requestCode);
 
     void showMessage(String message);
 
-    void zoomToLocation(LatLng latLng, float zoom);
+    void moveMapCamera(LatLng latLng, float zoom, boolean cameraAnimation);
 
     void showDialog(String title, String message, Marker marker);
 }

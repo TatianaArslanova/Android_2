@@ -2,7 +2,7 @@ package com.example.ama.android2_lesson03.ui.search.mvp;
 
 import android.net.Uri;
 
-import com.example.ama.android2_lesson03.PocketMap;
+import com.example.ama.android2_lesson03.repo.SearchQueryManager;
 import com.example.ama.android2_lesson03.repo.base.SearchManager;
 import com.example.ama.android2_lesson03.ui.base.BasePresenter;
 import com.example.ama.android2_lesson03.ui.search.base.SearchOnTheMapView;
@@ -12,6 +12,7 @@ import com.google.android.gms.maps.model.Marker;
 
 /**
  * Presenter implementation for {@link SearchOnTheMapView}
+ *
  * @param <T> view for work with
  */
 public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
@@ -21,7 +22,23 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
     private SearchManager queryManager;
 
     public SearchOnTheMapPresenter() {
-        queryManager = PocketMap.getQueryManager();
+        queryManager = new SearchQueryManager();
+    }
+
+    @Override
+    public void loadSavedState() {
+        queryManager.loadSavedState(new SearchManager.OnMarkerPreparedCallback() {
+            @Override
+            public void onSuccess(String title, String address, LatLng position, float zoom) {
+                view.moveMapCamera(position, zoom, false);
+                view.showOnInnerMap(title, address, position);
+            }
+        });
+    }
+
+    @Override
+    public void saveState(Marker currentMarker) {
+        queryManager.saveState(currentMarker);
     }
 
     @Override
@@ -29,7 +46,8 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
         queryManager.getFullLocationName(query, new SearchManager.OnFullNamePreparedCallback() {
             @Override
             public void onSuccess(String fullLocationName, LatLng latLng, float zoom) {
-                view.showOnInnerMap(fullLocationName, latLng, zoom);
+                view.moveMapCamera(latLng, zoom, true);
+                view.showOnInnerMap(null, fullLocationName, latLng);
             }
         });
     }
@@ -39,14 +57,15 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
         queryManager.getFullLocationName(latLng, new SearchManager.OnFullNamePreparedCallback() {
             @Override
             public void onSuccess(String fullLocationName, LatLng latLng, float zoom) {
-                view.showOnInnerMap(fullLocationName, latLng, zoom);
+                view.moveMapCamera(latLng, zoom, true);
+                view.showOnInnerMap(null, fullLocationName, latLng);
             }
         });
     }
 
     @Override
-    public void sendQueryToGMapsApp(boolean isMarkerOnTheMap, LatLng cameraPosition, float zoom) {
-        queryManager.getPreparedUri(isMarkerOnTheMap, cameraPosition, zoom, new SearchManager.OnUriPreparedCallback() {
+    public void sendQueryToGMapsApp(Marker currentMarker, LatLng cameraPosition, float zoom) {
+        queryManager.prepareUriForGMaps(currentMarker, cameraPosition, zoom, new SearchManager.OnUriPreparedCallback() {
             @Override
             public void onSuccess(Uri uri) {
                 view.showOnGMapsApp(uri);
@@ -59,7 +78,7 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
         queryManager.getMyLocation(new SearchManager.OnLocationSearchResultCallback() {
             @Override
             public void onLocationFound(LatLng latLng, float zoom) {
-                view.zoomToLocation(latLng, zoom);
+                view.moveMapCamera(latLng, zoom, true);
             }
 
             @Override
@@ -75,17 +94,7 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
     }
 
     @Override
-    public void saveMarker(Marker marker) {
-        queryManager.saveMarker(marker, new SearchManager.OnMarkerSavedCallback() {
-            @Override
-            public void onSuccess(String message) {
-                view.showMessage(message);
-            }
-        });
-    }
-
-    @Override
-    public void onSaveMarkerClick(Marker marker) {
+    public void onMarkerClick(Marker marker) {
         queryManager.prepareSaveMarkerDialog(marker, new SearchManager.OnDialogDataPrepared() {
             @Override
             public void onSuccess(String title, String message, Marker marker) {
@@ -95,16 +104,11 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
     }
 
     @Override
-    public void getCurrentMarker() {
-        queryManager.getCurrentMarker(new SearchManager.OnLoadMarkerCallback() {
+    public void saveMarker(Marker currentMarker, String customName) {
+        queryManager.saveMarkerToList(currentMarker, customName, new SearchManager.OnMarkerSavedCallback() {
             @Override
-            public void onSuccess(String title, LatLng position, float zoom) {
-                view.showOnInnerMap(title, position, zoom);
-            }
-
-            @Override
-            public void onNotFound() {
-                findMyLocation();
+            public void onSuccess(String message) {
+                view.showMessage(message);
             }
         });
     }

@@ -4,26 +4,24 @@ import android.location.Address;
 
 import com.example.ama.android2_lesson03.PocketMap;
 import com.example.ama.android2_lesson03.R;
-import com.example.ama.android2_lesson03.repo.base.MarkerListManager;
 import com.example.ama.android2_lesson03.repo.base.SearchManager;
-import com.example.ama.android2_lesson03.repo.data.LocationManagerAndroid;
-import com.example.ama.android2_lesson03.repo.data.PreferencesMarkerManager;
-import com.example.ama.android2_lesson03.repo.data.UriManager;
 import com.example.ama.android2_lesson03.repo.data.base.LocManager;
 import com.example.ama.android2_lesson03.repo.data.base.MarkerManager;
-import com.example.ama.android2_lesson03.repo.model.SimpleMarker;
+import com.example.ama.android2_lesson03.repo.data.location.LocationManagerAndroid;
+import com.example.ama.android2_lesson03.repo.data.markers.PreferencesMarkerManager;
+import com.example.ama.android2_lesson03.repo.data.model.SimpleMarker;
+import com.example.ama.android2_lesson03.repo.data.state.SearchOnTheMapStateSaver;
+import com.example.ama.android2_lesson03.repo.data.state.UriManager;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 /**
  * Class for execute presenter's queries
  */
-public class SearchQueryManager implements SearchManager, MarkerListManager {
+public class SearchQueryManager implements SearchManager {
     private LocManager locManager;
     private UriManager uriManager;
     private MarkerManager markerManager;
-
-    private SimpleMarker savedMarker;
 
     public static final float DEFAULT_ZOOM = 15f;
 
@@ -34,8 +32,8 @@ public class SearchQueryManager implements SearchManager, MarkerListManager {
     }
 
     @Override
-    public void getPreparedUri(boolean isMarkerOnTheMap, LatLng cameraPosition, float zoom, OnUriPreparedCallback callback) {
-        if (!isMarkerOnTheMap) {
+    public void prepareUriForGMaps(Marker marker, LatLng cameraPosition, float zoom, OnUriPreparedCallback callback) {
+        if (marker != null) {
             uriManager.prepareUriByCameraPosition(cameraPosition, zoom);
         }
         callback.onSuccess(uriManager.getPreparedUri());
@@ -74,47 +72,47 @@ public class SearchQueryManager implements SearchManager, MarkerListManager {
 
     @Override
     public void prepareSaveMarkerDialog(Marker marker, OnDialogDataPrepared callback) {
-        callback.onSuccess(
-                PocketMap.getInstance().getString(R.string.save_marker_dialog_title),
-                PocketMap.getInstance().getString(R.string.save_marker_dialog_message),
-                marker
-        );
+        SimpleMarker savingMarker = SimpleMarker.getFromMarker(marker);
+        if (savingMarker != null) {
+            callback.onSuccess(
+                    PocketMap.getInstance().getString(R.string.save_marker_dialog_title),
+                    markerManager.isMarkerExists(savingMarker) ?
+                            PocketMap.getInstance().getString(R.string.message_marker_already_exists) :
+                            PocketMap.getInstance().getString(R.string.save_marker_dialog_message),
+                    marker
+            );
+        }
     }
 
     @Override
-    public void saveMarker(Marker marker, OnMarkerSavedCallback callback) {
-        markerManager.addMarker(SimpleMarker.getFromMarker(marker));
-        callback.onSuccess(PocketMap.getInstance().getString(R.string.marker_saved_message));
+    public void saveMarkerToList(Marker marker, String customName, OnMarkerSavedCallback callback) {
+        SimpleMarker savingMarker = SimpleMarker.getFromMarker(marker);
+        if (savingMarker != null) {
+            if (markerManager.isMarkerExists(savingMarker)) {
+                markerManager.updateMarker(savingMarker, customName);
+            } else {
+                markerManager.addMarker(savingMarker);
+            }
+            callback.onSuccess(PocketMap.getInstance().getString(R.string.marker_saved_message));
+        }
     }
 
     @Override
-    public void getAllMarkers(OnGetMarkersCallback callback) {
-        callback.onSuccess(markerManager.getAllMarkers());
+    public void saveState(Marker currentMarker) {
+        SearchOnTheMapStateSaver.saveCurrentMarker(SimpleMarker.getFromMarker(currentMarker));
     }
 
-    @Override
-    public void updateMarker(SimpleMarker marker, String newName, OnGetMarkersCallback callback) {
-        markerManager.updateMarker(marker, newName);
-        getAllMarkers(callback);
-    }
 
     @Override
-    public void deleteMarker(SimpleMarker marker, OnGetMarkersCallback callback) {
-        markerManager.deleteMarker(marker);
-        getAllMarkers(callback);
-    }
-
-    @Override
-    public void saveCurrentMarker(SimpleMarker marker) {
-        savedMarker = marker;
-    }
-
-    @Override
-    public void getCurrentMarker(OnLoadMarkerCallback callback) {
-        if (savedMarker != null) {
-            callback.onSuccess(savedMarker.getTitle(), savedMarker.getPosition(), DEFAULT_ZOOM);
-        } else {
-            callback.onNotFound();
+    public void loadSavedState(OnMarkerPreparedCallback callback) {
+        SimpleMarker currentMarker = SearchOnTheMapStateSaver.loadCurrentMarker();
+        if (currentMarker != null) {
+            uriManager.prepareUriByMarkerLocation(currentMarker.getPosition(), currentMarker.getAddress());
+            callback.onSuccess(
+                    currentMarker.getTitle(),
+                    currentMarker.getAddress(),
+                    currentMarker.getPosition(),
+                    DEFAULT_ZOOM);
         }
     }
 
