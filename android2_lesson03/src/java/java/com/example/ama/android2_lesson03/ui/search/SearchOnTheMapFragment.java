@@ -237,11 +237,11 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
     }
 
     private void tuneMyLocation() {
-        if (PermissionManager.checkPermission(PocketMap.getInstance(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (PermissionManager.checkPermission(PocketMap.getInstance(), PermissionManager.FINE_LOCATION)) {
             map.setMyLocationEnabled(true);
             map.getUiSettings().setMyLocationButtonEnabled(true);
         } else {
-            requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION, PermissionManager.TUNE_MY_LOCATION_REQUEST);
+            requestPermission(PermissionManager.FINE_LOCATION, PermissionManager.TUNE_MY_LOCATION_REQUEST);
         }
     }
 

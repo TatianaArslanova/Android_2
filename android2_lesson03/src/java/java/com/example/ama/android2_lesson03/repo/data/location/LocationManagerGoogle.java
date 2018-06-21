@@ -1,6 +1,5 @@
 package com.example.ama.android2_lesson03.repo.data.location;
 
-import android.Manifest;
 import android.location.Location;
 
 import com.example.ama.android2_lesson03.PocketMap;
@@ -27,7 +26,7 @@ public class LocationManagerGoogle extends BaseLocationManager {
     @Override
     public void findMyLocation(final SearchManager.OnLocationSearchResultCallback callback) {
         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(PocketMap.getInstance());
-        if (PermissionManager.checkPermission(PocketMap.getInstance(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (PermissionManager.checkPermission(PocketMap.getInstance(), PermissionManager.FINE_LOCATION)) {
             client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
@@ -42,7 +41,7 @@ public class LocationManagerGoogle extends BaseLocationManager {
                 }
             });
         } else {
-            callback.onPermissionRequired(Manifest.permission.ACCESS_COARSE_LOCATION, PermissionManager.FIND_MY_LOCATION_REQUEST);
+            callback.onPermissionRequired(PermissionManager.FINE_LOCATION, PermissionManager.FIND_MY_LOCATION_REQUEST);
         }
     }
 }
