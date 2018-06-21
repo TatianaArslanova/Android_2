@@ -5,8 +5,10 @@ import android.content.pm.PackageManager
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 
+const val FINE_LOCATION = android.Manifest.permission.ACCESS_FINE_LOCATION
 const val TUNE_MY_LOCATION_REQUEST = 1
 const val FIND_MY_LOCATION_REQUEST = 2
+const val SUBSCRIBE_LOCATION_UPDATES = 3
 
 object PermissionManager {
 

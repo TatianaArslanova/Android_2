@@ -14,6 +14,7 @@ import com.example.ama.android2_lesson03.ui.search.base.SearchOnTheMapView
 import com.example.ama.android2_lesson03.ui.search.base.SearchPresenter
 import com.example.ama.android2_lesson03.ui.search.mvp.SearchOnTheMapPresenter
 import com.example.ama.android2_lesson03.utils.FIND_MY_LOCATION_REQUEST
+import com.example.ama.android2_lesson03.utils.FINE_LOCATION
 import com.example.ama.android2_lesson03.utils.PermissionManager
 import com.example.ama.android2_lesson03.utils.TUNE_MY_LOCATION_REQUEST
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -170,11 +171,11 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
     }
 
     private fun tuneMyLocation() {
-        if (PermissionManager.checkPermission(PocketMap.instance, android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (PermissionManager.checkPermission(PocketMap.instance, FINE_LOCATION)) {
             map?.isMyLocationEnabled = true
             map?.uiSettings?.isMyLocationButtonEnabled = true
         } else {
-            requestPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION, TUNE_MY_LOCATION_REQUEST)
+            requestPermission(FINE_LOCATION, TUNE_MY_LOCATION_REQUEST)
         }
     }
 
