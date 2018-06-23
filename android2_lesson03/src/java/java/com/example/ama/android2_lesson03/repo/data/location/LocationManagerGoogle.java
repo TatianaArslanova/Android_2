@@ -1,16 +1,17 @@
 package com.example.ama.android2_lesson03.repo.data.location;
 
 import android.location.Location;
+import android.os.Looper;
 
 import com.example.ama.android2_lesson03.PocketMap;
 import com.example.ama.android2_lesson03.R;
-import com.example.ama.android2_lesson03.repo.SearchQueryManager;
-import com.example.ama.android2_lesson03.repo.base.SearchManager;
 import com.example.ama.android2_lesson03.repo.data.base.BaseLocationManager;
 import com.example.ama.android2_lesson03.utils.PermissionManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 /**
@@ -18,30 +19,68 @@ import com.google.android.gms.tasks.OnSuccessListener;
  */
 public class LocationManagerGoogle extends BaseLocationManager {
 
+    private static final long REQUEST_INTERVAL = 3000L;
+
+    private FusedLocationProviderClient client;
+    private LocationCallback listener;
+
+    public LocationManagerGoogle() {
+        client = LocationServices.getFusedLocationProviderClient(PocketMap.getInstance());
+    }
+
     /**
      * Find user location by {@link FusedLocationProviderClient} and notify about result by callback
      *
      * @param callback for sending result
      */
+
     @Override
-    public void findMyLocation(final SearchManager.OnLocationSearchResultCallback callback) {
-        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(PocketMap.getInstance());
+    public void findMyLocation(final OnLocationSearchResultCallback callback) {
         if (PermissionManager.checkPermission(PocketMap.getInstance(), PermissionManager.FINE_LOCATION)) {
             client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
                     if (location != null) {
-                        callback.onLocationFound(new LatLng(
-                                        location.getLatitude(),
-                                        location.getLongitude()),
-                                SearchQueryManager.DEFAULT_ZOOM);
+                        callback.onLocationFound(location);
                     } else {
-                        callback.onNotFound(PocketMap.getInstance().getString(R.string.message_location_not_found));
+                        callback.onError(PocketMap.getInstance().getString(R.string.message_location_not_found));
                     }
                 }
             });
         } else {
             callback.onPermissionRequired(PermissionManager.FINE_LOCATION, PermissionManager.FIND_MY_LOCATION_REQUEST);
         }
+    }
+
+    @Override
+    public void subscribeOnLocationChanges(OnLocationSearchResultCallback callback) {
+        if (PermissionManager.checkPermission(PocketMap.getInstance(), PermissionManager.FINE_LOCATION)) {
+            registerListener(callback);
+            client.requestLocationUpdates(
+                    LocationRequest.create().setInterval(REQUEST_INTERVAL),
+                    listener,
+                    Looper.getMainLooper());
+        } else {
+            callback.onPermissionRequired(PermissionManager.FINE_LOCATION, PermissionManager.FIND_MY_LOCATION_REQUEST);
+        }
+    }
+
+    @Override
+    public void unsubscribeOfLocationChanges() {
+        if (listener != null) {
+            client.removeLocationUpdates(listener);
+            listener = null;
+        }
+    }
+
+    private void registerListener(final OnLocationSearchResultCallback callback) {
+        listener = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult != null && !locationResult.getLocations().isEmpty()) {
+                    callback.onLocationFound(locationResult.getLocations().get(0));
+                }
+            }
+        };
     }
 }

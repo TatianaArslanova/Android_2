@@ -75,7 +75,7 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
 
     @Override
     public void findMyLocation() {
-        queryManager.getMyLocation(new SearchManager.OnLocationSearchResultCallback() {
+        queryManager.getMyLocation(new SearchManager.OnLatLngSearchResultCallback() {
             @Override
             public void onLocationFound(LatLng latLng, float zoom) {
                 view.moveMapCamera(latLng, zoom, true);
@@ -111,5 +111,30 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
                 view.showMessage(message);
             }
         });
+    }
+
+    @Override
+    public void subscribeOnLocationUpdates() {
+        queryManager.subscribeOnLocationUpdates(new SearchManager.OnLatLngSearchResultCallback() {
+            @Override
+            public void onLocationFound(LatLng latLng, float zoom) {
+
+            }
+
+            @Override
+            public void onNotFound(String message) {
+                view.showMessage(message);
+            }
+
+            @Override
+            public void onPermissionRequired(String permission, int requestCode) {
+                view.requestPermission(permission, requestCode);
+            }
+        });
+    }
+
+    @Override
+    public void unsubscribeOfLocationUpdates() {
+        queryManager.unsubscribeOfLocationUpdates();
     }
 }

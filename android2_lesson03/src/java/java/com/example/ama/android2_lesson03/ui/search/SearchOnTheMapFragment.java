@@ -1,6 +1,5 @@
 package com.example.ama.android2_lesson03.ui.search;
 
-import android.Manifest;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -97,12 +96,14 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
 
     @Override
     public void onResume() {
+        presenter.subscribeOnLocationUpdates();
         mapView.onResume();
         super.onResume();
     }
 
     @Override
     public void onPause() {
+        presenter.unsubscribeOfLocationUpdates();
         mapView.onPause();
         super.onPause();
     }
@@ -156,6 +157,10 @@ public class SearchOnTheMapFragment extends Fragment implements SearchOnTheMapVi
             switch (requestCode) {
                 case PermissionManager.TUNE_MY_LOCATION_REQUEST: {
                     tuneMyLocation();
+                    break;
+                }
+                case PermissionManager.SUBSCRIBE_ON_LOCATION_UPDATES: {
+                    presenter.subscribeOnLocationUpdates();
                     break;
                 }
                 case PermissionManager.FIND_MY_LOCATION_REQUEST: {

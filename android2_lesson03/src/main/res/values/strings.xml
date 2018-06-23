@@ -3,7 +3,8 @@
     <string name="button_text_search">поиск</string>
     <string name="edit_text_hint_find_address">Найти адрес на карте</string>
     <string name="button_text_send_to_google_maps">on GoogleMaps</string>
-    <string name="message_location_not_found">Местоположение не найдено. Попробуйте позже.</string>
+    <string name="message_location_not_found">Местоположение не найдено</string>
+    <string name="message_location_provider_out_of_service">Не удалось обновить местоположение. Проверьте настройки GPS.</string>
     <string name="message_marker_already_exists">Такой маркер уже существует. Переименовать?</string>
     <string name="search_fragment_menu_item_settings_title">Сохраненные маркеры</string>
     <string name="save_marker_dialog_title">Сохранение маркера</string>
@@ -16,4 +17,5 @@
     <string name="button_text_cancel">Отмена</string>
     <string name="marker_list_fragment_context_menu_item_delete">Удалить</string>
     <string name="marker_list_fragment_context_menu_item_rename">Переименовать</string>
+    <string name="search_on_the_map_menu_item_check_box_location_updates">Местоположение</string>
 </resources>

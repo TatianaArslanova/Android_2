@@ -1,6 +1,7 @@
 package com.example.ama.android2_lesson03.repo;
 
 import android.location.Address;
+import android.location.Location;
 
 import com.example.ama.android2_lesson03.PocketMap;
 import com.example.ama.android2_lesson03.R;
@@ -8,6 +9,7 @@ import com.example.ama.android2_lesson03.repo.base.SearchManager;
 import com.example.ama.android2_lesson03.repo.data.base.LocManager;
 import com.example.ama.android2_lesson03.repo.data.base.MarkerManager;
 import com.example.ama.android2_lesson03.repo.data.location.LocationManagerAndroid;
+import com.example.ama.android2_lesson03.repo.data.location.LocationManagerGoogle;
 import com.example.ama.android2_lesson03.repo.data.markers.PreferencesMarkerManager;
 import com.example.ama.android2_lesson03.repo.data.model.SimpleMarker;
 import com.example.ama.android2_lesson03.repo.data.state.SearchOnTheMapStateSaver;
@@ -23,7 +25,7 @@ public class SearchQueryManager implements SearchManager {
     private UriManager uriManager;
     private MarkerManager markerManager;
 
-    public static final float DEFAULT_ZOOM = 15f;
+    private static final float DEFAULT_ZOOM = 15f;
 
     public SearchQueryManager() {
         locManager = new LocationManagerAndroid();
@@ -66,8 +68,8 @@ public class SearchQueryManager implements SearchManager {
     }
 
     @Override
-    public void getMyLocation(OnLocationSearchResultCallback callback) {
-        locManager.findMyLocation(callback);
+    public void getMyLocation(OnLatLngSearchResultCallback callback) {
+        locManager.findMyLocation(getLocationCallback(callback));
     }
 
     @Override
@@ -114,6 +116,38 @@ public class SearchQueryManager implements SearchManager {
                     currentMarker.getPosition(),
                     DEFAULT_ZOOM);
         }
+    }
+
+    @Override
+    public void subscribeOnLocationUpdates(OnLatLngSearchResultCallback callback) {
+        locManager.subscribeOnLocationChanges(getLocationCallback(callback));
+    }
+
+    @Override
+    public void unsubscribeOfLocationUpdates() {
+        locManager.unsubscribeOfLocationChanges();
+    }
+
+    private LocManager.OnLocationSearchResultCallback getLocationCallback(final SearchManager.OnLatLngSearchResultCallback callback) {
+        return new LocManager.OnLocationSearchResultCallback() {
+            @Override
+            public void onLocationFound(Location location) {
+                callback.onLocationFound(new LatLng(
+                                location.getLatitude(),
+                                location.getLongitude()),
+                        DEFAULT_ZOOM);
+            }
+
+            @Override
+            public void onError(String message) {
+                callback.onNotFound(message);
+            }
+
+            @Override
+            public void onPermissionRequired(String permission, int requestCode) {
+                callback.onPermissionRequired(permission, requestCode);
+            }
+        };
     }
 
     private String buildFullName(Address address) {

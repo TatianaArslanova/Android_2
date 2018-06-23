@@ -15,7 +15,7 @@ public interface SearchManager {
 
     void getFullLocationName(LatLng latLng, OnFullNamePreparedCallback callback);
 
-    void getMyLocation(OnLocationSearchResultCallback callback);
+    void getMyLocation(OnLatLngSearchResultCallback callback);
 
     void prepareSaveMarkerDialog(Marker marker, OnDialogDataPrepared callback);
 
@@ -24,6 +24,10 @@ public interface SearchManager {
     void saveState(Marker currentMarker);
 
     void loadSavedState(OnMarkerPreparedCallback callback);
+
+    void subscribeOnLocationUpdates(OnLatLngSearchResultCallback callback);
+
+    void unsubscribeOfLocationUpdates();
 
     interface OnDialogDataPrepared {
         void onSuccess(String title, String message, Marker marker);
@@ -45,7 +49,7 @@ public interface SearchManager {
         void onSuccess(String address, LatLng latLng, float zoom);
     }
 
-    interface OnLocationSearchResultCallback {
+    interface OnLatLngSearchResultCallback {
         void onLocationFound(LatLng latLng, float zoom);
 
         void onNotFound(String message);

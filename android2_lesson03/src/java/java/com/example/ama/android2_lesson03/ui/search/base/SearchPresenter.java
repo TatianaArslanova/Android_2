@@ -21,4 +21,8 @@ public interface SearchPresenter<T extends SearchOnTheMapView> extends Presenter
 
     void saveMarker(Marker currentMarker, String customName);
 
+    void subscribeOnLocationUpdates();
+
+    void unsubscribeOfLocationUpdates();
+
 }
