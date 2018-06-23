@@ -1,5 +1,7 @@
 package com.example.ama.android2_lesson03.repo.data.model
 
+import com.example.ama.android2_lesson03.repo.data.state.NOT_FOUND
+import com.example.ama.android2_lesson03.repo.data.state.SearchOnTheMapStateSaver
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import org.json.JSONException
@@ -40,14 +42,16 @@ data class SimpleMarker(val address: String, val position: LatLng, var title: St
         }
 
         fun simpleMarkerFromJson(json: String): SimpleMarker? {
-            try {
-                val jsonObject = JSONObject(json)
-                return SimpleMarker(
-                        jsonObject.getString(MARKER_ADDRESS_KEY),
-                        LatLng(jsonObject.getDouble(MARKER_LATITUDE_KEY), jsonObject.getDouble(MARKER_LONGITUDE_KEY)),
-                        jsonObject.getString(MARKER_TITLE_KEY))
-            } catch (e: JSONException) {
-                e.printStackTrace()
+            if (json!= NOT_FOUND) {
+                try {
+                    val jsonObject = JSONObject(json)
+                    return SimpleMarker(
+                            jsonObject.getString(MARKER_ADDRESS_KEY),
+                            LatLng(jsonObject.getDouble(MARKER_LATITUDE_KEY), jsonObject.getDouble(MARKER_LONGITUDE_KEY)),
+                            jsonObject.getString(MARKER_TITLE_KEY))
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
             }
             return null
         }

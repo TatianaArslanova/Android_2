@@ -29,4 +29,10 @@ interface SearchManager {
     fun saveState(currentMarker: Marker?)
 
     fun loadSavedState(onSuccess: (markerTitle: String, address: String, position: LatLng, zoom: Float) -> Unit)
+
+    fun subscribeOnLocationUpdates(found: (latLng: LatLng, zoom: Float) -> Unit,
+                                   notFound: (message: String) -> Unit,
+                                   permissionRequired: (permission: String, requestCode: Int) -> Unit)
+
+    fun unsubscribeOfLocationUpdates()
 }

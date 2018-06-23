@@ -1,6 +1,7 @@
 package com.example.ama.android2_lesson03.repo.data.base
 
 import android.location.Address
+import android.location.Location
 import com.google.android.gms.maps.model.LatLng
 
 /**
@@ -12,4 +13,10 @@ interface LocManager {
     fun findMyLocation(found: (latLng: LatLng, zoom: Float) -> Unit,
                        notFound: (message: String) -> Unit,
                        permissionRequired: (permission: String, requestCode: Int) -> Unit)
+
+    fun subscribeOnLocationUpdates(locationFound: (location: Location) -> Unit,
+                                   error: (message: String) -> Unit,
+                                   permissionRequired: (permission: String, requestCode: Int) -> Unit)
+
+    fun unsubscribeOfLocationUpdates()
 }

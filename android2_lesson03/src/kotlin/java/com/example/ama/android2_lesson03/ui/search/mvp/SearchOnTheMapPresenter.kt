@@ -67,4 +67,15 @@ class SearchOnTheMapPresenter<T : SearchOnTheMapView> : BasePresenter<T>(), Sear
             view?.showOnInnerMap(markerTitle, address, position)
         }
     }
+
+    override fun subscrineOnLocationUpdates() {
+        queryManager.subscribeOnLocationUpdates(
+                found = { latLng, zoom -> },
+                notFound = { message -> view?.showMessage(message) },
+                permissionRequired = { permission, requestCode -> view?.requestPermission(permission, requestCode) })
+    }
+
+    override fun unsubscribeOfLocationUpdates() {
+        queryManager.unsubscribeOfLocationUpdates()
+    }
 }

@@ -74,11 +74,13 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
     }
 
     override fun onResume() {
+        presenter?.subscrineOnLocationUpdates()
         mapView.onResume()
         super.onResume()
     }
 
     override fun onPause() {
+        presenter?.unsubscribeOfLocationUpdates()
         mapView.onPause()
         super.onPause()
     }

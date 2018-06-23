@@ -8,6 +8,7 @@ import com.example.ama.android2_lesson03.repo.base.SearchManager
 import com.example.ama.android2_lesson03.repo.data.base.LocManager
 import com.example.ama.android2_lesson03.repo.data.base.MarkerManager
 import com.example.ama.android2_lesson03.repo.data.location.LocationManagerAndroid
+import com.example.ama.android2_lesson03.repo.data.location.LocationManagerGoogle
 import com.example.ama.android2_lesson03.repo.data.markers.PreferencesMarkerManager
 import com.example.ama.android2_lesson03.repo.data.model.SimpleMarker
 import com.example.ama.android2_lesson03.repo.data.state.SearchOnTheMapStateSaver
@@ -101,6 +102,18 @@ class SearchQueryManager : SearchManager {
             onSuccess.invoke(marker.title, marker.address, marker.position, DEFAULT_ZOOM)
         }
     }
+
+    override fun subscribeOnLocationUpdates(found: (latLng: LatLng, zoom: Float) -> Unit, notFound: (message: String) -> Unit, permissionRequired: (permission: String, requestCode: Int) -> Unit) {
+        locManager.subscribeOnLocationUpdates(
+                locationFound = { location -> found.invoke(LatLng(location.latitude, location.longitude), DEFAULT_ZOOM) },
+                error = { message -> notFound.invoke(message) },
+                permissionRequired = { permission, requestCode -> permissionRequired.invoke(permission, requestCode) })
+    }
+
+    override fun unsubscribeOfLocationUpdates() {
+        locManager.unsubscribeOfLocationUpdates()
+    }
+
 
     private fun buildFullName(address: Address): String {
         val builder = StringBuilder()
