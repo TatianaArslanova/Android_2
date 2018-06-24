@@ -70,21 +70,21 @@ class LocationManagerAndroid : BaseLocationManager() {
 
             override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
                 when (p1) {
-                    LocationProvider.AVAILABLE -> Log.d(javaClass.simpleName, "LocationProvider avaliable")
-                    LocationProvider.TEMPORARILY_UNAVAILABLE -> Log.d(javaClass.simpleName, "LocationProvider temporarily unavailable")
+                    LocationProvider.AVAILABLE -> Log.d("onStatusChanged", "LocationProvider avaliable")
+                    LocationProvider.TEMPORARILY_UNAVAILABLE -> Log.d("onStatusChanged", "LocationProvider temporarily unavailable")
                     LocationProvider.OUT_OF_SERVICE -> {
                         error.invoke(PocketMap.instance.getString(R.string.message_location_provider_out_of_service))
-                        Log.d(javaClass.simpleName, "LocationProvider out of service")
+                        Log.d("onStatusChanged", "LocationProvider out of service")
                     }
                 }
             }
 
             override fun onProviderEnabled(p0: String?) {
-                Log.d(javaClass.simpleName, "LocationProvider enabled")
+                Log.d("onProviderEnabled", "LocationProvider enabled")
             }
 
             override fun onProviderDisabled(p0: String?) {
-                Log.d(javaClass.simpleName, "LocationProvider disabled")
+                Log.d("onProviderDisabled", "LocationProvider disabled")
             }
         }
     }

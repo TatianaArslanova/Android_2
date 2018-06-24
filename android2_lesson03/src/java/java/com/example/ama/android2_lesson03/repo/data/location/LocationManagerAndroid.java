@@ -77,27 +77,27 @@ public class LocationManagerAndroid extends BaseLocationManager {
             public void onStatusChanged(String s, int i, Bundle bundle) {
                 switch (i) {
                     case LocationProvider.AVAILABLE:
-                        Log.d(getClass().getSimpleName(), "LocationProvider avaliable");
+                        Log.d("onStatusChanged", "LocationProvider avaliable");
                         break;
                     case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                        Log.d(getClass().getSimpleName(), "LocationProvider temporarily unavailable");
+                        Log.d("onStatusChanged", "LocationProvider temporarily unavailable");
                         break;
                     case LocationProvider.OUT_OF_SERVICE:
                         callback.onError(PocketMap.getInstance().getString(R.string.message_location_provider_out_of_service));
-                        Log.d(getClass().getSimpleName(), "LocationProvider out of service");
+                        Log.d("onStatusChanged", "LocationProvider out of service");
                         break;
                 }
             }
 
             @Override
             public void onProviderEnabled(String s) {
-                Log.d(getClass().getSimpleName(), "LocationProvider enabled");
+                Log.d("onProviderEnabled", "LocationProvider enabled");
             }
 
             @Override
 
             public void onProviderDisabled(String s) {
-                Log.d(getClass().getSimpleName(), "LocationProvider disabled");
+                Log.d("onProviderDisabled", "LocationProvider disabled");
             }
         };
     }

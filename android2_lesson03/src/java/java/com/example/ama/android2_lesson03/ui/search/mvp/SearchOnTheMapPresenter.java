@@ -1,6 +1,7 @@
 package com.example.ama.android2_lesson03.ui.search.mvp;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.ama.android2_lesson03.repo.SearchQueryManager;
 import com.example.ama.android2_lesson03.repo.base.SearchManager;
@@ -118,7 +119,7 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
         queryManager.subscribeOnLocationUpdates(new SearchManager.OnLatLngSearchResultCallback() {
             @Override
             public void onLocationFound(LatLng latLng, float zoom) {
-
+                Log.d("onLocationFound", "location updated "+latLng.toString());
             }
 
             @Override

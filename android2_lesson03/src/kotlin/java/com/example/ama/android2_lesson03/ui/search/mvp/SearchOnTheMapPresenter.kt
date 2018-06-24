@@ -1,5 +1,6 @@
 package com.example.ama.android2_lesson03.ui.search.mvp
 
+import android.util.Log
 import com.example.ama.android2_lesson03.repo.SearchQueryManager
 import com.example.ama.android2_lesson03.repo.base.SearchManager
 import com.example.ama.android2_lesson03.ui.base.BasePresenter
@@ -70,7 +71,7 @@ class SearchOnTheMapPresenter<T : SearchOnTheMapView> : BasePresenter<T>(), Sear
 
     override fun subscrineOnLocationUpdates() {
         queryManager.subscribeOnLocationUpdates(
-                found = { latLng, zoom -> },
+                found = { latLng, zoom -> Log.d("found", "location updated "+latLng.toString()) },
                 notFound = { message -> view?.showMessage(message) },
                 permissionRequired = { permission, requestCode -> view?.requestPermission(permission, requestCode) })
     }
