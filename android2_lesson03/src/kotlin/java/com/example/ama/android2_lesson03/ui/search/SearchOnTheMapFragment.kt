@@ -6,20 +6,19 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.*
+import android.widget.Toast
 import com.example.ama.android2_lesson03.PocketMap
 import com.example.ama.android2_lesson03.R
 import com.example.ama.android2_lesson03.ui.Launcher
 import com.example.ama.android2_lesson03.ui.MainActivity
+import com.example.ama.android2_lesson03.ui.search.base.Controller
 import com.example.ama.android2_lesson03.ui.search.base.SearchOnTheMapView
 import com.example.ama.android2_lesson03.ui.search.base.SearchPresenter
 import com.example.ama.android2_lesson03.ui.search.mvp.SearchOnTheMapPresenter
 import com.example.ama.android2_lesson03.utils.*
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_search.*
 
 /**
@@ -28,11 +27,8 @@ import kotlinx.android.synthetic.main.fragment_search.*
 class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
 
     private lateinit var mapView: MapView
-
-    private var map: GoogleMap? = null
     private var presenter: SearchPresenter<SearchOnTheMapView>? = null
-
-    private var currentMarker: Marker? = null
+    private var mapController: Controller? = null
 
     companion object {
         fun newInstance() = SearchOnTheMapFragment()
@@ -49,18 +45,23 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         presenter = SearchOnTheMapPresenter()
+        mapController = MapController(
+                presenter!!,
+                clearAddress = {
+                    et_search.text.clear()
+                    tv_address.text = ""
+                },
+                permissionRequired = { permission, requestCode ->
+                    requestPermission(permission, requestCode)
+                })
         addListeners()
         mapView = mv_main_map
         mapView.onCreate(savedInstanceState)
-        mapView.getMapAsync({ it ->
-            map = it
-            tuneMap()
-            tuneMyLocation()
-            presenter?.loadSavedState()
-            if (currentMarker == null) {
-                presenter?.findMyLocation()
-            }
-        })
+        mapView.getMapAsync(
+                { it ->
+                    mapController?.attachMap(it)
+                    mapController?.tuneMyLocation()
+                })
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -84,7 +85,7 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
 
     override fun onStop() {
         mapView.onStop()
-        presenter?.saveState(currentMarker)
+        mapController?.saveState()
         presenter?.detachView()
         super.onStop()
     }
@@ -107,7 +108,7 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             when (requestCode) {
-                TUNE_MY_LOCATION_REQUEST -> tuneMyLocation()
+                TUNE_MY_LOCATION_REQUEST -> mapController?.tuneMyLocation()
                 FIND_MY_LOCATION_REQUEST -> presenter?.findMyLocation()
                 SUBSCRIBE_LOCATION_UPDATES -> presenter?.subscrineOnLocationUpdates()
             }
@@ -133,27 +134,17 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
     }
 
     override fun showOnInnerMap(markerTitle: String?, address: String, latLng: LatLng) {
-        map?.clear()
         et_search.setText(address)
         tv_address.text = address
-        currentMarker = if (markerTitle == null || markerTitle == address) {
-            setMarkerOnTheMap(address, latLng)
-        } else {
-            setMarkerOnTheMapWithTitle(markerTitle, address, latLng)
-        }
-        currentMarker?.showInfoWindow()
+        mapController?.showOnInnerMap(markerTitle, address, latLng)
     }
 
     override fun showMessage(message: String) {
-        Launcher.showToast(message)
+        Toast.makeText(PocketMap.instance, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun moveMapCamera(latLng: LatLng, zoom: Float, cameraAnimation: Boolean) {
-        if (cameraAnimation) {
-            zoomToLocation(latLng, zoom)
-        } else {
-            setOnLocation(latLng, zoom)
-        }
+        mapController?.moveMapCamera(latLng, zoom, cameraAnimation)
     }
 
     override fun requestPermission(permission: String, requestCode: Int) {
@@ -161,69 +152,16 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
     }
 
     override fun showEditDialog(dialogTitle: String, dialogMessage: String, marker: Marker) {
-        Launcher.showDialog(activity, dialogTitle, dialogMessage, marker.title)
+        DialogLauncher.showEditDialog(activity, dialogTitle, dialogMessage, marker.title)
         { newName -> presenter?.saveMarker(marker, newName) }
     }
 
     private fun addListeners() {
         btn_search.setOnClickListener { startSearching() }
-        btn_ongmap.setOnClickListener { prepareToGmaps() }
-    }
-
-    private fun tuneMyLocation() {
-        if (PermissionManager.checkPermission(PocketMap.instance, FINE_LOCATION)) {
-            map?.isMyLocationEnabled = true
-            map?.uiSettings?.isMyLocationButtonEnabled = true
-        } else {
-            requestPermission(FINE_LOCATION, TUNE_MY_LOCATION_REQUEST)
-        }
-    }
-
-    private fun setOnLocation(latLng: LatLng, zoom: Float) {
-        map?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
-    }
-
-    private fun zoomToLocation(latLng: LatLng, zoom: Float) {
-        map?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
-    }
-
-    private fun tuneMap() {
-        map?.uiSettings?.setAllGesturesEnabled(true)
-        map?.uiSettings?.isZoomControlsEnabled = true
-        map?.setOnMapLongClickListener { latLng -> presenter?.findAddressByLatLng(latLng) }
-        map?.setOnMapClickListener { clearMap() }
-        map?.setOnMarkerClickListener { marker ->
-            presenter?.onMarkerClick(marker)
-            true
-        }
+        btn_ongmap.setOnClickListener { mapController?.prepareToGMaps() }
     }
 
     private fun startSearching() {
         presenter?.findAddressByQuery(et_search.text.toString())
     }
-
-    private fun prepareToGmaps() {
-        presenter?.sendQueryToGMapsApp(
-                currentMarker,
-                map?.cameraPosition?.target,
-                map?.cameraPosition?.zoom)
-    }
-
-    private fun clearMap() {
-        map?.clear()
-        et_search.text.clear()
-        tv_address.text = ""
-        currentMarker = null
-    }
-
-    private fun setMarkerOnTheMap(address: String, position: LatLng): Marker? =
-            map?.addMarker(MarkerOptions()
-                    .title(address)
-                    .position(position))
-
-    private fun setMarkerOnTheMapWithTitle(title: String, address: String, position: LatLng): Marker? =
-            map?.addMarker(MarkerOptions()
-                    .title(title)
-                    .snippet(address)
-                    .position(position))
 }

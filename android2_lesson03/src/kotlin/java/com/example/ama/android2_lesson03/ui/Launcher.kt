@@ -32,27 +32,6 @@ object Launcher {
         activity.startActivity(intent)
     }
 
-    fun showToast(message: String) {
-        Toast.makeText(PocketMap.instance, message, Toast.LENGTH_SHORT).show()
-    }
-
-    fun showDialog(context: Context, dialogTitle: String, dialogMessage: String, etText: String,
-                   okListener: (newName: String) -> Unit) {
-        val view = LayoutInflater.from(context).inflate(R.layout.edit_marker_dialog, null)
-        val etName = view.findViewById<EditText>(R.id.et_marker_name)
-        etName.setText(etText)
-        etName.selectAll()
-        AlertDialog.Builder(context)
-                .setView(view)
-                .setTitle(dialogTitle)
-                .setMessage(dialogMessage)
-                .setPositiveButton(R.string.button_ok_text, { dialogInterface, i -> okListener.invoke(etName.text.toString()) })
-                .setNegativeButton(R.string.button_text_cancel, { dialogInterface, i -> dialogInterface.cancel() })
-                .create()
-                .show()
-
-    }
-
     private fun runFragment(activity: AppCompatActivity, container: Int, fragment: Fragment, addToBackStack: Boolean) {
         val transaction = activity.supportFragmentManager.beginTransaction()
         transaction.replace(container, fragment, fragment::class.java.simpleName)

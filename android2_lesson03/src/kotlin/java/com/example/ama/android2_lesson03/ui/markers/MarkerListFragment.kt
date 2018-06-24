@@ -10,10 +10,10 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import com.example.ama.android2_lesson03.R
 import com.example.ama.android2_lesson03.repo.data.model.SimpleMarker
-import com.example.ama.android2_lesson03.ui.Launcher
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerPresenter
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerView
 import com.example.ama.android2_lesson03.ui.markers.mvp.MarkerListPresenter
+import com.example.ama.android2_lesson03.utils.DialogLauncher
 
 /**
  * List fragment for work with favorites markers
@@ -63,7 +63,7 @@ class MarkerListFragment : ListFragment(), MarkerView {
     }
 
     override fun showEditDialog(dialogTitle: String, dialogMessage: String, marker: SimpleMarker) {
-        Launcher.showDialog(activity, dialogTitle, dialogMessage, marker.title)
+        DialogLauncher.showEditDialog(activity, dialogTitle, dialogMessage, marker.title)
         { newName -> presenter?.editMarkerName(marker, newName) }
     }
 

@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_search_pane"
         android:gravity="center_horizontal"
+        android:minLines="2"
         tools:text="@string/app_name" />
 
     <com.google.android.gms.maps.MapView
