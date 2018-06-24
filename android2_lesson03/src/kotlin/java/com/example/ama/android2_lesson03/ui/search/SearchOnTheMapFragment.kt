@@ -13,10 +13,7 @@ import com.example.ama.android2_lesson03.ui.MainActivity
 import com.example.ama.android2_lesson03.ui.search.base.SearchOnTheMapView
 import com.example.ama.android2_lesson03.ui.search.base.SearchPresenter
 import com.example.ama.android2_lesson03.ui.search.mvp.SearchOnTheMapPresenter
-import com.example.ama.android2_lesson03.utils.FIND_MY_LOCATION_REQUEST
-import com.example.ama.android2_lesson03.utils.FINE_LOCATION
-import com.example.ama.android2_lesson03.utils.PermissionManager
-import com.example.ama.android2_lesson03.utils.TUNE_MY_LOCATION_REQUEST
+import com.example.ama.android2_lesson03.utils.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -112,6 +109,7 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
             when (requestCode) {
                 TUNE_MY_LOCATION_REQUEST -> tuneMyLocation()
                 FIND_MY_LOCATION_REQUEST -> presenter?.findMyLocation()
+                SUBSCRIBE_LOCATION_UPDATES -> presenter?.subscrineOnLocationUpdates()
             }
         }
     }
