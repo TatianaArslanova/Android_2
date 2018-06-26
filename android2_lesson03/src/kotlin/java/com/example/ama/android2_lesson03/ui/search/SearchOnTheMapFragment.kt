@@ -3,20 +3,17 @@ package com.example.ama.android2_lesson03.ui.search
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.view.*
+import android.view.View
 import android.widget.Toast
 import com.example.ama.android2_lesson03.PocketMap
-import com.example.ama.android2_lesson03.R
 import com.example.ama.android2_lesson03.ui.Launcher
-import com.example.ama.android2_lesson03.ui.MainActivity
+import com.example.ama.android2_lesson03.ui.search.base.BaseMapFragment
 import com.example.ama.android2_lesson03.ui.search.base.Controller
 import com.example.ama.android2_lesson03.ui.search.base.SearchOnTheMapView
 import com.example.ama.android2_lesson03.ui.search.base.SearchPresenter
 import com.example.ama.android2_lesson03.ui.search.mvp.SearchOnTheMapPresenter
 import com.example.ama.android2_lesson03.utils.*
-import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -24,23 +21,13 @@ import kotlinx.android.synthetic.main.fragment_search.*
 /**
  * Fragment for getting search user queries and showing on the map
  */
-class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
+class SearchOnTheMapFragment : BaseMapFragment(), SearchOnTheMapView {
 
-    private lateinit var mapView: MapView
     private var presenter: SearchPresenter<SearchOnTheMapView>? = null
     private var mapController: Controller? = null
 
     companion object {
         fun newInstance() = SearchOnTheMapFragment()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_search, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -55,54 +42,33 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
                     requestPermission(permission, requestCode)
                 })
         addListeners()
-        mapView = mv_main_map
-        mapView.onCreate(savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
         mapView.getMapAsync(
                 { it ->
                     mapController?.attachMap(it)
                     mapController?.tuneMyLocation()
                 })
-        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onStart() {
         presenter?.attachView(this)
-        mapView.onStart()
         super.onStart()
     }
 
     override fun onResume() {
         presenter?.subscrineOnLocationUpdates()
-        mapView.onResume()
         super.onResume()
     }
 
     override fun onPause() {
         presenter?.unsubscribeOfLocationUpdates()
-        mapView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        mapView.onStop()
         mapController?.saveState()
         presenter?.detachView()
         super.onStop()
-    }
-
-    override fun onDestroy() {
-        mapView.onDestroy()
-        super.onDestroy()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?) {
-        mapView.onSaveInstanceState(outState)
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onLowMemory() {
-        mapView.onLowMemory()
-        super.onLowMemory()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -114,20 +80,6 @@ class SearchOnTheMapFragment : Fragment(), SearchOnTheMapView {
             }
         }
     }
-
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.search_fragment_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?) =
-            when (item?.itemId) {
-                R.id.mi_showsettings -> {
-                    Launcher.runMarkerListFragment(activity as MainActivity, true)
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
-            }
 
     override fun showOnGMapsApp(uri: Uri) {
         Launcher.sendGoogleMapsIntent(activity as AppCompatActivity, uri)
