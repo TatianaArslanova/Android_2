@@ -66,7 +66,7 @@ public class PreferencesMarkerManager implements MarkerManager {
     }
 
     private void putInPreferences(Set<String> markerSet) {
-        preferences.edit().remove(MARKERS_KEY).putStringSet(MARKERS_KEY, markerSet).apply();
+        preferences.edit().clear().putStringSet(MARKERS_KEY, markerSet).apply();
     }
 
     private Set<String> getFromPreferences() {

@@ -93,6 +93,7 @@ public class SearchQueryManager implements SearchManager {
             if (markerManager.isMarkerExists(savingMarker)) {
                 markerManager.updateMarker(savingMarker, customName);
             } else {
+                savingMarker.setTitle(customName);
                 markerManager.addMarker(savingMarker);
             }
             callback.onSuccess(PocketMap.getInstance().getString(R.string.marker_saved_message));

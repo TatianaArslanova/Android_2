@@ -8,7 +8,6 @@ import com.example.ama.android2_lesson03.repo.base.SearchManager
 import com.example.ama.android2_lesson03.repo.data.base.LocManager
 import com.example.ama.android2_lesson03.repo.data.base.MarkerManager
 import com.example.ama.android2_lesson03.repo.data.location.LocationManagerAndroid
-import com.example.ama.android2_lesson03.repo.data.location.LocationManagerGoogle
 import com.example.ama.android2_lesson03.repo.data.markers.PreferencesMarkerManager
 import com.example.ama.android2_lesson03.repo.data.model.SimpleMarker
 import com.example.ama.android2_lesson03.repo.data.state.SearchOnTheMapStateSaver
@@ -85,6 +84,7 @@ class SearchQueryManager : SearchManager {
             if (markerManager.isMarkerExists(savingMarker)) {
                 markerManager.updateMarker(savingMarker, customName)
             } else {
+                savingMarker.title = customName
                 markerManager.addMarker(savingMarker)
             }
             callback.invoke(PocketMap.instance.getString(R.string.marker_saved_message))

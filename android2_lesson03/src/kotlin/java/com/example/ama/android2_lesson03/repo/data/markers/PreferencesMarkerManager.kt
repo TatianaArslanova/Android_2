@@ -47,6 +47,6 @@ class PreferencesMarkerManager : MarkerManager {
             preferences.getStringSet(MARKERS_KEY, HashSet<String>())
 
     private fun putSetInPreferences(markerSet: Set<String>) {
-        preferences.edit().remove(MARKERS_KEY).putStringSet(MARKERS_KEY, markerSet).apply()
+        preferences.edit().clear().putStringSet(MARKERS_KEY, markerSet).apply()
     }
 }
