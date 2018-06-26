@@ -11,10 +11,10 @@ import android.widget.ListView;
 
 import com.example.ama.android2_lesson03.R;
 import com.example.ama.android2_lesson03.repo.data.model.SimpleMarker;
-import com.example.ama.android2_lesson03.ui.Launcher;
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerPresenter;
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerView;
 import com.example.ama.android2_lesson03.ui.markers.mvp.MarkerListPresenter;
+import com.example.ama.android2_lesson03.utils.DialogLauncher;
 
 import java.util.ArrayList;
 
@@ -88,7 +88,7 @@ public class MarkerListFragment extends ListFragment implements MarkerView {
 
     @Override
     public void showEditDialog(String dialogTitle, String dialogMessage, final SimpleMarker marker) {
-        Launcher.showDialog(getActivity(), dialogTitle, dialogMessage, marker.getTitle(), new Launcher.OnDialogResult() {
+        DialogLauncher.showEditDialog(getActivity(), dialogTitle, dialogMessage, marker.getTitle(), new DialogLauncher.OnDialogResult() {
             @Override
             public void onPositiveResult(String inputText) {
                 presenter.editMarkerName(marker, inputText);

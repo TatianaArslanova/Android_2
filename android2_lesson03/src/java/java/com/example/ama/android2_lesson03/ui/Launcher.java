@@ -45,42 +45,4 @@ public class Launcher {
         intent.setPackage(GOOGLE_MAP_PACKAGE_NAME);
         activity.startActivity(intent);
     }
-
-    public static void showToast(String message) {
-        Toast.makeText(PocketMap.getInstance(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    public static void showDialog(Context context,
-                                  String title,
-                                  String message,
-                                  String markerName,
-                                  final OnDialogResult okListener) {
-        View view = LayoutInflater.from(context).inflate(R.layout.edit_marker_dialog, null);
-        final EditText etName = view.findViewById(R.id.et_marker_name);
-        etName.setText(markerName);
-        etName.selectAll();
-        new AlertDialog.Builder(context)
-                .setView(view)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(PocketMap.getInstance().getString(R.string.button_ok_text), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        okListener.onPositiveResult(etName.getText().toString());
-                        dialogInterface.cancel();
-                    }
-                })
-                .setNegativeButton(PocketMap.getInstance().getString(R.string.button_text_cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                })
-                .create()
-                .show();
-    }
-
-    public interface OnDialogResult {
-        void onPositiveResult(String inputText);
-    }
 }
