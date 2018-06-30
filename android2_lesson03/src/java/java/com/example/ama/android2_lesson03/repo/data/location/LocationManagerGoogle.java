@@ -6,7 +6,6 @@ import android.os.Looper;
 import com.example.ama.android2_lesson03.PocketMap;
 import com.example.ama.android2_lesson03.R;
 import com.example.ama.android2_lesson03.repo.data.base.BaseLocationManager;
-import com.example.ama.android2_lesson03.utils.PermissionManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -35,34 +34,28 @@ public class LocationManagerGoogle extends BaseLocationManager {
      */
 
     @Override
+    @SuppressWarnings({"MissingPermission"})
     public void findMyLocation(final OnLocationSearchResultCallback callback) {
-        if (PermissionManager.checkPermission(PocketMap.getInstance(), PermissionManager.FINE_LOCATION)) {
-            client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null) {
-                        callback.onLocationFound(location);
-                    } else {
-                        callback.onError(PocketMap.getInstance().getString(R.string.message_location_not_found));
-                    }
+        client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    callback.onLocationFound(location);
+                } else {
+                    callback.onError(PocketMap.getInstance().getString(R.string.message_location_not_found));
                 }
-            });
-        } else {
-            callback.onPermissionRequired(PermissionManager.FINE_LOCATION, PermissionManager.FIND_MY_LOCATION_REQUEST);
-        }
+            }
+        });
     }
 
     @Override
+    @SuppressWarnings({"MissingPermission"})
     public void subscribeOnLocationChanges(OnLocationSearchResultCallback callback) {
-        if (PermissionManager.checkPermission(PocketMap.getInstance(), PermissionManager.FINE_LOCATION)) {
-            registerListener(callback);
-            client.requestLocationUpdates(
-                    LocationRequest.create().setInterval(REQUEST_INTERVAL),
-                    listener,
-                    Looper.getMainLooper());
-        } else {
-            callback.onPermissionRequired(PermissionManager.FINE_LOCATION, PermissionManager.FIND_MY_LOCATION_REQUEST);
-        }
+        registerListener(callback);
+        client.requestLocationUpdates(
+                LocationRequest.create().setInterval(REQUEST_INTERVAL),
+                listener,
+                Looper.getMainLooper());
     }
 
     @Override

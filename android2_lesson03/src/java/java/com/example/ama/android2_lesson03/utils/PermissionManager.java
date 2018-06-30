@@ -1,23 +1,30 @@
 package com.example.ama.android2_lesson03.utils;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.app.Activity;
+
+import com.tbruyelle.rxpermissions2.RxPermissions;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 public class PermissionManager {
 
     public static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    public static final int TUNE_MY_LOCATION_REQUEST = 1;
-    public static final int SUBSCRIBE_ON_LOCATION_UPDATES = 2;
-    public static final int FIND_MY_LOCATION_REQUEST = 3;
 
-    public static boolean checkPermission(Context context, String permission) {
-        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
+    public static Disposable requestPermission(Activity activity, String permission, final OnGrantResult callback) {
+        RxPermissions rxPermissions = new RxPermissions(activity);
+        return rxPermissions
+                .request(permission)
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        callback.sendResult(aBoolean);
+                    }
+                });
     }
 
-    public static void requestPermission(Fragment fragment, String permission, int requestCode) {
-        fragment.requestPermissions(new String[]{permission}, requestCode);
+    public interface OnGrantResult {
+        void sendResult(boolean granted);
     }
 }

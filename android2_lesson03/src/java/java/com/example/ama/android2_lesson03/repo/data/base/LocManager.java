@@ -23,7 +23,5 @@ public interface LocManager {
         void onLocationFound(Location location);
 
         void onError(String message);
-
-        void onPermissionRequired(String permission, int requestCode);
     }
 }

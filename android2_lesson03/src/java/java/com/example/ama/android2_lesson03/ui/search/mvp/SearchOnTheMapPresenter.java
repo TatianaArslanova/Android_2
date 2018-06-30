@@ -86,11 +86,6 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
             public void onNotFound(String message) {
                 view.showMessage(message);
             }
-
-            @Override
-            public void onPermissionRequired(String permission, int requestCode) {
-                view.requestPermission(permission, requestCode);
-            }
         });
     }
 
@@ -119,17 +114,12 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
         queryManager.subscribeOnLocationUpdates(new SearchManager.OnLatLngSearchResultCallback() {
             @Override
             public void onLocationFound(LatLng latLng, float zoom) {
-                Log.d("onLocationFound", "location updated "+latLng.toString());
+                Log.d("onLocationFound", "location updated " + latLng.toString());
             }
 
             @Override
             public void onNotFound(String message) {
                 view.showMessage(message);
-            }
-
-            @Override
-            public void onPermissionRequired(String permission, int requestCode) {
-                view.requestPermission(permission, requestCode);
             }
         });
     }

@@ -1,9 +1,7 @@
 package com.example.ama.android2_lesson03.ui.search;
 
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -24,6 +22,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import io.reactivex.disposables.Disposable;
+
 /**
  * Fragment for getting search user queries and showing on the map
  */
@@ -31,6 +31,7 @@ public class SearchOnTheMapFragment extends BaseMapFragment implements SearchOnT
 
     private SearchPresenter<SearchOnTheMapView> presenter;
     private Controller mapController;
+    private Disposable disposable;
 
     public static SearchOnTheMapFragment newInstance() {
         return new SearchOnTheMapFragment();
@@ -39,12 +40,7 @@ public class SearchOnTheMapFragment extends BaseMapFragment implements SearchOnT
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         presenter = new SearchOnTheMapPresenter<>();
-        mapController = new MapController(presenter, new Controller.SomeNameCallback() {
-            @Override
-            public void onPermissionRequired(String permission, int requestCode) {
-                requestPermission(permission, requestCode);
-            }
-
+        mapController = new MapController(presenter, new Controller.ClearAddressCallback() {
             @Override
             public void clearAddress() {
                 etSearch.getText().clear();
@@ -61,7 +57,15 @@ public class SearchOnTheMapFragment extends BaseMapFragment implements SearchOnT
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mapController.attachMap(googleMap);
-                mapController.tuneMyLocation();
+                disposable = PermissionManager.requestPermission(
+                        getActivity(),
+                        PermissionManager.FINE_LOCATION,
+                        new PermissionManager.OnGrantResult() {
+                            @Override
+                            public void sendResult(boolean granted) {
+                                mapController.setLocationAccess(granted);
+                            }
+                        });
             }
         });
     }
@@ -74,13 +78,13 @@ public class SearchOnTheMapFragment extends BaseMapFragment implements SearchOnT
 
     @Override
     public void onResume() {
-        presenter.subscribeOnLocationUpdates();
+        mapController.onResume();
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        presenter.unsubscribeOfLocationUpdates();
+        mapController.onPause();
         super.onPause();
     }
 
@@ -92,23 +96,11 @@ public class SearchOnTheMapFragment extends BaseMapFragment implements SearchOnT
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            switch (requestCode) {
-                case PermissionManager.TUNE_MY_LOCATION_REQUEST: {
-                    mapController.tuneMyLocation();
-                    break;
-                }
-                case PermissionManager.SUBSCRIBE_ON_LOCATION_UPDATES: {
-                    presenter.subscribeOnLocationUpdates();
-                    break;
-                }
-                case PermissionManager.FIND_MY_LOCATION_REQUEST: {
-                    presenter.findMyLocation();
-                    break;
-                }
-            }
+    public void onDestroy() {
+        if (disposable != null) {
+            disposable.dispose();
         }
+        super.onDestroy();
     }
 
     @Override
@@ -121,11 +113,6 @@ public class SearchOnTheMapFragment extends BaseMapFragment implements SearchOnT
         tvAddress.setText(address);
         etSearch.setText(address);
         mapController.showOnInnerMap(title, address, latLng);
-    }
-
-    @Override
-    public void requestPermission(String permission, int requestCode) {
-        PermissionManager.requestPermission(this, permission, requestCode);
     }
 
     @Override

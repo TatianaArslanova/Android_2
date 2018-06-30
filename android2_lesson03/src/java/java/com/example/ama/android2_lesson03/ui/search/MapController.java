@@ -1,10 +1,8 @@
 package com.example.ama.android2_lesson03.ui.search;
 
-import com.example.ama.android2_lesson03.PocketMap;
 import com.example.ama.android2_lesson03.ui.search.base.Controller;
 import com.example.ama.android2_lesson03.ui.search.base.SearchOnTheMapView;
 import com.example.ama.android2_lesson03.ui.search.base.SearchPresenter;
-import com.example.ama.android2_lesson03.utils.PermissionManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -16,9 +14,11 @@ public class MapController implements Controller {
     private Marker currentMarker;
 
     private SearchPresenter<SearchOnTheMapView> presenter;
-    private SomeNameCallback callback;
+    private ClearAddressCallback callback;
 
-    public MapController(SearchPresenter<SearchOnTheMapView> presenter, SomeNameCallback callback) {
+    private boolean isLocationAccessEnabled;
+
+    public MapController(SearchPresenter<SearchOnTheMapView> presenter, ClearAddressCallback callback) {
         this.presenter = presenter;
         this.callback = callback;
     }
@@ -28,24 +28,31 @@ public class MapController implements Controller {
         this.map = map;
         tuneMap();
         presenter.loadSavedState();
-        if (currentMarker == null) {
-            presenter.findMyLocation();
+    }
+
+    @Override
+    public void setLocationAccess(boolean enabled) {
+        isLocationAccessEnabled = enabled;
+        tuneMyLocation();
+    }
+
+    @Override
+    public void onResume() {
+        if (isLocationAccessEnabled) {
+            presenter.subscribeOnLocationUpdates();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        if (isLocationAccessEnabled) {
+            presenter.unsubscribeOfLocationUpdates();
         }
     }
 
     @Override
     public void saveState() {
         presenter.saveState(currentMarker);
-    }
-
-    @Override
-    public void tuneMyLocation() {
-        if (PermissionManager.checkPermission(PocketMap.getInstance(), PermissionManager.FINE_LOCATION)) {
-            map.setMyLocationEnabled(true);
-            map.getUiSettings().setMyLocationButtonEnabled(true);
-        } else {
-            callback.onPermissionRequired(PermissionManager.FINE_LOCATION, PermissionManager.TUNE_MY_LOCATION_REQUEST);
-        }
     }
 
     @Override
@@ -101,6 +108,16 @@ public class MapController implements Controller {
         });
     }
 
+    @SuppressWarnings({"MissingPermission"})
+    private void tuneMyLocation() {
+        if (map != null && isLocationAccessEnabled) {
+            map.setMyLocationEnabled(true);
+            map.getUiSettings().setMyLocationButtonEnabled(true);
+            if (currentMarker == null) {
+                presenter.findMyLocation();
+            }
+        }
+    }
 
     private void zoomToLocation(LatLng latLng, float zoom) {
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));

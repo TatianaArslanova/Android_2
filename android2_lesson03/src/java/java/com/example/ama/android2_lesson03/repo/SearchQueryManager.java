@@ -143,11 +143,6 @@ public class SearchQueryManager implements SearchManager {
             public void onError(String message) {
                 callback.onNotFound(message);
             }
-
-            @Override
-            public void onPermissionRequired(String permission, int requestCode) {
-                callback.onPermissionRequired(permission, requestCode);
-            }
         };
     }
 

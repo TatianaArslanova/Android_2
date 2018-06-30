@@ -6,9 +6,13 @@ import com.google.android.gms.maps.model.LatLng;
 public interface Controller {
     void attachMap(GoogleMap map);
 
-    void saveState();
+    void setLocationAccess(boolean enabled);
 
-    void tuneMyLocation();
+    void onResume();
+
+    void onPause();
+
+    void saveState();
 
     void showOnInnerMap(String markerTitle, String address, LatLng latLng);
 
@@ -16,9 +20,7 @@ public interface Controller {
 
     void prepareToGMaps();
 
-    interface SomeNameCallback {
-        void onPermissionRequired(String permission, int requestCode);
-
+    interface ClearAddressCallback {
         void clearAddress();
     }
 }

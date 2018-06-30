@@ -53,7 +53,5 @@ public interface SearchManager {
         void onLocationFound(LatLng latLng, float zoom);
 
         void onNotFound(String message);
-
-        void onPermissionRequired(String permission, int requestCode);
     }
 }

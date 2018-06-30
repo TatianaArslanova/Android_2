@@ -11,7 +11,6 @@ import android.util.Log;
 import com.example.ama.android2_lesson03.PocketMap;
 import com.example.ama.android2_lesson03.R;
 import com.example.ama.android2_lesson03.repo.data.base.BaseLocationManager;
-import com.example.ama.android2_lesson03.utils.PermissionManager;
 
 /**
  * Class for locating by android.location
@@ -36,32 +35,25 @@ public class LocationManagerAndroid extends BaseLocationManager {
      */
 
     @Override
+    @SuppressWarnings({"MissingPermission"})
     public void findMyLocation(OnLocationSearchResultCallback callback) {
-        if (PermissionManager.checkPermission(PocketMap.getInstance(), PermissionManager.FINE_LOCATION)) {
-            if (locManager != null) {
-                Location location = locManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-                if (location != null) {
-                    callback.onLocationFound(location);
-                } else {
-                    callback.onError(PocketMap.getInstance().getString(R.string.message_location_not_found));
-                }
+        if (locManager != null) {
+            Location location = locManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+            if (location != null) {
+                callback.onLocationFound(location);
+            } else {
+                callback.onError(PocketMap.getInstance().getString(R.string.message_location_not_found));
             }
-        } else {
-            callback.onPermissionRequired(
-                    PermissionManager.FINE_LOCATION,
-                    PermissionManager.FIND_MY_LOCATION_REQUEST);
         }
     }
 
     @Override
+    @SuppressWarnings({"MissingPermission"})
     public void subscribeOnLocationChanges(OnLocationSearchResultCallback callback) {
-        if (PermissionManager.checkPermission(PocketMap.getInstance(), PermissionManager.FINE_LOCATION)) {
-            registerListener(callback);
-            if (locManager != null) {
-                locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, REQUEST_MIN_TIME, REQUEST_MIN_DISTANCE, locListener);
-            }
-        } else
-            callback.onPermissionRequired(PermissionManager.FINE_LOCATION, PermissionManager.SUBSCRIBE_ON_LOCATION_UPDATES);
+        registerListener(callback);
+        if (locManager != null) {
+            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, REQUEST_MIN_TIME, REQUEST_MIN_DISTANCE, locListener);
+        }
     }
 
     private void registerListener(final OnLocationSearchResultCallback callback) {

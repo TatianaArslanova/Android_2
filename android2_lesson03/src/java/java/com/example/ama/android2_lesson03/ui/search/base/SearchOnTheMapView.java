@@ -11,8 +11,6 @@ public interface SearchOnTheMapView extends PocketMapView {
 
     void showOnInnerMap(String markerTitle, String address, LatLng latLng);
 
-    void requestPermission(String permission, int requestCode);
-
     void showMessage(String message);
 
     void moveMapCamera(LatLng latLng, float zoom, boolean cameraAnimation);
