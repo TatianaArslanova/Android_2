@@ -1,12 +1,8 @@
 package com.example.ama.android2_lesson03.ui.search
 
-import com.example.ama.android2_lesson03.PocketMap
 import com.example.ama.android2_lesson03.ui.search.base.Controller
 import com.example.ama.android2_lesson03.ui.search.base.SearchOnTheMapView
 import com.example.ama.android2_lesson03.ui.search.base.SearchPresenter
-import com.example.ama.android2_lesson03.utils.FINE_LOCATION
-import com.example.ama.android2_lesson03.utils.PermissionManager
-import com.example.ama.android2_lesson03.utils.TUNE_MY_LOCATION_REQUEST
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
@@ -15,33 +11,38 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 class MapController(
         private val presenter: SearchPresenter<SearchOnTheMapView>,
-        private val clearAddress: () -> Unit,
-        private val permissionRequired: (permission: String, requestCode: Int) -> Unit)
+        private val clearAddress: () -> Unit)
     : Controller {
 
     private var map: GoogleMap? = null
     private var currentMarker: Marker? = null
+    private var isLocationAccessEnabled = false
 
     override fun attachMap(map: GoogleMap) {
         this.map = map
         tuneMap()
         presenter.loadSavedState()
-        if (currentMarker == null) {
-            presenter.findMyLocation()
-        }
     }
 
     override fun saveState() {
         presenter.saveState(currentMarker)
     }
 
-    override fun tuneMyLocation() {
-        if (PermissionManager.checkPermission(PocketMap.instance, FINE_LOCATION)) {
-            map?.isMyLocationEnabled = true
-            map?.uiSettings?.isMyLocationButtonEnabled = true
-        } else {
-            permissionRequired.invoke(FINE_LOCATION, TUNE_MY_LOCATION_REQUEST)
+    override fun onResume() {
+        if (isLocationAccessEnabled) {
+            presenter.subscribeOnLocationUpdates()
         }
+    }
+
+    override fun onPause() {
+        if (isLocationAccessEnabled) {
+            presenter.unsubscribeOfLocationUpdates()
+        }
+    }
+
+    override fun setLocationAccess(enabled: Boolean) {
+        isLocationAccessEnabled = enabled
+        tuneMyLocation()
     }
 
     override fun showOnInnerMap(markerTitle: String?, address: String, latLng: LatLng) {
@@ -77,6 +78,17 @@ class MapController(
         map?.setOnMarkerClickListener { marker ->
             presenter.onMarkerClick(marker)
             true
+        }
+    }
+
+    @SuppressWarnings("MissingPermission")
+    private fun tuneMyLocation() {
+        if (isLocationAccessEnabled) {
+            map?.isMyLocationEnabled = true
+            map?.uiSettings?.isMyLocationButtonEnabled = true
+            if (currentMarker == null) {
+                presenter.findMyLocation()
+            }
         }
     }
 

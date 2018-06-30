@@ -11,12 +11,10 @@ interface LocManager {
     fun findAddressByQuery(query: String): Address?
     fun findAddressByLatLng(latLng: LatLng): Address?
     fun findMyLocation(found: (latLng: LatLng, zoom: Float) -> Unit,
-                       notFound: (message: String) -> Unit,
-                       permissionRequired: (permission: String, requestCode: Int) -> Unit)
+                       notFound: (message: String) -> Unit)
 
     fun subscribeOnLocationUpdates(locationFound: (location: Location) -> Unit,
-                                   error: (message: String) -> Unit,
-                                   permissionRequired: (permission: String, requestCode: Int) -> Unit)
+                                   error: (message: String) -> Unit)
 
     fun unsubscribeOfLocationUpdates()
 }

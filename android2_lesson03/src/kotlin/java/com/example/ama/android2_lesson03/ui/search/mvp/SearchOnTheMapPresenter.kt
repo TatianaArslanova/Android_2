@@ -40,10 +40,7 @@ class SearchOnTheMapPresenter<T : SearchOnTheMapView> : BasePresenter<T>(), Sear
     override fun findMyLocation() {
         queryManager.getMyLocation(
                 found = { latLng, zoom -> view?.moveMapCamera(latLng, zoom, true) },
-                notFound = { message -> view?.showMessage(message) },
-                permissionRequired = { permission, requestCode ->
-                    view?.requestPermission(permission, requestCode)
-                })
+                notFound = { message -> view?.showMessage(message) })
     }
 
     override fun saveMarker(marker: Marker, customName: String) {
@@ -69,11 +66,10 @@ class SearchOnTheMapPresenter<T : SearchOnTheMapView> : BasePresenter<T>(), Sear
         }
     }
 
-    override fun subscrineOnLocationUpdates() {
+    override fun subscribeOnLocationUpdates() {
         queryManager.subscribeOnLocationUpdates(
                 found = { latLng, zoom -> Log.d("found", "location updated "+latLng.toString()) },
-                notFound = { message -> view?.showMessage(message) },
-                permissionRequired = { permission, requestCode -> view?.requestPermission(permission, requestCode) })
+                notFound = { message -> view?.showMessage(message) })
     }
 
     override fun unsubscribeOfLocationUpdates() {

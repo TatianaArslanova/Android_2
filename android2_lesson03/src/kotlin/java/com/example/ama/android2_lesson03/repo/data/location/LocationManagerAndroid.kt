@@ -11,10 +11,6 @@ import com.example.ama.android2_lesson03.PocketMap
 import com.example.ama.android2_lesson03.R
 import com.example.ama.android2_lesson03.repo.SearchQueryManager
 import com.example.ama.android2_lesson03.repo.data.base.BaseLocationManager
-import com.example.ama.android2_lesson03.utils.FIND_MY_LOCATION_REQUEST
-import com.example.ama.android2_lesson03.utils.FINE_LOCATION
-import com.example.ama.android2_lesson03.utils.PermissionManager
-import com.example.ama.android2_lesson03.utils.SUBSCRIBE_LOCATION_UPDATES
 import com.google.android.gms.maps.model.LatLng
 
 /**
@@ -30,26 +26,20 @@ class LocationManagerAndroid : BaseLocationManager() {
     private val locationManager = PocketMap.instance.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     private var listener: LocationListener? = null
 
-    override fun findMyLocation(found: (latLng: LatLng, zoom: Float) -> Unit, notFound: (message: String) -> Unit, permissionRequired: (permission: String, requestCode: Int) -> Unit) {
-        if (PermissionManager.checkPermission(PocketMap.instance, FINE_LOCATION)) {
-            val location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)
-            if (location != null) {
-                found.invoke(LatLng(location.latitude, location.longitude), SearchQueryManager.DEFAULT_ZOOM)
-            } else {
-                notFound.invoke(PocketMap.instance.getString(R.string.message_location_not_found))
-            }
+    @SuppressWarnings("MissingPermission")
+    override fun findMyLocation(found: (latLng: LatLng, zoom: Float) -> Unit, notFound: (message: String) -> Unit) {
+        val location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)
+        if (location != null) {
+            found.invoke(LatLng(location.latitude, location.longitude), SearchQueryManager.DEFAULT_ZOOM)
         } else {
-            permissionRequired.invoke(FINE_LOCATION, FIND_MY_LOCATION_REQUEST)
+            notFound.invoke(PocketMap.instance.getString(R.string.message_location_not_found))
         }
     }
 
-    override fun subscribeOnLocationUpdates(locationFound: (location: Location) -> Unit, error: (message: String) -> Unit, permissionRequired: (permission: String, requestCode: Int) -> Unit) {
-        if (PermissionManager.checkPermission(PocketMap.instance, FINE_LOCATION)) {
-            registerListener(locationFound, error)
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_REQUEST_INTERVAL, MIN_DISTANCE_REQUEST, listener)
-        } else {
-            permissionRequired.invoke(FINE_LOCATION, SUBSCRIBE_LOCATION_UPDATES)
-        }
+    @SuppressWarnings("MissingPermission")
+    override fun subscribeOnLocationUpdates(locationFound: (location: Location) -> Unit, error: (message: String) -> Unit) {
+        registerListener(locationFound, error)
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_REQUEST_INTERVAL, MIN_DISTANCE_REQUEST, listener)
     }
 
     override fun unsubscribeOfLocationUpdates() {

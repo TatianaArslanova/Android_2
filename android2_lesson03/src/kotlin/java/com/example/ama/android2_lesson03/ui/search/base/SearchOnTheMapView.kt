@@ -10,6 +10,5 @@ interface SearchOnTheMapView : PocketMapView {
     fun showOnInnerMap(markerTitle: String?, address: String, latLng: LatLng)
     fun showMessage(message: String)
     fun moveMapCamera(latLng: LatLng, zoom: Float, cameraAnimation: Boolean)
-    fun requestPermission(permission: String, requestCode: Int)
     fun showEditDialog(dialogTitle: String, dialogMessage: String, marker: Marker)
 }

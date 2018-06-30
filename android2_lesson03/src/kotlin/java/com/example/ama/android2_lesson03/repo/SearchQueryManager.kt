@@ -61,9 +61,8 @@ class SearchQueryManager : SearchManager {
     }
 
     override fun getMyLocation(found: (latLng: LatLng, zoom: Float) -> Unit,
-                               notFound: (message: String) -> Unit,
-                               permissionRequired: (permission: String, requestCode: Int) -> Unit) {
-        locManager.findMyLocation(found, notFound, permissionRequired)
+                               notFound: (message: String) -> Unit) {
+        locManager.findMyLocation(found, notFound)
     }
 
     override fun prepareSaveMarkerDialog(marker: Marker, success: (dialogTitle: String, dialogMessage: String, savingMarker: Marker) -> Unit) {
@@ -103,11 +102,10 @@ class SearchQueryManager : SearchManager {
         }
     }
 
-    override fun subscribeOnLocationUpdates(found: (latLng: LatLng, zoom: Float) -> Unit, notFound: (message: String) -> Unit, permissionRequired: (permission: String, requestCode: Int) -> Unit) {
+    override fun subscribeOnLocationUpdates(found: (latLng: LatLng, zoom: Float) -> Unit, notFound: (message: String) -> Unit) {
         locManager.subscribeOnLocationUpdates(
                 locationFound = { location -> found.invoke(LatLng(location.latitude, location.longitude), DEFAULT_ZOOM) },
-                error = { message -> notFound.invoke(message) },
-                permissionRequired = { permission, requestCode -> permissionRequired.invoke(permission, requestCode) })
+                error = { message -> notFound.invoke(message) })
     }
 
     override fun unsubscribeOfLocationUpdates() {

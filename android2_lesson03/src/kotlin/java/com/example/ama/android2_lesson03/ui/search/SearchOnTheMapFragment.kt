@@ -1,6 +1,5 @@
 package com.example.ama.android2_lesson03.ui.search
 
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -13,9 +12,12 @@ import com.example.ama.android2_lesson03.ui.search.base.Controller
 import com.example.ama.android2_lesson03.ui.search.base.SearchOnTheMapView
 import com.example.ama.android2_lesson03.ui.search.base.SearchPresenter
 import com.example.ama.android2_lesson03.ui.search.mvp.SearchOnTheMapPresenter
-import com.example.ama.android2_lesson03.utils.*
+import com.example.ama.android2_lesson03.utils.DialogLauncher
+import com.example.ama.android2_lesson03.utils.FINE_LOCATION
+import com.example.ama.android2_lesson03.utils.PermissionManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_search.*
 
 /**
@@ -25,6 +27,7 @@ class SearchOnTheMapFragment : BaseMapFragment(), SearchOnTheMapView {
 
     private var presenter: SearchPresenter<SearchOnTheMapView>? = null
     private var mapController: Controller? = null
+    private var disposable: Disposable? = null
 
     companion object {
         fun newInstance() = SearchOnTheMapFragment()
@@ -32,21 +35,17 @@ class SearchOnTheMapFragment : BaseMapFragment(), SearchOnTheMapView {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         presenter = SearchOnTheMapPresenter()
-        mapController = MapController(
-                presenter!!,
-                clearAddress = {
-                    et_search.text.clear()
-                    tv_address.text = ""
-                },
-                permissionRequired = { permission, requestCode ->
-                    requestPermission(permission, requestCode)
-                })
+        mapController = MapController(presenter!!) {
+            et_search.text.clear()
+            tv_address.text = ""
+        }
         addListeners()
         super.onViewCreated(view, savedInstanceState)
         mapView.getMapAsync(
                 { it ->
                     mapController?.attachMap(it)
-                    mapController?.tuneMyLocation()
+                    disposable = PermissionManager.requestPermission(activity, FINE_LOCATION)
+                    { isGranted -> mapController?.setLocationAccess(isGranted) }
                 })
     }
 
@@ -56,12 +55,12 @@ class SearchOnTheMapFragment : BaseMapFragment(), SearchOnTheMapView {
     }
 
     override fun onResume() {
-        presenter?.subscrineOnLocationUpdates()
+        mapController?.onResume()
         super.onResume()
     }
 
     override fun onPause() {
-        presenter?.unsubscribeOfLocationUpdates()
+        mapController?.onPause()
         super.onPause()
     }
 
@@ -71,14 +70,9 @@ class SearchOnTheMapFragment : BaseMapFragment(), SearchOnTheMapView {
         super.onStop()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            when (requestCode) {
-                TUNE_MY_LOCATION_REQUEST -> mapController?.tuneMyLocation()
-                FIND_MY_LOCATION_REQUEST -> presenter?.findMyLocation()
-                SUBSCRIBE_LOCATION_UPDATES -> presenter?.subscrineOnLocationUpdates()
-            }
-        }
+    override fun onDestroy() {
+        disposable?.dispose()
+        super.onDestroy()
     }
 
     override fun showOnGMapsApp(uri: Uri) {
@@ -97,10 +91,6 @@ class SearchOnTheMapFragment : BaseMapFragment(), SearchOnTheMapView {
 
     override fun moveMapCamera(latLng: LatLng, zoom: Float, cameraAnimation: Boolean) {
         mapController?.moveMapCamera(latLng, zoom, cameraAnimation)
-    }
-
-    override fun requestPermission(permission: String, requestCode: Int) {
-        PermissionManager.requestPermission(this, permission, requestCode)
     }
 
     override fun showEditDialog(dialogTitle: String, dialogMessage: String, marker: Marker) {

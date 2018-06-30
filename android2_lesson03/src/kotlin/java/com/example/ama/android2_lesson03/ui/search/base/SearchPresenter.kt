@@ -13,6 +13,6 @@ interface SearchPresenter<T : SearchOnTheMapView> : Presenter<T> {
     fun onMarkerClick(marker: Marker)
     fun saveState(currentMarker: Marker?)
     fun loadSavedState()
-    fun subscrineOnLocationUpdates()
+    fun subscribeOnLocationUpdates()
     fun unsubscribeOfLocationUpdates()
 }

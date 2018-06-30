@@ -18,8 +18,7 @@ interface SearchManager {
                             callback: (fullLocationName: String, position: LatLng, zoom: Float) -> Unit)
 
     fun getMyLocation(found: (latLng: LatLng, zoom: Float) -> Unit,
-                      notFound: (message: String) -> Unit,
-                      permissionRequired: (permission: String, requestCode: Int) -> Unit)
+                      notFound: (message: String) -> Unit)
 
     fun prepareSaveMarkerDialog(marker: Marker,
                                 success: (dialogTitle: String, dialogMessage: String, savingMarker: Marker) -> Unit)
@@ -31,8 +30,7 @@ interface SearchManager {
     fun loadSavedState(onSuccess: (markerTitle: String, address: String, position: LatLng, zoom: Float) -> Unit)
 
     fun subscribeOnLocationUpdates(found: (latLng: LatLng, zoom: Float) -> Unit,
-                                   notFound: (message: String) -> Unit,
-                                   permissionRequired: (permission: String, requestCode: Int) -> Unit)
+                                   notFound: (message: String) -> Unit)
 
     fun unsubscribeOfLocationUpdates()
 }
