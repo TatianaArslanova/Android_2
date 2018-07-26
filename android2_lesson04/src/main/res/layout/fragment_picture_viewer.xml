@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btn_load_images"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/fragment_picture_viewer_btn_load" />
+
+    <ProgressBar
+        android:id="@+id/pb_progress"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/btn_load_images"
+        android:layout_toStartOf="@id/btn_load_images"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_load_images"
+        android:layout_centerHorizontal="true"
+        android:maxLines="1"
+        tools:text="@string/fragment_picture_viewer_tv_count" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tv_count" />
+
+</RelativeLayout>
