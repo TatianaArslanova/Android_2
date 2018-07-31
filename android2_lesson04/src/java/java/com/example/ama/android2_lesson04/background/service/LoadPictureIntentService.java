@@ -13,10 +13,6 @@ import java.net.URL;
 
 public class LoadPictureIntentService extends IntentService {
 
-    public static final String ACTION_UPDATE = "com.example.ama.android2_lesson04.action.UPDATE";
-    public static final String ACTION_FINISH = "com.example.ama.android2_lesson04.action.FINISH";
-    public static final String EXTRA_KEY = "extra_key";
-
     public LoadPictureIntentService() {
         super(LoadPictureIntentService.class.getSimpleName());
     }
@@ -24,7 +20,7 @@ public class LoadPictureIntentService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         if (intent != null) {
-            String[] extras = intent.getStringArrayExtra(EXTRA_KEY);
+            String[] extras = intent.getStringArrayExtra(ServiceConstants.EXTRA_KEY);
             if (extras != null) {
                 for (String o : extras) {
                     try {
@@ -32,7 +28,7 @@ public class LoadPictureIntentService extends IntentService {
                         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                         Thread.sleep(2000);
                         LocalBroadcastManager.getInstance(this)
-                                .sendBroadcast(new Intent(ACTION_UPDATE).putExtra(EXTRA_KEY, bitmap));
+                                .sendBroadcast(new Intent(ServiceConstants.ACTION_UPDATE).putExtra(ServiceConstants.EXTRA_KEY, bitmap));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
@@ -41,7 +37,7 @@ public class LoadPictureIntentService extends IntentService {
                 }
             }
             LocalBroadcastManager.getInstance(this)
-                    .sendBroadcast(new Intent(ACTION_FINISH));
+                    .sendBroadcast(new Intent(ServiceConstants.ACTION_FINISH));
         }
     }
 }

@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.example.ama.android2_lesson04.R;
 import com.example.ama.android2_lesson04.ServiceTestApp;
-import com.example.ama.android2_lesson04.background.service.LoadPictureIntentService;
+import com.example.ama.android2_lesson04.background.service.ServiceConstants;
 import com.example.ama.android2_lesson04.ui.viewer.adapter.TestPagerAdapter;
 
 import java.util.ArrayList;
@@ -91,13 +91,13 @@ public abstract class BasePictureViewerFragment extends Fragment {
                 if (intent != null) {
                     if (intent.getAction() != null) {
                         switch (intent.getAction()) {
-                            case LoadPictureIntentService.ACTION_UPDATE: {
-                                Bitmap bitmap = intent.getParcelableExtra(LoadPictureIntentService.EXTRA_KEY);
+                            case ServiceConstants.ACTION_UPDATE: {
+                                Bitmap bitmap = intent.getParcelableExtra(ServiceConstants.EXTRA_KEY);
                                 ServiceTestApp.getData().addBitmap(bitmap);
                                 showPictures(ServiceTestApp.getData().getBitmaps());
                                 break;
                             }
-                            case LoadPictureIntentService.ACTION_FINISH: {
+                            case ServiceConstants.ACTION_FINISH: {
                                 hideLoading();
                                 break;
                             }
@@ -107,8 +107,8 @@ public abstract class BasePictureViewerFragment extends Fragment {
             }
         };
         IntentFilter filter = new IntentFilter();
-        filter.addAction(LoadPictureIntentService.ACTION_UPDATE);
-        filter.addAction(LoadPictureIntentService.ACTION_FINISH);
+        filter.addAction(ServiceConstants.ACTION_UPDATE);
+        filter.addAction(ServiceConstants.ACTION_FINISH);
         LocalBroadcastManager.getInstance(ServiceTestApp.getInstance())
                 .registerReceiver(broadcastReceiver, filter);
     }
