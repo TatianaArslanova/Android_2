@@ -5,9 +5,9 @@ import android.content.Intent;
 import com.example.ama.android2_lesson04.R;
 import com.example.ama.android2_lesson04.background.service.LoadPictureIntentService;
 import com.example.ama.android2_lesson04.background.service.ServiceConstants;
-import com.example.ama.android2_lesson04.ui.viewer.base.BasePictureViewerFragment;
+import com.example.ama.android2_lesson04.ui.viewer.base.BaseReceiverFragment;
 
-public class PVFragmentIntentService extends BasePictureViewerFragment {
+public class PVFragmentIntentService extends BaseReceiverFragment {
 
     public static PVFragmentIntentService newInstance() {
         return new PVFragmentIntentService();

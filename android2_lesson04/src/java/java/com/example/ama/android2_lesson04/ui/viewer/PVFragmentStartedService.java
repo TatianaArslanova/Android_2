@@ -6,9 +6,9 @@ import com.example.ama.android2_lesson04.R;
 import com.example.ama.android2_lesson04.ServiceTestApp;
 import com.example.ama.android2_lesson04.background.service.LoadPictureStartedService;
 import com.example.ama.android2_lesson04.background.service.ServiceConstants;
-import com.example.ama.android2_lesson04.ui.viewer.base.BasePictureViewerFragment;
+import com.example.ama.android2_lesson04.ui.viewer.base.BaseReceiverFragment;
 
-public class PVFragmentStartedService extends BasePictureViewerFragment {
+public class PVFragmentStartedService extends BaseReceiverFragment {
 
     public static PVFragmentStartedService newInstance() {
         return new PVFragmentStartedService();

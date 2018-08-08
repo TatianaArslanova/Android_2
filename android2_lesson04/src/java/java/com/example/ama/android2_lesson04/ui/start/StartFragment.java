@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.ama.android2_lesson04.R;
 import com.example.ama.android2_lesson04.ui.MainActivity;
+import com.example.ama.android2_lesson04.ui.viewer.PVFragmentAsynkTask;
 import com.example.ama.android2_lesson04.ui.viewer.PVFragmentIntentService;
 import com.example.ama.android2_lesson04.ui.viewer.PVFragmentStartedService;
 
@@ -44,6 +45,13 @@ public class StartFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         startFragment(PVFragmentStartedService.newInstance());
+                    }
+                });
+        view.findViewById(R.id.btn_asynk_task)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startFragment(PVFragmentAsynkTask.newInstance());
                     }
                 });
     }
