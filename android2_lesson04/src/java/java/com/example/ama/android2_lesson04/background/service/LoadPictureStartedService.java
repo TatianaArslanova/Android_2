@@ -19,10 +19,11 @@ import java.net.URL;
 public class LoadPictureStartedService extends Service {
 
     private Handler handler;
+    private HandlerThread thread;
 
     @Override
     public void onCreate() {
-        HandlerThread thread = new HandlerThread(
+        thread = new HandlerThread(
                 LoadPictureStartedService.class.getSimpleName(),
                 Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
@@ -67,5 +68,11 @@ public class LoadPictureStartedService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onDestroy() {
+        thread.quit();
+        super.onDestroy();
     }
 }
