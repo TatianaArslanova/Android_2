@@ -15,6 +15,10 @@ public class Data {
         bitmaps.add(bitmap);
     }
 
+    public void addBitmaps(ArrayList<Bitmap> newBitmaps) {
+        bitmaps.addAll(newBitmaps);
+    }
+
     public ArrayList<Bitmap> getBitmaps() {
         return bitmaps;
     }

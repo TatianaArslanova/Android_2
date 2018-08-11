@@ -22,12 +22,13 @@ import java.util.ArrayList;
 public abstract class BasePictureViewerFragment extends Fragment {
 
     private static final String IS_LOADING = "isLoading";
+    protected boolean isLoading;
 
     private TestPagerAdapter adapter;
     private ProgressBar progressBar;
     private TextView tvCount;
     private Button btnLoadImages;
-    private boolean isLoading;
+
 
     @Nullable
     @Override
