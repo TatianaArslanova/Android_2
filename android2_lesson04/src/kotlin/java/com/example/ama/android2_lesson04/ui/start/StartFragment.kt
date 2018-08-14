@@ -9,6 +9,7 @@ import com.example.ama.android2_lesson04.R
 import com.example.ama.android2_lesson04.ui.MainActivity
 import com.example.ama.android2_lesson04.ui.viewer.PVFragmentAsynkTask
 import com.example.ama.android2_lesson04.ui.viewer.PVFragmentIntentService
+import com.example.ama.android2_lesson04.ui.viewer.PVFragmentLoader
 import com.example.ama.android2_lesson04.ui.viewer.PVFragmentStartedService
 import kotlinx.android.synthetic.main.fragment_start.*
 
@@ -26,6 +27,7 @@ class StartFragment : Fragment() {
         btn_start_service.setOnClickListener { changeFragment(PVFragmentStartedService.newInstance()) }
         btn_intent_service.setOnClickListener { changeFragment(PVFragmentIntentService.newInstance()) }
         btn_asynk_task.setOnClickListener { changeFragment(PVFragmentAsynkTask.newInstance()) }
+        btn_loader.setOnClickListener { changeFragment(PVFragmentLoader.newInstance()) }
         super.onViewCreated(view, savedInstanceState)
     }
 
