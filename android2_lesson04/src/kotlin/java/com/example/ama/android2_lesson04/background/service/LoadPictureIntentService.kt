@@ -4,9 +4,6 @@ import android.app.IntentService
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.support.v4.content.LocalBroadcastManager
-import com.example.ama.android2_lesson04.ui.viewer.base.ACTION_FINISH
-import com.example.ama.android2_lesson04.ui.viewer.base.ACTION_UPDATE
-import com.example.ama.android2_lesson04.ui.viewer.base.EXTRA_KEY
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL

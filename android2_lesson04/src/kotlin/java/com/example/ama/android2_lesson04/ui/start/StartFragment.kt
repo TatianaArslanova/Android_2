@@ -7,10 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.ama.android2_lesson04.R
 import com.example.ama.android2_lesson04.ui.MainActivity
-import com.example.ama.android2_lesson04.ui.viewer.PVFragmentAsynkTask
-import com.example.ama.android2_lesson04.ui.viewer.PVFragmentIntentService
-import com.example.ama.android2_lesson04.ui.viewer.PVFragmentLoader
-import com.example.ama.android2_lesson04.ui.viewer.PVFragmentStartedService
+import com.example.ama.android2_lesson04.ui.viewer.*
 import kotlinx.android.synthetic.main.fragment_start.*
 
 class StartFragment : Fragment() {
@@ -28,6 +25,7 @@ class StartFragment : Fragment() {
         btn_intent_service.setOnClickListener { changeFragment(PVFragmentIntentService.newInstance()) }
         btn_asynk_task.setOnClickListener { changeFragment(PVFragmentAsynkTask.newInstance()) }
         btn_loader.setOnClickListener { changeFragment(PVFragmentLoader.newInstance()) }
+        btn_bind_service.setOnClickListener { changeFragment(PVFragmentBoundService.newInstance()) }
         super.onViewCreated(view, savedInstanceState)
     }
 
