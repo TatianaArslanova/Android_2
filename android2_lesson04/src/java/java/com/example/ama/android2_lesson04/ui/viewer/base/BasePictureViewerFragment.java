@@ -29,15 +29,9 @@ public abstract class BasePictureViewerFragment extends Fragment {
     private TextView tvCount;
     private Button btnLoadImages;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            ServiceTestApp.getData().setBitmaps(new ArrayList<Bitmap>());
-        } else {
-            isLoading = savedInstanceState.getBoolean(IS_LOADING);
-        }
         return inflater.inflate(R.layout.fragment_picture_viewer, container, false);
     }
 
@@ -45,8 +39,12 @@ public abstract class BasePictureViewerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         initUi(view);
         setListeners();
+        if (savedInstanceState == null) {
+            ServiceTestApp.getData().setBitmaps(new ArrayList<Bitmap>());
+        } else {
+            setLoading(savedInstanceState.getBoolean(IS_LOADING));
+        }
         setLoadingCount();
-        if (isLoading) showLoading();
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -67,7 +65,7 @@ public abstract class BasePictureViewerFragment extends Fragment {
     }
 
     protected void onFinishLoading() {
-        hideLoading();
+        setLoading(false);
     }
 
     private void initUi(View view) {
@@ -83,22 +81,16 @@ public abstract class BasePictureViewerFragment extends Fragment {
         btnLoadImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLoading();
+                setLoading(true);
                 onLoadImagesClick();
             }
         });
     }
 
-    private void showLoading() {
-        progressBar.setVisibility(View.VISIBLE);
-        btnLoadImages.setEnabled(false);
-        isLoading = true;
-    }
-
-    private void hideLoading() {
-        progressBar.setVisibility(View.GONE);
-        btnLoadImages.setEnabled(true);
-        isLoading = false;
+    private void setLoading(boolean isLoading) {
+        this.isLoading = isLoading;
+        progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        btnLoadImages.setEnabled(!isLoading);
     }
 
     private void setLoadingCount() {

@@ -4,6 +4,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Binder;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -16,15 +18,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-public class LoadPictureStartedService extends Service {
+public class LoadPictureCombinedService extends Service {
 
     private Handler handler;
     private HandlerThread thread;
+    private IBinder binder = new MyBinder();
 
     @Override
     public void onCreate() {
         thread = new HandlerThread(
-                LoadPictureStartedService.class.getSimpleName(),
+                LoadPictureCombinedService.class.getSimpleName(),
                 Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
         handler = new Handler(thread.getLooper()) {
@@ -37,7 +40,7 @@ public class LoadPictureStartedService extends Service {
                             InputStream inputStream = (InputStream) new URL(o).getContent();
                             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                             Thread.sleep(2000);
-                            LocalBroadcastManager.getInstance(LoadPictureStartedService.this)
+                            LocalBroadcastManager.getInstance(LoadPictureCombinedService.this)
                                     .sendBroadcast(new Intent(ServiceConstants.ACTION_UPDATE).putExtra(ServiceConstants.EXTRA_KEY, bitmap));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -46,7 +49,7 @@ public class LoadPictureStartedService extends Service {
                         }
                     }
                 }
-                LocalBroadcastManager.getInstance(LoadPictureStartedService.this)
+                LocalBroadcastManager.getInstance(LoadPictureCombinedService.this)
                         .sendBroadcast(new Intent(ServiceConstants.ACTION_FINISH));
                 stopSelf(msg.what);
             }
@@ -57,22 +60,34 @@ public class LoadPictureStartedService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
-            Message msg = handler.obtainMessage(startId);
-            msg.setData(intent.getExtras());
-            handler.sendMessage(msg);
+            loadImages(startId, intent.getExtras());
         }
-        return START_STICKY;
+        return START_NOT_STICKY;
+    }
+
+    private void loadImages(int startId, Bundle data) {
+        Message msg = handler.obtainMessage(startId);
+        msg.setData(data);
+        handler.sendMessage(msg);
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return binder;
     }
 
     @Override
     public void onDestroy() {
         thread.quit();
         super.onDestroy();
+    }
+
+    public class MyBinder extends Binder {
+        public void sendUrls(String... urls) {
+            Bundle bundle = new Bundle();
+            bundle.putStringArray(ServiceConstants.EXTRA_KEY, urls);
+            LoadPictureCombinedService.this.loadImages(ServiceConstants.BOUND_SERVICE_MESSAGE_ID, bundle);
+        }
     }
 }

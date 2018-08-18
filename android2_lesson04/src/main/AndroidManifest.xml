@@ -23,7 +23,7 @@
         </activity>
 
         <service android:name=".background.service.LoadPictureIntentService" />
-        <service android:name=".background.service.LoadPictureStartedService" />
+        <service android:name=".background.service.LoadPictureCombinedService" />
     </application>
 
 </manifest>
