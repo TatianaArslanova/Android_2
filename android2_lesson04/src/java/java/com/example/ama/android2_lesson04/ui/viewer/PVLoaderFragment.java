@@ -15,14 +15,14 @@ import com.example.ama.android2_lesson04.utils.ResourcesUtils;
 
 import java.util.ArrayList;
 
-public class PVFragmentLoader
+public class PVLoaderFragment
         extends BasePictureViewerFragment
         implements LoaderManager.LoaderCallbacks<ArrayList<Bitmap>> {
 
     public static final int LOADER_ID = 1;
 
-    public static PVFragmentLoader newInstance() {
-        return new PVFragmentLoader();
+    public static PVLoaderFragment newInstance() {
+        return new PVLoaderFragment();
     }
 
     @Override

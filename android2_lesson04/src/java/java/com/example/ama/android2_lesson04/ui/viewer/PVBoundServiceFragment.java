@@ -15,19 +15,19 @@ import com.example.ama.android2_lesson04.background.service.LoadPictureCombinedS
 import com.example.ama.android2_lesson04.ui.viewer.base.BaseReceiverFragment;
 import com.example.ama.android2_lesson04.utils.ResourcesUtils;
 
-public class PVFragmentBoundService
-        extends BaseReceiverFragment
-        implements ServiceConnection {
+public class PVBoundServiceFragment extends BaseReceiverFragment {
 
     private boolean isBound;
     private LoadPictureCombinedService.MyBinder binder;
+    private PVServiceConnection serviceConnection;
 
-    public static PVFragmentBoundService newInstance() {
-        return new PVFragmentBoundService();
+    public static PVBoundServiceFragment newInstance() {
+        return new PVBoundServiceFragment();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        serviceConnection = new PVServiceConnection();
         bindService();
         super.onViewCreated(view, savedInstanceState);
     }
@@ -42,25 +42,28 @@ public class PVFragmentBoundService
     private void bindService() {
         if (getActivity() != null) {
             Intent intent = new Intent(getActivity(), LoadPictureCombinedService.class);
-            ServiceTestApp.getInstance().bindService(intent, this, Context.BIND_AUTO_CREATE);
+            ServiceTestApp.getInstance().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
         }
     }
 
     @Override
     public void onDestroyView() {
-        ServiceTestApp.getInstance().unbindService(this);
+        ServiceTestApp.getInstance().unbindService(serviceConnection);
         super.onDestroyView();
     }
 
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-        binder = (LoadPictureCombinedService.MyBinder) service;
-        isBound = true;
-    }
+    private class PVServiceConnection implements ServiceConnection {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            binder = (LoadPictureCombinedService.MyBinder) service;
+            isBound = true;
+        }
 
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-        binder = null;
-        isBound = false;
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            binder = null;
+            isBound = false;
+        }
+
     }
 }

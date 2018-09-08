@@ -10,12 +10,12 @@ import com.example.ama.android2_lesson04.background.asynk.LoadingPicturesAsynkTa
 import com.example.ama.android2_lesson04.ui.viewer.base.BasePictureViewerFragment;
 import com.example.ama.android2_lesson04.utils.ResourcesUtils;
 
-public class PVFragmentAsynkTask extends BasePictureViewerFragment {
+public class PVAsynkTaskFragment extends BasePictureViewerFragment {
 
     private LoadingPicturesAsynkTask asynkTask;
 
-    public static PVFragmentAsynkTask newInstance() {
-        return new PVFragmentAsynkTask();
+    public static PVAsynkTaskFragment newInstance() {
+        return new PVAsynkTaskFragment();
     }
 
     @Override
