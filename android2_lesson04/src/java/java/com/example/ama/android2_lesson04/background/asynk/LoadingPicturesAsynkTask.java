@@ -29,6 +29,7 @@ public class LoadingPicturesAsynkTask extends AsyncTask<String, Bitmap, ArrayLis
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
         for (String o : strings) {
             try {
+                if (isCancelled()) return null;
                 InputStream inputStream = (InputStream) new URL(o).getContent();
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 Thread.sleep(2000);

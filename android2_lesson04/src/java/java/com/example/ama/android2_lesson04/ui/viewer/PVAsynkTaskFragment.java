@@ -62,4 +62,12 @@ public class PVAsynkTaskFragment extends BasePictureViewerFragment {
         }
         super.onDestroyView();
     }
+
+    @Override
+    public void onDestroy() {
+        if (asynkTask!=null){
+            asynkTask.cancel(true);
+        }
+        super.onDestroy();
+    }
 }
