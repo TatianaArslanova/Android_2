@@ -12,7 +12,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
 import com.example.ama.android2_lesson04.ServiceTestApp;
-import com.example.ama.android2_lesson04.background.service.ServiceConstants;
+import com.example.ama.android2_lesson04.background.BackgroundConstants;
 
 public abstract class BaseReceiverFragment extends BasePictureViewerFragment {
 
@@ -31,12 +31,12 @@ public abstract class BaseReceiverFragment extends BasePictureViewerFragment {
                 if (intent != null) {
                     if (intent.getAction() != null) {
                         switch (intent.getAction()) {
-                            case ServiceConstants.ACTION_UPDATE: {
-                                Bitmap bitmap = intent.getParcelableExtra(ServiceConstants.EXTRA_KEY);
+                            case BackgroundConstants.ACTION_UPDATE: {
+                                Bitmap bitmap = intent.getParcelableExtra(BackgroundConstants.EXTRA_KEY);
                                 onUpdateLoading(bitmap);
                                 break;
                             }
-                            case ServiceConstants.ACTION_FINISH: {
+                            case BackgroundConstants.ACTION_FINISH: {
                                 onFinishLoading();
                                 break;
                             }
@@ -46,8 +46,8 @@ public abstract class BaseReceiverFragment extends BasePictureViewerFragment {
             }
         };
         IntentFilter filter = new IntentFilter();
-        filter.addAction(ServiceConstants.ACTION_UPDATE);
-        filter.addAction(ServiceConstants.ACTION_FINISH);
+        filter.addAction(BackgroundConstants.ACTION_UPDATE);
+        filter.addAction(BackgroundConstants.ACTION_FINISH);
         LocalBroadcastManager.getInstance(ServiceTestApp.getInstance())
                 .registerReceiver(broadcastReceiver, filter);
     }

@@ -1,12 +1,10 @@
 package com.example.ama.android2_lesson04.background.asynk;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import com.example.ama.android2_lesson04.background.utils.NetworkUtils;
+
 import java.util.ArrayList;
 
 public class LoadingPicturesAsynkTask extends AsyncTask<String, Bitmap, ArrayList<Bitmap>> {
@@ -26,19 +24,14 @@ public class LoadingPicturesAsynkTask extends AsyncTask<String, Bitmap, ArrayLis
 
     @Override
     protected ArrayList<Bitmap> doInBackground(String... strings) {
+        if (strings == null || strings.length == 0) return null;
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
         for (String o : strings) {
-            try {
-                if (isCancelled()) return null;
-                InputStream inputStream = (InputStream) new URL(o).getContent();
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                Thread.sleep(2000);
+            if (isCancelled()) return null;
+            Bitmap bitmap = NetworkUtils.loadBitmapFromUrl(o);
+            if (bitmap != null) {
                 bitmaps.add(bitmap);
                 publishProgress(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
         return bitmaps;

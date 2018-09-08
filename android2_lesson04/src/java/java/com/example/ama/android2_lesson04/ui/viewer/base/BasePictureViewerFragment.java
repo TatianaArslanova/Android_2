@@ -39,9 +39,7 @@ public abstract class BasePictureViewerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         initUi(view);
         setListeners();
-        if (savedInstanceState == null) {
-            ServiceTestApp.getData().setBitmaps(new ArrayList<Bitmap>());
-        } else {
+        if (savedInstanceState != null) {
             setLoading(savedInstanceState.getBoolean(IS_LOADING));
         }
         setLoadingCount();
@@ -60,8 +58,10 @@ public abstract class BasePictureViewerFragment extends Fragment {
     }
 
     protected void onUpdateLoading(Bitmap bitmap) {
-        ServiceTestApp.getData().addBitmap(bitmap);
-        showPictures(ServiceTestApp.getData().getBitmaps());
+        if (bitmap != null) {
+            ServiceTestApp.getData().addBitmap(bitmap);
+            showPictures(ServiceTestApp.getData().getBitmaps());
+        }
     }
 
     protected void onFinishLoading() {
