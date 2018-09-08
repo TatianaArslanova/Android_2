@@ -78,12 +78,9 @@ public abstract class BasePictureViewerFragment extends Fragment {
     }
 
     private void setListeners() {
-        btnLoadImages.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setLoading(true);
-                onLoadImagesClick();
-            }
+        btnLoadImages.setOnClickListener(v -> {
+            setLoading(true);
+            onLoadImagesClick();
         });
     }
 

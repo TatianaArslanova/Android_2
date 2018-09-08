@@ -1,6 +1,5 @@
 package com.example.ama.android2_lesson04.ui;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -33,6 +32,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        ServiceTestApp.getData().setBitmaps(new ArrayList<Bitmap>());
+        ServiceTestApp.getData().setBitmaps(new ArrayList<>());
     }
 }

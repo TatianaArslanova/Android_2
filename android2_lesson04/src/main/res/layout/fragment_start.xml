@@ -34,4 +34,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/start_fragment_btn_bind_service" />
+
+    <Button
+        android:id="@+id/btn_rx_java"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start_fragment_btn_rx_java" />
 </LinearLayout>

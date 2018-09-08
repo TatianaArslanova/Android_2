@@ -24,7 +24,8 @@ public class LoadPictureIntentService extends IntentService {
                     Bitmap bitmap = NetworkUtils.loadBitmapFromUrl(o);
                     if (bitmap != null) {
                         LocalBroadcastManager.getInstance(this)
-                                .sendBroadcast(new Intent(BackgroundConstants.ACTION_UPDATE).putExtra(BackgroundConstants.EXTRA_KEY, bitmap));
+                                .sendBroadcast(new Intent(BackgroundConstants.ACTION_UPDATE)
+                                        .putExtra(BackgroundConstants.EXTRA_KEY, bitmap));
                     }
                 }
             }

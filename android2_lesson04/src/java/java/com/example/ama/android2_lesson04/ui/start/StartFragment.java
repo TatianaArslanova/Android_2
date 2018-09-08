@@ -14,6 +14,7 @@ import com.example.ama.android2_lesson04.ui.viewer.PVAsynkTaskFragment;
 import com.example.ama.android2_lesson04.ui.viewer.PVBoundServiceFragment;
 import com.example.ama.android2_lesson04.ui.viewer.PVIntentServiceFragment;
 import com.example.ama.android2_lesson04.ui.viewer.PVLoaderFragment;
+import com.example.ama.android2_lesson04.ui.viewer.PVRxJavaFragment;
 import com.example.ama.android2_lesson04.ui.viewer.PVStartedServiceFragment;
 
 public class StartFragment extends Fragment {
@@ -36,40 +37,17 @@ public class StartFragment extends Fragment {
 
     private void addListeners(View view) {
         view.findViewById(R.id.btn_intent_service)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startFragment(PVIntentServiceFragment.newInstance());
-                    }
-                });
+                .setOnClickListener(v -> startFragment(PVIntentServiceFragment.newInstance()));
         view.findViewById(R.id.btn_start_service)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startFragment(PVStartedServiceFragment.newInstance());
-                    }
-                });
+                .setOnClickListener(v -> startFragment(PVStartedServiceFragment.newInstance()));
         view.findViewById(R.id.btn_asynk_task)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startFragment(PVAsynkTaskFragment.newInstance());
-                    }
-                });
+                .setOnClickListener(v -> startFragment(PVAsynkTaskFragment.newInstance()));
         view.findViewById(R.id.btn_loader)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startFragment(PVLoaderFragment.newInstance());
-                    }
-                });
+                .setOnClickListener(v -> startFragment(PVLoaderFragment.newInstance()));
         view.findViewById(R.id.btn_bind_service)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startFragment(PVBoundServiceFragment.newInstance());
-                    }
-                });
+                .setOnClickListener(v -> startFragment(PVBoundServiceFragment.newInstance()));
+        view.findViewById(R.id.btn_rx_java)
+                .setOnClickListener(v -> startFragment(PVRxJavaFragment.newInstance()));
     }
 
     private void startFragment(Fragment fragment) {
