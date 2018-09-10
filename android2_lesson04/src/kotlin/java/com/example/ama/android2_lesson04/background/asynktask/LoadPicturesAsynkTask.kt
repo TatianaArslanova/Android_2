@@ -15,6 +15,7 @@ class LoadPicturesAsynkTask(private var onFinishListener: (() -> Unit)?,
         val bitmaps = ArrayList<Bitmap>()
         try {
             for (o in params) {
+                if (isCancelled) return bitmaps
                 if (o != null) {
                     val inputStream = URL(o).content as InputStream
                     val bitmap = BitmapFactory.decodeStream(inputStream)

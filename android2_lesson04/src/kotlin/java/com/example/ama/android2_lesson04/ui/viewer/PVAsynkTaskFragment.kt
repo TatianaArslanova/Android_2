@@ -43,4 +43,9 @@ class PVAsynkTaskFragment : BasePictureViewerFragment() {
         asynkTask?.removeListeners()
         super.onDestroyView()
     }
+
+    override fun onDestroy() {
+        asynkTask?.cancel(true)
+        super.onDestroy()
+    }
 }
