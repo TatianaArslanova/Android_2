@@ -1,9 +1,14 @@
 package com.example.ama.android2_lesson04.background.service
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.*
+import android.support.v4.app.NotificationCompat
 import android.support.v4.content.LocalBroadcastManager
+import com.example.ama.android2_lesson04.R
 import com.example.ama.android2_lesson04.background.utils.*
 import java.io.IOException
 
@@ -41,7 +46,9 @@ class LoadPictureCombinedService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
-            loadImages(intent.extras)
+            createNotificationChannel()
+            startForeground(NOTIFICATION_ID, buildNotification())
+            loadImages(intent.extras, startId)
         }
         return super.onStartCommand(intent, flags, startId)
     }
@@ -52,6 +59,25 @@ class LoadPictureCombinedService : Service() {
     }
 
     override fun onBind(intent: Intent?) = binder
+
+    private fun buildNotification() =
+            NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+                    .setContentTitle(NOTIFICATION_TITLE)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setProgress(PROGRESS_BAR_MAX, PROGRESS_BAR_START, true)
+                    .build()
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                    CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_DEFAULT)
+            val manager: NotificationManager? =
+                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager?.createNotificationChannel(channel)
+        }
+    }
 
     private fun loadImages(data: Bundle?, startId: Int = BOUND_SERVICE_MESSAGE_ID) {
         val message = handler.obtainMessage(startId)
