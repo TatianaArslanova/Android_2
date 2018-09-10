@@ -21,11 +21,11 @@ class StartFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        btn_start_service.setOnClickListener { changeFragment(PVFragmentStartedService.newInstance()) }
-        btn_intent_service.setOnClickListener { changeFragment(PVFragmentIntentService.newInstance()) }
-        btn_asynk_task.setOnClickListener { changeFragment(PVFragmentAsynkTask.newInstance()) }
-        btn_loader.setOnClickListener { changeFragment(PVFragmentLoader.newInstance()) }
-        btn_bind_service.setOnClickListener { changeFragment(PVFragmentBoundService.newInstance()) }
+        btn_start_service.setOnClickListener { changeFragment(PVStartedServiceFragment.newInstance()) }
+        btn_intent_service.setOnClickListener { changeFragment(PVIntentServiceFragment.newInstance()) }
+        btn_asynk_task.setOnClickListener { changeFragment(PVAsynkTaskFragment.newInstance()) }
+        btn_loader.setOnClickListener { changeFragment(PVLoaderFragment.newInstance()) }
+        btn_bind_service.setOnClickListener { changeFragment(PVBoundServiceFragment.newInstance()) }
         super.onViewCreated(view, savedInstanceState)
     }
 

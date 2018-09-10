@@ -7,10 +7,10 @@ import com.example.ama.android2_lesson04.R
 import com.example.ama.android2_lesson04.background.asynktask.LoadPicturesAsynkTask
 import com.example.ama.android2_lesson04.ui.viewer.base.BasePictureViewerFragment
 
-class PVFragmentAsynkTask : BasePictureViewerFragment() {
+class PVAsynkTaskFragment : BasePictureViewerFragment() {
 
     companion object {
-        fun newInstance() = PVFragmentAsynkTask()
+        fun newInstance() = PVAsynkTaskFragment()
     }
 
     private var asynkTask: LoadPicturesAsynkTask? = null

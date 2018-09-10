@@ -11,13 +11,13 @@ import com.example.ama.android2_lesson04.background.loader.LOADER_ARGS
 import com.example.ama.android2_lesson04.background.loader.PictureLoader
 import com.example.ama.android2_lesson04.ui.viewer.base.BasePictureViewerFragment
 
-class PVFragmentLoader
+class PVLoaderFragment
     : BasePictureViewerFragment(),
         LoaderManager.LoaderCallbacks<ArrayList<Bitmap>> {
 
     companion object {
         const val LOADER_ID = 1
-        fun newInstance() = PVFragmentLoader()
+        fun newInstance() = PVLoaderFragment()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

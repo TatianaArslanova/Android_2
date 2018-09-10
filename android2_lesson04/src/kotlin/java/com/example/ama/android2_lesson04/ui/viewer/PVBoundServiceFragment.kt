@@ -12,23 +12,24 @@ import com.example.ama.android2_lesson04.ServiceTestApp
 import com.example.ama.android2_lesson04.background.service.LoadPictureCombinedService
 import com.example.ama.android2_lesson04.ui.viewer.base.BaseReceiverFragment
 
-class PVFragmentBoundService : BaseReceiverFragment(), ServiceConnection {
+class PVBoundServiceFragment : BaseReceiverFragment() {
 
     companion object {
-        fun newInstance() = PVFragmentBoundService()
+        fun newInstance() = PVBoundServiceFragment()
     }
 
     private var isBound = false
     private var binder: LoadPictureCombinedService.MyBinder? = null
+    private val serviceConnection: PVServiceConnection = PVServiceConnection()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         ServiceTestApp.instance.bindService(Intent(ServiceTestApp.instance,
-                LoadPictureCombinedService::class.java), this, Context.BIND_AUTO_CREATE)
+                LoadPictureCombinedService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
         super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroyView() {
-        ServiceTestApp.instance.unbindService(this)
+        ServiceTestApp.instance.unbindService(serviceConnection)
         super.onDestroyView()
     }
 
@@ -38,13 +39,16 @@ class PVFragmentBoundService : BaseReceiverFragment(), ServiceConnection {
         }
     }
 
-    override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-        binder = service as LoadPictureCombinedService.MyBinder?
-        isBound = true
-    }
+    inner class PVServiceConnection : ServiceConnection {
 
-    override fun onServiceDisconnected(name: ComponentName?) {
-        binder = null
-        isBound = false
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            binder = service as LoadPictureCombinedService.MyBinder?
+            isBound = true
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            binder = null
+            isBound = false
+        }
     }
 }
