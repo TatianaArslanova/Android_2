@@ -26,6 +26,7 @@ class StartFragment : Fragment() {
         btn_asynk_task.setOnClickListener { changeFragment(PVAsynkTaskFragment.newInstance()) }
         btn_loader.setOnClickListener { changeFragment(PVLoaderFragment.newInstance()) }
         btn_bind_service.setOnClickListener { changeFragment(PVBoundServiceFragment.newInstance()) }
+        btn_rx_java.setOnClickListener { changeFragment(PVRxJavaFragment.newInstance()) }
         super.onViewCreated(view, savedInstanceState)
     }
 

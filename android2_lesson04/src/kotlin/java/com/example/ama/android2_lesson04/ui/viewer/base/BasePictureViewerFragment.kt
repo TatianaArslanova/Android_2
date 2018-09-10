@@ -58,7 +58,7 @@ abstract class BasePictureViewerFragment : Fragment() {
         showBitmaps(ServiceTestApp.data.bitmaps)
     }
 
-    protected fun onFinishLoading() {
+    protected open fun onFinishLoading() {
         isLoading = false
     }
 
