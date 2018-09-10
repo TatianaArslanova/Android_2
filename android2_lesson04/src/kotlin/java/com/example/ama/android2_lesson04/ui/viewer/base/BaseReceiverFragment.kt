@@ -8,9 +8,9 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import com.example.ama.android2_lesson04.ServiceTestApp
-import com.example.ama.android2_lesson04.background.service.ACTION_FINISH
-import com.example.ama.android2_lesson04.background.service.ACTION_UPDATE
-import com.example.ama.android2_lesson04.background.service.EXTRA_KEY
+import com.example.ama.android2_lesson04.background.utils.ACTION_FINISH
+import com.example.ama.android2_lesson04.background.utils.ACTION_UPDATE
+import com.example.ama.android2_lesson04.background.utils.EXTRA_KEY
 
 abstract class BaseReceiverFragment : BasePictureViewerFragment() {
     private val receiver = object : BroadcastReceiver() {

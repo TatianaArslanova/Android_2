@@ -1,11 +1,9 @@
 package com.example.ama.android2_lesson04.background.asynktask
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.AsyncTask
+import com.example.ama.android2_lesson04.background.utils.NetworkUtils
 import java.io.IOException
-import java.io.InputStream
-import java.net.URL
 
 class LoadPicturesAsynkTask(private var onFinishListener: (() -> Unit)?,
                             private var onUpdateListener: ((bitmap: Bitmap) -> Unit)?)
@@ -17,11 +15,9 @@ class LoadPicturesAsynkTask(private var onFinishListener: (() -> Unit)?,
             for (o in params) {
                 if (isCancelled) return bitmaps
                 if (o != null) {
-                    val inputStream = URL(o).content as InputStream
-                    val bitmap = BitmapFactory.decodeStream(inputStream)
-                    Thread.sleep(2000)
-                    bitmaps.add(bitmap)
+                    val bitmap = NetworkUtils.loadBitmapFromUrl(o)
                     if (bitmap != null) {
+                        bitmaps.add(bitmap)
                         publishProgress(bitmap)
                     }
                 }

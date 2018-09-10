@@ -2,12 +2,10 @@ package com.example.ama.android2_lesson04.background.service
 
 import android.app.Service
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.*
 import android.support.v4.content.LocalBroadcastManager
+import com.example.ama.android2_lesson04.background.utils.*
 import java.io.IOException
-import java.io.InputStream
-import java.net.URL
 
 class LoadPictureCombinedService : Service() {
 
@@ -22,11 +20,11 @@ class LoadPictureCombinedService : Service() {
             try {
                 val extras = msg.data.getStringArray(EXTRA_KEY)
                 for (o in extras) {
-                    val inputStream = URL(o).content as InputStream
-                    val bitmap = BitmapFactory.decodeStream(inputStream)
-                    Thread.sleep(2000)
-                    LocalBroadcastManager.getInstance(this)
-                            .sendBroadcast(Intent(ACTION_UPDATE).putExtra(EXTRA_KEY, bitmap))
+                    val bitmap = NetworkUtils.loadBitmapFromUrl(o)
+                    if (bitmap != null) {
+                        LocalBroadcastManager.getInstance(this)
+                                .sendBroadcast(Intent(ACTION_UPDATE).putExtra(EXTRA_KEY, bitmap))
+                    }
                 }
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -55,7 +53,7 @@ class LoadPictureCombinedService : Service() {
 
     override fun onBind(intent: Intent?) = binder
 
-    private fun loadImages(data: Bundle, startId: Int = BOUND_SERVICE_MESSAGE_ID) {
+    private fun loadImages(data: Bundle?, startId: Int = BOUND_SERVICE_MESSAGE_ID) {
         val message = handler.obtainMessage(startId)
         message.data = data
         handler.sendMessage(message)

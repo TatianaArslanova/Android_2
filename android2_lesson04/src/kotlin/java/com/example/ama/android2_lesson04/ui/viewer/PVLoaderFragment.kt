@@ -7,8 +7,8 @@ import android.support.v4.content.Loader
 import android.view.View
 import com.example.ama.android2_lesson04.R
 import com.example.ama.android2_lesson04.ServiceTestApp
-import com.example.ama.android2_lesson04.background.loader.LOADER_ARGS
 import com.example.ama.android2_lesson04.background.loader.PictureLoader
+import com.example.ama.android2_lesson04.background.utils.LOADER_ARGS
 import com.example.ama.android2_lesson04.ui.viewer.base.BasePictureViewerFragment
 
 class PVLoaderFragment
