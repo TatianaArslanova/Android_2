@@ -13,6 +13,7 @@ import com.example.ama.android2_lesson04.ui.MainActivity;
 import com.example.ama.android2_lesson04.ui.viewer.PVAsynkTaskFragment;
 import com.example.ama.android2_lesson04.ui.viewer.PVBoundServiceFragment;
 import com.example.ama.android2_lesson04.ui.viewer.PVIntentServiceFragment;
+import com.example.ama.android2_lesson04.ui.viewer.PVJobServiceFragment;
 import com.example.ama.android2_lesson04.ui.viewer.PVLoaderFragment;
 import com.example.ama.android2_lesson04.ui.viewer.PVRxJavaFragment;
 import com.example.ama.android2_lesson04.ui.viewer.PVStartedServiceFragment;
@@ -48,6 +49,8 @@ public class StartFragment extends Fragment {
                 .setOnClickListener(v -> startFragment(PVBoundServiceFragment.newInstance()));
         view.findViewById(R.id.btn_rx_java)
                 .setOnClickListener(v -> startFragment(PVRxJavaFragment.newInstance()));
+        view.findViewById(R.id.btn_job_service)
+                .setOnClickListener(v -> startFragment(PVJobServiceFragment.newInstance()));
     }
 
     private void startFragment(Fragment fragment) {

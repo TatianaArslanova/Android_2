@@ -9,6 +9,7 @@
     <string name="fragment_picture_viewer_tv_count">Загружено: %1$d</string>
     <string name="image_view_content_description">image</string>
     <string name="start_fragment_btn_rx_java">RxJava</string>
+    <string name="start_fragment_btn_job_service">JobService</string>
 
     <string-array name="image_urls">
         <item>https://pbs.twimg.com/profile_images/378800000572082798/60fc3f55854eef3709ddb2dd37e7a022.jpeg</item>

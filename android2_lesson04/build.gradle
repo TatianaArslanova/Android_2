@@ -58,6 +58,8 @@ dependencies {
 
     implementation "io.reactivex.rxjava2:rxandroid:$rxJavaAndroidVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+
+    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
 }
 repositories {
     mavenCentral()
