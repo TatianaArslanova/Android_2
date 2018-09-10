@@ -27,6 +27,7 @@ class StartFragment : Fragment() {
         btn_loader.setOnClickListener { changeFragment(PVLoaderFragment.newInstance()) }
         btn_bind_service.setOnClickListener { changeFragment(PVBoundServiceFragment.newInstance()) }
         btn_rx_java.setOnClickListener { changeFragment(PVRxJavaFragment.newInstance()) }
+        btn_job_service.setOnClickListener { changeFragment(PVJobServiceFragment.newInstance()) }
         super.onViewCreated(view, savedInstanceState)
     }
 
