@@ -37,6 +37,7 @@ public class PVRxJavaFragment extends BasePictureViewerFragment {
     private void loadWithRx(String... urls) {
         disposable = Observable.fromIterable(Arrays.asList(urls))
                 .map(NetworkUtils::loadBitmapFromUrl)
+                .filter(bitmap -> bitmap != null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete(this::onFinishLoading)
