@@ -20,39 +20,39 @@ import android.support.v4.app.NotificationCompat;
 import com.example.ama.android2_lesson03.R;
 import com.example.ama.android2_lesson03.repo.data.base.LocManager;
 import com.example.ama.android2_lesson03.repo.data.location.LocationManagerAndroid;
+import com.example.ama.android2_lesson03.utils.PermissionManager;
+import com.example.ama.android2_lesson03.widget.model.WidgetModel;
+import com.example.ama.android2_lesson03.widget.model.WidgetModelFactory;
 import com.google.android.gms.maps.model.LatLng;
 
-public class CurrentLocationForegroundService extends Service {
+public class LocationWidgetService extends Service {
+
     public static final int NOTIFICATION_ID = 1;
     public static final String CHANNEL_ID = "channel_01";
     public static final String CHANNEL_NAME = "find_location_channel";
 
     private LocManager locManager;
+    private WidgetModelFactory factory;
     private HandlerThread thread;
     private Handler handler;
 
     @Override
     public void onCreate() {
         locManager = new LocationManagerAndroid();
+        factory = new WidgetModelFactory(getApplicationContext());
         thread = new HandlerThread(this.getClass().getSimpleName(),
                 Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
         handler = new Handler(thread.getLooper()) {
             @Override
             public void handleMessage(final Message msg) {
-                locManager.subscribeOnLocationChanges(new LocManager.OnLocationSearchResultCallback() {
-                    @Override
-                    public void onLocationFound(Location location) {
-                        sendWidgetUpdates(location);
-                        locManager.unsubscribeOfLocationChanges();
-                        stopSelf(msg.what);
-                    }
-
-                    @Override
-                    public void onError(String message) {
-                        stopSelf(msg.what);
-                    }
-                });
+                if (PermissionManager.checkLocationPermission()) {
+                    requestLocation(msg.what);
+                } else {
+                    sendWidgetUpdates(
+                            factory.permissionRequiredModel());
+                    stopSelf(msg.what);
+                }
             }
         };
         super.onCreate();
@@ -62,7 +62,7 @@ public class CurrentLocationForegroundService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         createNotificationChannel();
         startForeground(NOTIFICATION_ID, buildNotification());
-        requestLocation(startId);
+        handler.sendMessage(handler.obtainMessage(startId));
         return START_NOT_STICKY;
     }
 
@@ -88,25 +88,38 @@ public class CurrentLocationForegroundService extends Service {
                 .build();
     }
 
-    private void requestLocation(int startId) {
-        handler.sendMessage(handler.obtainMessage(startId));
+    private void requestLocation(final int startId) {
+        locManager.subscribeOnLocationChanges(new LocManager.OnLocationSearchResultCallback() {
+            @Override
+            public void onLocationFound(Location location) {
+                sendWidgetUpdates(
+                        factory.fullModel(location, getLocationName(location)));
+                locManager.unsubscribeOfLocationChanges();
+                stopSelf(startId);
+            }
+
+            @Override
+            public void onError(String message) {
+                locManager.unsubscribeOfLocationChanges();
+                stopSelf(startId);
+            }
+        });
     }
 
-    private void sendWidgetUpdates(Location location) {
+    private void sendWidgetUpdates(WidgetModel widgetModel) {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         int[] widgetIds = appWidgetManager.getAppWidgetIds(
                 new ComponentName(getApplicationContext(),
-                        CurrentLocationWidgetProvider.class));
-        CurrentLocationWidgetProvider.updateWidgets(
+                        LocationWidgetProvider.class));
+        LocationWidgetProvider.updateWidgets(
                 getApplicationContext(),
                 appWidgetManager,
                 widgetIds,
-                latLng,
-                buildFullName(locManager.findAddressByCoords(latLng)));
+                widgetModel);
     }
 
-    private String buildFullName(Address address) {
+    private String getLocationName(Location location) {
+        Address address = locManager.findAddressByCoords(new LatLng(location.getLatitude(), location.getLongitude()));
         StringBuilder fullLocationName = new StringBuilder();
         if (address != null) {
             int index = address.getMaxAddressLineIndex();

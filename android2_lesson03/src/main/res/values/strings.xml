@@ -22,4 +22,5 @@
     <string name="widget_tools_text_view_location_address">Челябинск, проспект Ленина, 25</string>
     <string name="widget_latlng_format" formatted="false">%.5f, %.5f</string>
     <string name="notification_message_detecting_location">Определение местоположения</string>
+    <string name="message_permission_required">Приложению требуется разрешение на доступ к геолокации</string>
 </resources>

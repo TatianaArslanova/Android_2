@@ -2,7 +2,10 @@ package com.example.ama.android2_lesson03.utils;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
 
+import com.example.ama.android2_lesson03.PocketMap;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.disposables.Disposable;
@@ -22,6 +25,11 @@ public class PermissionManager {
                         callback.sendResult(aBoolean);
                     }
                 });
+    }
+
+    public static boolean checkLocationPermission() {
+        return ContextCompat.checkSelfPermission(PocketMap.getInstance(), FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
     }
 
     public interface OnGrantResult {

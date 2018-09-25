@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.example.ama.android2_lesson03.widget.CurrentLocationWidgetProvider">
+        <receiver android:name="com.example.ama.android2_lesson03.widget.LocationWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -38,7 +38,7 @@
                 android:resource="@xml/widget_current_location_info" />
         </receiver>
 
-        <service android:name=".widget.CurrentLocationForegroundService" />
+        <service android:name=".widget.LocationWidgetService" />
 
     </application>
 
