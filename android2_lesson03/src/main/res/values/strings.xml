@@ -18,4 +18,8 @@
     <string name="marker_list_fragment_context_menu_item_delete">Удалить</string>
     <string name="marker_list_fragment_context_menu_item_rename">Переименовать</string>
     <string name="search_on_the_map_menu_item_check_box_location_updates">Местоположение</string>
+    <string name="widget_tools_text_view_latlng">55.55331, 23.41234</string>
+    <string name="widget_tools_text_view_location_address">Челябинск, проспект Ленина, 25</string>
+    <string name="widget_latlng_format" formatted="false">%.5f, %.5f</string>
+    <string name="notification_message_detecting_location">Определение местоположения</string>
 </resources>
