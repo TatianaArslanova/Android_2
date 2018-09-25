@@ -50,9 +50,11 @@ public class LocationManagerAndroid extends BaseLocationManager {
     @Override
     @SuppressWarnings({"MissingPermission"})
     public void subscribeOnLocationChanges(OnLocationSearchResultCallback callback) {
-        registerListener(callback);
-        if (locManager != null) {
-            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, REQUEST_MIN_TIME, REQUEST_MIN_DISTANCE, locListener);
+        if (locListener == null) {
+            registerListener(callback);
+            if (locManager != null) {
+                locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, REQUEST_MIN_TIME, REQUEST_MIN_DISTANCE, locListener);
+            }
         }
     }
 

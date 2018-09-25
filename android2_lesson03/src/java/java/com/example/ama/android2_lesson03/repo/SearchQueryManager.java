@@ -9,11 +9,11 @@ import com.example.ama.android2_lesson03.repo.base.SearchManager;
 import com.example.ama.android2_lesson03.repo.data.base.LocManager;
 import com.example.ama.android2_lesson03.repo.data.base.MarkerManager;
 import com.example.ama.android2_lesson03.repo.data.location.LocationManagerAndroid;
-import com.example.ama.android2_lesson03.repo.data.location.LocationManagerGoogle;
 import com.example.ama.android2_lesson03.repo.data.markers.PreferencesMarkerManager;
 import com.example.ama.android2_lesson03.repo.data.model.SimpleMarker;
 import com.example.ama.android2_lesson03.repo.data.state.SearchOnTheMapStateSaver;
 import com.example.ama.android2_lesson03.repo.data.state.UriManager;
+import com.example.ama.android2_lesson03.utils.AddressUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -47,7 +47,7 @@ public class SearchQueryManager implements SearchManager {
         if (address != null) {
             uriManager.prepareUriByQuery(query);
             callback.onSuccess(
-                    buildFullName(address),
+                    AddressUtils.buildFullName(address),
                     new LatLng(address.getLatitude(), address.getLongitude()),
                     DEFAULT_ZOOM);
         }
@@ -57,7 +57,7 @@ public class SearchQueryManager implements SearchManager {
     public void getFullLocationName(LatLng latLng, OnFullNamePreparedCallback callback) {
         Address address = locManager.findAddressByCoords(latLng);
         if (address != null) {
-            String fullName = buildFullName(address);
+            String fullName = AddressUtils.buildFullName(address);
             uriManager.prepareUriByMarkerLocation(latLng, fullName);
             callback.onSuccess(
                     fullName,
@@ -144,17 +144,5 @@ public class SearchQueryManager implements SearchManager {
                 callback.onNotFound(message);
             }
         };
-    }
-
-    private String buildFullName(Address address) {
-        StringBuilder fullLocationName = new StringBuilder();
-        if (address != null) {
-            int index = address.getMaxAddressLineIndex();
-            for (int i = 0; i <= index; i++) {
-                if (fullLocationName.length() != 0) fullLocationName.append(", ");
-                fullLocationName.append(address.getAddressLine(i));
-            }
-        }
-        return fullLocationName.toString();
     }
 }

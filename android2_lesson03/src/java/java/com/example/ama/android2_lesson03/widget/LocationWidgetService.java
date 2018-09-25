@@ -7,7 +7,6 @@ import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.location.Address;
 import android.location.Location;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -72,36 +71,23 @@ public class LocationWidgetService extends Service {
         super.onDestroy();
     }
 
-    private void createNotificationChannel() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            if (manager != null) {
-                manager.createNotificationChannel(channel);
-            }
-        }
-    }
-
-    private Notification buildNotification() {
-        return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                .setContentTitle(getString(R.string.notification_message_detecting_location))
-                .build();
-    }
-
     private void requestLocation(final int startId) {
         locManager.subscribeOnLocationChanges(new LocManager.OnLocationSearchResultCallback() {
             @Override
             public void onLocationFound(Location location) {
                 sendWidgetUpdates(
-                        factory.fullModel(location, getLocationName(location)));
-                locManager.unsubscribeOfLocationChanges();
-                stopSelf(startId);
+                        factory.fullModel(
+                                location,
+                                locManager.findAddressByCoords(
+                                        new LatLng(
+                                                location.getLatitude(),
+                                                location.getLongitude()))));
+                stopService(startId);
             }
 
             @Override
             public void onError(String message) {
-                locManager.unsubscribeOfLocationChanges();
-                stopSelf(startId);
+                stopService(startId);
             }
         });
     }
@@ -118,17 +104,25 @@ public class LocationWidgetService extends Service {
                 widgetModel);
     }
 
-    private String getLocationName(Location location) {
-        Address address = locManager.findAddressByCoords(new LatLng(location.getLatitude(), location.getLongitude()));
-        StringBuilder fullLocationName = new StringBuilder();
-        if (address != null) {
-            int index = address.getMaxAddressLineIndex();
-            for (int i = 0; i <= index; i++) {
-                if (fullLocationName.length() != 0) fullLocationName.append(", ");
-                fullLocationName.append(address.getAddressLine(i));
+    private void createNotificationChannel() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            if (manager != null) {
+                manager.createNotificationChannel(channel);
             }
         }
-        return fullLocationName.toString();
+    }
+
+    private Notification buildNotification() {
+        return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                .setContentTitle(getString(R.string.notification_message_detecting_location))
+                .build();
+    }
+
+    private void stopService(int startId) {
+        locManager.unsubscribeOfLocationChanges();
+        stopSelf(startId);
     }
 
     @Nullable

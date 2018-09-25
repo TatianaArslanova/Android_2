@@ -51,11 +51,13 @@ public class LocationManagerGoogle extends BaseLocationManager {
     @Override
     @SuppressWarnings({"MissingPermission"})
     public void subscribeOnLocationChanges(OnLocationSearchResultCallback callback) {
-        registerListener(callback);
-        client.requestLocationUpdates(
-                LocationRequest.create().setInterval(REQUEST_INTERVAL),
-                listener,
-                Looper.getMainLooper());
+        if (listener == null) {
+            registerListener(callback);
+            client.requestLocationUpdates(
+                    LocationRequest.create().setInterval(REQUEST_INTERVAL),
+                    listener,
+                    Looper.getMainLooper());
+        }
     }
 
     @Override

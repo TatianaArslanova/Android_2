@@ -29,7 +29,7 @@ public class LocationWidgetProvider extends AppWidgetProvider {
         }
     }
 
-    private static void startLocationService(Context context) {
+    private void startLocationService(Context context) {
         Intent intent = new Intent(context, LocationWidgetService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent);

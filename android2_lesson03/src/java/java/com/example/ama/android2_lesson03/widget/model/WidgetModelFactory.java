@@ -3,10 +3,12 @@ package com.example.ama.android2_lesson03.widget.model;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
 import android.location.Location;
 import android.os.Build;
 
 import com.example.ama.android2_lesson03.R;
+import com.example.ama.android2_lesson03.utils.AddressUtils;
 import com.example.ama.android2_lesson03.utils.ResourceUtils;
 import com.example.ama.android2_lesson03.widget.LocationWidgetService;
 
@@ -19,10 +21,10 @@ public class WidgetModelFactory {
         this.context = context;
     }
 
-    public WidgetModel fullModel(Location location, String address) {
+    public WidgetModel fullModel(Location location, Address address) {
         return new WidgetModel(
                 ResourceUtils.formatLocationCoordinates(location),
-                address,
+                AddressUtils.buildFullName(address),
                 buildPendingIntent());
     }
 
