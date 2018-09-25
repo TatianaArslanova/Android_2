@@ -6,6 +6,7 @@ import android.content.Intent
 import android.location.Address
 import android.location.Location
 import android.os.Build
+import com.example.ama.android2_lesson03.R
 import com.example.ama.android2_lesson03.utils.AddressUtils
 import com.example.ama.android2_lesson03.utils.ResourceUtils
 import com.example.ama.android2_lesson03.widget.LocationWidgetService
@@ -21,6 +22,13 @@ class WidgetModelFactory(val context: Context) {
                     ResourceUtils.formatLocationCoordinates(location),
                     AddressUtils.buildFullName(address),
                     buildPendingIntent())
+
+    fun permissionRequiredModel() =
+            WidgetModel(
+                    context.resources.getString(R.string.message_location_not_found),
+                    context.resources.getString(R.string.message_permission_required),
+                    buildPendingIntent()
+            )
 
     private fun buildPendingIntent(): PendingIntent {
         val intent = Intent(context, LocationWidgetService::class.java)

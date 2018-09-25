@@ -1,6 +1,9 @@
 package com.example.ama.android2_lesson03.utils
 
 import android.app.Activity
+import android.content.pm.PackageManager
+import android.support.v4.content.ContextCompat
+import com.example.ama.android2_lesson03.PocketMap
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.Disposable
 
@@ -12,4 +15,8 @@ object PermissionManager {
             RxPermissions(activity)
                     .request(permission)
                     .subscribe { it -> callback.invoke(it) }
+
+    fun checkLocationPermission() =
+            ContextCompat.checkSelfPermission(PocketMap.instance, FINE_LOCATION) ==
+                    PackageManager.PERMISSION_GRANTED
 }

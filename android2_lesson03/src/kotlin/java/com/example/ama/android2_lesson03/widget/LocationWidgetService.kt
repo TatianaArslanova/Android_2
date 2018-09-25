@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat
 import com.example.ama.android2_lesson03.R
 import com.example.ama.android2_lesson03.repo.data.base.LocManager
 import com.example.ama.android2_lesson03.repo.data.location.LocationManagerAndroid
+import com.example.ama.android2_lesson03.utils.PermissionManager
 import com.example.ama.android2_lesson03.widget.model.WidgetModel
 import com.example.ama.android2_lesson03.widget.model.WidgetModelFactory
 import com.google.android.gms.maps.model.LatLng
@@ -35,7 +36,12 @@ class LocationWidgetService : Service() {
         thread = HandlerThread(this.javaClass.simpleName, Process.THREAD_PRIORITY_BACKGROUND)
         thread.start()
         handler = Handler(thread.looper) { message ->
-            requestLocationUpdate(message.what)
+            if (PermissionManager.checkLocationPermission()) {
+                requestLocationUpdate(message.what)
+            } else {
+                sendWidgetUpdate(factory.permissionRequiredModel())
+                stopSelf(message.what)
+            }
             true
         }
         super.onCreate()
