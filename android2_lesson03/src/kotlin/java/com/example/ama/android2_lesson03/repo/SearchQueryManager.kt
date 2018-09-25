@@ -1,6 +1,5 @@
 package com.example.ama.android2_lesson03.repo
 
-import android.location.Address
 import android.net.Uri
 import com.example.ama.android2_lesson03.PocketMap
 import com.example.ama.android2_lesson03.R
@@ -12,9 +11,9 @@ import com.example.ama.android2_lesson03.repo.data.markers.PreferencesMarkerMana
 import com.example.ama.android2_lesson03.repo.data.model.SimpleMarker
 import com.example.ama.android2_lesson03.repo.data.state.SearchOnTheMapStateSaver
 import com.example.ama.android2_lesson03.repo.data.state.UriManager
+import com.example.ama.android2_lesson03.utils.AddressUtils
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import java.lang.StringBuilder
 
 /**
  * Class for execute presenter's queries
@@ -41,7 +40,7 @@ class SearchQueryManager : SearchManager {
         if (address != null) {
             uriManager.prepareUriByQuery(query)
             callback.invoke(
-                    buildFullName(address),
+                    AddressUtils.buildFullName(address),
                     LatLng(address.latitude, address.longitude),
                     DEFAULT_ZOOM)
 
@@ -51,7 +50,7 @@ class SearchQueryManager : SearchManager {
     override fun getFullLocationName(latLng: LatLng, callback: (fullLocationName: String, position: LatLng, zoom: Float) -> Unit) {
         val address = locManager.findAddressByLatLng(latLng)
         if (address != null) {
-            val fullLocationName = buildFullName(address)
+            val fullLocationName = AddressUtils.buildFullName(address)
             uriManager.prepareUriByMarkerLocation(latLng, fullLocationName)
             callback.invoke(
                     fullLocationName,
@@ -110,15 +109,5 @@ class SearchQueryManager : SearchManager {
 
     override fun unsubscribeOfLocationUpdates() {
         locManager.unsubscribeOfLocationUpdates()
-    }
-
-
-    private fun buildFullName(address: Address): String {
-        val builder = StringBuilder()
-        for (i in 0..address.maxAddressLineIndex) {
-            if (builder.isNotEmpty()) builder.append(",")
-            builder.append(address.getAddressLine(i))
-        }
-        return builder.toString()
     }
 }
