@@ -21,7 +21,7 @@ public class NotesWidgetProvider extends AppWidgetProvider {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         int[] IDs = appWidgetManager.getAppWidgetIds(new ComponentName(context, NotesWidgetProvider.class));
         for (int ID : IDs) {
-            Intent intent = new Intent(context, StackNoteService.class);
+            Intent intent = new Intent(context, ListNoteService.class);
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_notes);
             remoteViews.setRemoteAdapter(R.id.lv_notelist, intent);
             appWidgetManager.notifyAppWidgetViewDataChanged(ID, R.id.lv_notelist);

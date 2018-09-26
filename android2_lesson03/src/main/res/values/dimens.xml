@@ -3,4 +3,8 @@
     <dimen name="widget_top_padding">4dp</dimen>
     <dimen name="widget_medium_padding">8dp</dimen>
     <dimen name="widget_image_button_size">48dp</dimen>
+    <dimen name="widget_location_min_height">110dp</dimen>
+    <dimen name="widget_location_min_width">250dp</dimen>
+    <dimen name="widget_location_min_resize_height">110dp</dimen>
+    <dimen name="widget_location_min_resize_width">250dp</dimen>
 </resources>

@@ -11,11 +11,11 @@ import com.example.ama.android2_lesson01.model.Note;
 
 import java.util.ArrayList;
 
-public class StackNoteServiceFactory implements RemoteViewsService.RemoteViewsFactory {
+public class ListNotesRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private Context context;
     private ArrayList<Note> notes = new ArrayList<>();
 
-    StackNoteServiceFactory(Context context) {
+    ListNotesRemoteViewsFactory(Context context) {
         this.context = context;
     }
 

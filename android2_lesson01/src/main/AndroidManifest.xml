@@ -33,7 +33,7 @@
         </receiver>
 
         <service
-            android:name=".widget.StackNoteService"
+            android:name=".widget.ListNoteService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
     </application>
