@@ -1,5 +1,6 @@
 package com.example.ama.android2_lesson01.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.example.ama.android2_lesson01.R;
+import com.example.ama.android2_lesson01.ui.MainActivity;
 
 public class NotesWidgetProvider extends AppWidgetProvider {
 
@@ -24,6 +26,12 @@ public class NotesWidgetProvider extends AppWidgetProvider {
             Intent intent = new Intent(context, ListNoteService.class);
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_notes);
             remoteViews.setRemoteAdapter(R.id.lv_notelist, intent);
+
+            Intent activityIntent = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent
+                    .getActivity(context, 0, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            remoteViews.setPendingIntentTemplate(R.id.lv_notelist, pendingIntent);
+
             appWidgetManager.notifyAppWidgetViewDataChanged(ID, R.id.lv_notelist);
             appWidgetManager.updateAppWidget(ID, remoteViews);
         }

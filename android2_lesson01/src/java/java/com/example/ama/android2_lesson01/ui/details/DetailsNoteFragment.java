@@ -27,7 +27,7 @@ import com.example.ama.android2_lesson01.ui.details.mvp.base.DetailsPresenter;
 public class DetailsNoteFragment extends Fragment
         implements DetailsNoteView {
 
-    private static final String TARGET_NOTE = "target_note";
+    public static final String TARGET_NOTE = "target_note";
 
     private DetailsPresenter<DetailsNoteView> mPresenter;
     private Note mTargetNote;
