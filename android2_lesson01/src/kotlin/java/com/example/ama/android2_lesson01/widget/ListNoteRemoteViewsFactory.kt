@@ -1,12 +1,14 @@
 package com.example.ama.android2_lesson01.widget
 
 import android.content.Context
+import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.example.ama.android2_lesson01.NotesApp
 import com.example.ama.android2_lesson01.R
 import com.example.ama.android2_lesson01.db.base.NotesDataManager
 import com.example.ama.android2_lesson01.model.Note
+import com.example.ama.android2_lesson01.ui.details.DetailsNoteFragment
 
 class ListNoteRemoteViewsFactory(val context: Context)
     : RemoteViewsService.RemoteViewsFactory {
@@ -37,6 +39,10 @@ class ListNoteRemoteViewsFactory(val context: Context)
         val remoteViews = RemoteViews(context.packageName, R.layout.widget_item_view)
         remoteViews.setTextViewText(R.id.tv_card_note_title, notes[position].title)
         remoteViews.setTextViewText(R.id.tv_card_note_text, notes[position].text)
+
+        val intent = Intent()
+        intent.putExtra(DetailsNoteFragment.TARGET_NOTE, notes[position])
+        remoteViews.setOnClickFillInIntent(R.id.ll_widget_item, intent)
         return remoteViews
     }
 
