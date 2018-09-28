@@ -6,6 +6,7 @@
     android:minResizeHeight="@dimen/widget_location_min_resize_height"
     android:minResizeWidth="@dimen/widget_location_min_resize_width"
     android:minWidth="@dimen/widget_location_min_width"
+    android:previewImage="@drawable/widget_preview_location_light"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="3600000">
 

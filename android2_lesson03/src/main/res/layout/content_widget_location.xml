@@ -39,6 +39,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:background="?attr/widgetButton"
+        android:contentDescription="@string/widget_image_button_content_description_refresh"
         android:padding="@dimen/widget_medium_padding"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_replay_black_24dp" />

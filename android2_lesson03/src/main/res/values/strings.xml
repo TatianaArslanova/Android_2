@@ -23,4 +23,7 @@
     <string name="widget_latlng_format" formatted="false">%.5f, %.5f</string>
     <string name="notification_message_detecting_location">Определение местоположения</string>
     <string name="message_permission_required">Приложению требуется разрешение на доступ к геолокации</string>
+    <string name="widget_image_button_content_description_dark">widget preview with the dark theme</string>
+    <string name="widget_image_button_content_description_light">widget preview with the light theme</string>
+    <string name="widget_image_button_content_description_refresh">refresh location button</string>
 </resources>
