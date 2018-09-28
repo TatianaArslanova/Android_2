@@ -8,4 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="widgetLight" parent="Theme.AppCompat.Light.DarkActionBar" >
+        <item name="widgetBackground">@color/widgetBackground</item>
+        <item name="widgetTitle">@color/widgetTitle</item>
+        <item name="widgetText">@color/widgetText</item>
+        <item name="widgetButton">@color/widgetButton</item>
+    </style>
+
+    <style name="widgetDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="widgetBackground">@color/widgetBackgroundDark</item>
+        <item name="widgetTitle">@color/widgetTitleDark</item>
+        <item name="widgetText">@color/widgetTextDark</item>
+        <item name="widgetButton">@color/widgetButtonDark</item>
+    </style>
+
 </resources>

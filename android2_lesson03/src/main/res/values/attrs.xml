@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="widgetBackground" format="reference" />
+    <attr name="widgetTitle" format="reference" />
+    <attr name="widgetText" format="reference" />
+    <attr name="widgetButton" format="reference" />
+</resources>

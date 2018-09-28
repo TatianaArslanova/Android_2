@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialLayout="@layout/widget_current_location"
+    android:configure="com.example.ama.android2_lesson03.widget.WidgetConfigActivity"
+    android:initialLayout="@layout/widget_location_light"
     android:minHeight="@dimen/widget_location_min_height"
     android:minResizeHeight="@dimen/widget_location_min_resize_height"
     android:minResizeWidth="@dimen/widget_location_min_resize_width"

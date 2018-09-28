@@ -3,6 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="widget_background">#FFF</color>
-    <color name="widget_text">#000</color>
+    <color name="widgetBackground">#FFF</color>
+    <color name="widgetTitle">#424242</color>
+    <color name="widgetText">#696969</color>
+    <color name="widgetButton">#C0C0C0</color>
+    <color name="widgetBackgroundDark">#043A6B</color>
+    <color name="widgetTitleDark">#FF9500</color>
+    <color name="widgetTextDark">#FFB800</color>
+    <color name="widgetButtonDark">#BF5D30</color>
 </resources>

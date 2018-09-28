@@ -29,6 +29,13 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".widget.WidgetConfigActivity"
+            android:theme="@style/Theme.AppCompat.Dialog">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
         <receiver android:name="com.example.ama.android2_lesson03.widget.LocationWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

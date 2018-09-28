@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/widget_background"
+    android:background="?attr/widgetBackground"
     android:orientation="horizontal"
-    android:padding="@dimen/widget_top_padding">
+    android:padding="@dimen/widget_top_padding"
+    tools:theme="@style/widgetDark">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/widget_text"
+            android:textColor="?attr/widgetTitle"
             tools:text="@string/widget_tools_text_view_latlng" />
 
         <TextView
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:textColor="@color/widget_text"
+            android:textColor="?attr/widgetText"
             tools:text="@string/widget_tools_text_view_location_address" />
 
     </LinearLayout>
@@ -38,6 +38,7 @@
         android:layout_width="@dimen/widget_image_button_size"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
+        android:background="?attr/widgetButton"
         android:padding="@dimen/widget_medium_padding"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_replay_black_24dp" />
