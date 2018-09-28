@@ -31,8 +31,10 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
         queryManager.loadSavedState(new SearchManager.OnMarkerPreparedCallback() {
             @Override
             public void onSuccess(String title, String address, LatLng position, float zoom) {
-                view.moveMapCamera(position, zoom, false);
-                view.showOnInnerMap(title, address, position);
+                if (view != null) {
+                    view.moveMapCamera(position, zoom, false);
+                    view.showOnInnerMap(title, address, position);
+                }
             }
         });
     }
@@ -47,8 +49,10 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
         queryManager.getFullLocationName(query, new SearchManager.OnFullNamePreparedCallback() {
             @Override
             public void onSuccess(String fullLocationName, LatLng latLng, float zoom) {
-                view.moveMapCamera(latLng, zoom, true);
-                view.showOnInnerMap(null, fullLocationName, latLng);
+                if (view != null) {
+                    view.moveMapCamera(latLng, zoom, true);
+                    view.showOnInnerMap(null, fullLocationName, latLng);
+                }
             }
         });
     }
@@ -58,8 +62,10 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
         queryManager.getFullLocationName(latLng, new SearchManager.OnFullNamePreparedCallback() {
             @Override
             public void onSuccess(String fullLocationName, LatLng latLng, float zoom) {
-                view.moveMapCamera(latLng, zoom, true);
-                view.showOnInnerMap(null, fullLocationName, latLng);
+                if (view != null) {
+                    view.moveMapCamera(latLng, zoom, true);
+                    view.showOnInnerMap(null, fullLocationName, latLng);
+                }
             }
         });
     }
@@ -69,7 +75,9 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
         queryManager.prepareUriForGMaps(currentMarker, cameraPosition, zoom, new SearchManager.OnUriPreparedCallback() {
             @Override
             public void onSuccess(Uri uri) {
-                view.showOnGMapsApp(uri);
+                if (view != null) {
+                    view.showOnGMapsApp(uri);
+                }
             }
         });
     }
@@ -79,12 +87,16 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
         queryManager.getMyLocation(new SearchManager.OnLatLngSearchResultCallback() {
             @Override
             public void onLocationFound(LatLng latLng, float zoom) {
-                view.moveMapCamera(latLng, zoom, true);
+                if (view != null) {
+                    view.moveMapCamera(latLng, zoom, true);
+                }
             }
 
             @Override
             public void onNotFound(String message) {
-                view.showMessage(message);
+                if (view != null) {
+                    view.showMessage(message);
+                }
             }
         });
     }
@@ -94,7 +106,9 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
         queryManager.prepareSaveMarkerDialog(marker, new SearchManager.OnDialogDataPrepared() {
             @Override
             public void onSuccess(String title, String message, Marker marker) {
-                view.showDialog(title, message, marker);
+                if (view != null) {
+                    view.showDialog(title, message, marker);
+                }
             }
         });
     }
@@ -104,7 +118,9 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
         queryManager.saveMarkerToList(currentMarker, customName, new SearchManager.OnMarkerSavedCallback() {
             @Override
             public void onSuccess(String message) {
-                view.showMessage(message);
+                if (view != null) {
+                    view.showMessage(message);
+                }
             }
         });
     }
@@ -119,7 +135,9 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
 
             @Override
             public void onNotFound(String message) {
-                view.showMessage(message);
+                if (view != null) {
+                    view.showMessage(message);
+                }
             }
         });
     }
