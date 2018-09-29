@@ -8,6 +8,9 @@ import android.os.Build
 import android.widget.RemoteViews
 import com.example.ama.android2_lesson03.R
 import com.example.ama.android2_lesson03.widget.model.WidgetModel
+import com.example.ama.android2_lesson03.widget.utils.THEME_DARK
+import com.example.ama.android2_lesson03.widget.utils.THEME_LIGHT
+import com.example.ama.android2_lesson03.widget.utils.WIDGET_PREFERENCES_NAME
 
 class LocationWidgetProvider : AppWidgetProvider() {
 
@@ -15,13 +18,20 @@ class LocationWidgetProvider : AppWidgetProvider() {
         fun updateWidgets(context: Context, appWidgetManager: AppWidgetManager,
                           appWidgetIds: IntArray, model: WidgetModel) {
             for (id in appWidgetIds) {
-                val remoteViews = RemoteViews(context.packageName, R.layout.widget_current_location)
+                val remoteViews = when (getTheme(context, id)) {
+                    THEME_DARK -> RemoteViews(context.packageName, R.layout.widget_location_dark)
+                    else -> RemoteViews(context.packageName, R.layout.widget_location_light)
+                }
                 remoteViews.setTextViewText(R.id.tv_latlng, model.coordinates)
                 remoteViews.setTextViewText(R.id.tv_location_address, model.address)
                 remoteViews.setOnClickPendingIntent(R.id.ib_update_location, model.pendingIntent)
                 appWidgetManager.updateAppWidget(id, remoteViews)
             }
         }
+
+        private fun getTheme(context: Context, widgetId: Int) =
+                context.getSharedPreferences(WIDGET_PREFERENCES_NAME, Context.MODE_PRIVATE)
+                        .getInt(widgetId.toString(), THEME_LIGHT)
     }
 
     override fun onUpdate(context: Context?, appWidgetManager: AppWidgetManager?, appWidgetIds: IntArray?) {
