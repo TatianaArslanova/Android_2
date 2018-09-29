@@ -8,18 +8,35 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="widgetLight" parent="Theme.AppCompat.Light.DarkActionBar" >
-        <item name="widgetBackground">@color/widgetBackground</item>
-        <item name="widgetTitle">@color/widgetTitle</item>
-        <item name="widgetText">@color/widgetText</item>
-        <item name="widgetButton">@color/widgetButton</item>
+    <style name="WidgetTitle" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/widgetTitle</item>
     </style>
 
-    <style name="widgetDark" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="widgetBackground">@color/widgetBackgroundDark</item>
-        <item name="widgetTitle">@color/widgetTitleDark</item>
-        <item name="widgetText">@color/widgetTextDark</item>
-        <item name="widgetButton">@color/widgetButtonDark</item>
+    <style name="WidgetText" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/widgetText</item>
     </style>
 
+    <style name="WidgetImageButton">
+        <item name="android:background">@color/widgetButton</item>
+    </style>
+
+    <style name="WidgetBackground">
+        <item name="android:background">@color/widgetBackground</item>
+    </style>
+
+    <style name="WidgetTitle.Dark" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/widgetTitleDark</item>
+    </style>
+
+    <style name="WidgetText.Dark" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/widgetTextDark</item>
+    </style>
+
+    <style name="WidgetImageButton.Dark">
+        <item name="android:background">@color/widgetButtonDark</item>
+    </style>
+
+    <style name="WidgetBackground.Dark">
+        <item name="android:background">@color/widgetBackgroundDark</item>
+    </style>
 </resources>
