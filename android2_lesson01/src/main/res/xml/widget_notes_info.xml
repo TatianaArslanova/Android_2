@@ -6,4 +6,5 @@
     android:minResizeWidth="@dimen/widget_notelist_min_resize_width"
     android:minWidth="@dimen/widget_notelist_min_width"
     android:resizeMode="horizontal|vertical"
+    android:previewImage="@drawable/widget_preview_notes"
     android:updatePeriodMillis="86400000" />
