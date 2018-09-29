@@ -74,12 +74,8 @@ public class DetailsNoteFragment extends Fragment
                 mEtText.setText(mTargetNote.getText());
             }
         }
-        view.findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSaveButtonClick();
-            }
-        });
+        view.findViewById(R.id.btn_save).setOnClickListener(
+                v -> onSaveButtonClick());
         mPresenter = new DetailsNotePresenter<>();
     }
 

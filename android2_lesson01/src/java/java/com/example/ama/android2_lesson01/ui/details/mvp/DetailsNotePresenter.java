@@ -27,12 +27,7 @@ public class DetailsNotePresenter<T extends DetailsNoteView>
 
     @Override
     public void createNote(String title, String text) {
-        NotesApp.getDataManager().createNote(title, text, new NotesDataManager.DataChangedCallback() {
-            @Override
-            public void onDataChanged() {
-                view.finishEditing();
-            }
-        });
+        NotesApp.getDataManager().createNote(title, text, () -> view.finishEditing());
     }
 
     /**
@@ -47,12 +42,7 @@ public class DetailsNotePresenter<T extends DetailsNoteView>
 
     @Override
     public void updateNote(Note targetNote, String newTitle, String newText) {
-        NotesApp.getDataManager().updateNote(targetNote, newTitle, newText, new NotesDataManager.DataChangedCallback() {
-            @Override
-            public void onDataChanged() {
-                view.finishEditing();
-            }
-        });
+        NotesApp.getDataManager().updateNote(targetNote, newTitle, newText, () -> view.finishEditing());
     }
 
     /**
@@ -66,12 +56,7 @@ public class DetailsNotePresenter<T extends DetailsNoteView>
     @Override
     public void deleteNote(Note note) {
         if (note != null) {
-            NotesApp.getDataManager().deleteNote(note, new NotesDataManager.DataChangedCallback() {
-                @Override
-                public void onDataChanged() {
-                    view.finishEditing();
-                }
-            });
+            NotesApp.getDataManager().deleteNote(note, () -> view.finishEditing());
         } else {
             view.finishEditing();
         }

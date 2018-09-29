@@ -7,7 +7,6 @@ import android.widget.RemoteViewsService;
 
 import com.example.ama.android2_lesson01.NotesApp;
 import com.example.ama.android2_lesson01.R;
-import com.example.ama.android2_lesson01.db.base.NotesDataManager;
 import com.example.ama.android2_lesson01.model.Note;
 import com.example.ama.android2_lesson01.ui.details.DetailsNoteFragment;
 
@@ -27,12 +26,9 @@ public class ListNotesRemoteViewsFactory implements RemoteViewsService.RemoteVie
 
     @Override
     public void onDataSetChanged() {
-        NotesApp.getDataManager().loadListOfAllNotes(new NotesDataManager.LoadDataCallback() {
-            @Override
-            public void onLoad(ArrayList<Note> mData) {
-                notes.clear();
-                notes.addAll(mData);
-            }
+        NotesApp.getDataManager().loadListOfAllNotes(mData -> {
+            notes.clear();
+            notes.addAll(mData);
         });
     }
 

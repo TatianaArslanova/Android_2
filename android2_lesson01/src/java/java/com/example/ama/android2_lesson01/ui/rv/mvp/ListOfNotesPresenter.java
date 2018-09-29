@@ -1,13 +1,10 @@
 package com.example.ama.android2_lesson01.ui.rv.mvp;
 
 import com.example.ama.android2_lesson01.NotesApp;
-import com.example.ama.android2_lesson01.db.base.NotesDataManager;
 import com.example.ama.android2_lesson01.model.Note;
 import com.example.ama.android2_lesson01.ui.base.BasePresenter;
 import com.example.ama.android2_lesson01.ui.rv.mvp.base.ListOfNotesView;
 import com.example.ama.android2_lesson01.ui.rv.mvp.base.ListPresenter;
-
-import java.util.ArrayList;
 
 /**
  * Presenter implementation for {@link ListOfNotesView}
@@ -25,15 +22,12 @@ public class ListOfNotesPresenter<T extends ListOfNotesView>
 
     @Override
     public void loadData() {
-        NotesApp.getDataManager().loadListOfAllNotes(new NotesDataManager.LoadDataCallback() {
-            @Override
-            public void onLoad(ArrayList<Note> mData) {
-                view.showNoteList(mData);
-                if (mData.size() == 0) {
-                    view.showEmptyMessage();
-                } else {
-                    view.hideEmptyMessage();
-                }
+        NotesApp.getDataManager().loadListOfAllNotes(mData -> {
+            view.showNoteList(mData);
+            if (mData.size() == 0) {
+                view.showEmptyMessage();
+            } else {
+                view.hideEmptyMessage();
             }
         });
     }
@@ -46,11 +40,6 @@ public class ListOfNotesPresenter<T extends ListOfNotesView>
 
     @Override
     public void deleteNote(Note note) {
-        NotesApp.getDataManager().deleteNote(note, new NotesDataManager.DataChangedCallback() {
-            @Override
-            public void onDataChanged() {
-                loadData();
-            }
-        });
+        NotesApp.getDataManager().deleteNote(note, () -> loadData());
     }
 }

@@ -40,19 +40,11 @@ public class ListOfNotesHolder extends RecyclerView.ViewHolder {
     }
 
     private void setListeners() {
-        itemView.findViewById(R.id.ibtn_delete_note).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onDeleteNoteClick(mAdapter.getmData().get(getAdapterPosition()));
-            }
-        })
+        itemView.findViewById(R.id.ibtn_delete_note).setOnClickListener(
+                v -> mListener.onDeleteNoteClick(mAdapter.getmData().get(getAdapterPosition())))
         ;
-        itemView.findViewById(R.id.cv_note).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onEditNoteClick(mAdapter.getmData().get(getAdapterPosition()));
-            }
-        });
+        itemView.findViewById(R.id.cv_note).setOnClickListener(
+                v -> mListener.onEditNoteClick(mAdapter.getmData().get(getAdapterPosition())));
     }
 
     public interface OnNoteClickListener {
