@@ -72,7 +72,7 @@ public class LocationWidgetService extends Service {
     }
 
     private void requestLocation(final int startId) {
-        locManager.subscribeOnLocationChanges(new LocManager.OnLocationSearchResultCallback() {
+        locManager.findMyLocation(new LocManager.OnLocationSearchResultCallback() {
             @Override
             public void onLocationFound(Location location) {
                 sendWidgetUpdates(
@@ -82,12 +82,12 @@ public class LocationWidgetService extends Service {
                                         new LatLng(
                                                 location.getLatitude(),
                                                 location.getLongitude()))));
-                stopService(startId);
+                stopSelf(startId);
             }
 
             @Override
             public void onError(String message) {
-                stopService(startId);
+                stopSelf(startId);
             }
         });
     }
@@ -118,11 +118,6 @@ public class LocationWidgetService extends Service {
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(getString(R.string.notification_message_detecting_location))
                 .build();
-    }
-
-    private void stopService(int startId) {
-        locManager.unsubscribeOfLocationChanges();
-        stopSelf(startId);
     }
 
     @Nullable
