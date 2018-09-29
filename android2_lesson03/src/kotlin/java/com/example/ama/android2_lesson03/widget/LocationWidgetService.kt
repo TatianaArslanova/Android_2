@@ -15,7 +15,6 @@ import com.example.ama.android2_lesson03.repo.data.location.LocationManagerAndro
 import com.example.ama.android2_lesson03.utils.PermissionManager
 import com.example.ama.android2_lesson03.widget.model.WidgetModel
 import com.example.ama.android2_lesson03.widget.model.WidgetModelFactory
-import com.google.android.gms.maps.model.LatLng
 
 class LocationWidgetService : Service() {
 
@@ -75,14 +74,14 @@ class LocationWidgetService : Service() {
                     .build()
 
     private fun requestLocationUpdate(startId: Int) {
-        locManager.subscribeOnLocationUpdates(
-                locationFound = { location ->
-                    sendWidgetUpdate(factory.fullModel(
-                            location,
-                            locManager.findAddressByLatLng(LatLng(location.latitude, location.longitude))))
-                    unsubscribe(startId)
+        locManager.findMyLocation(
+                found = { latLng, _ ->
+                    sendWidgetUpdate(
+                            factory.fullModel(latLng, locManager.findAddressByLatLng(latLng)))
+                    stopSelf(startId)
                 },
-                error = { unsubscribe(startId) })
+                notFound = { message -> stopSelf(startId) }
+        )
     }
 
     private fun sendWidgetUpdate(model: WidgetModel) {
@@ -94,10 +93,5 @@ class LocationWidgetService : Service() {
                 appWidgetManager,
                 widgetIds,
                 model)
-    }
-
-    private fun unsubscribe(startId: Int) {
-        locManager.unsubscribeOfLocationUpdates()
-        stopSelf(startId)
     }
 }

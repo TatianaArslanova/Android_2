@@ -4,12 +4,12 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.location.Address
-import android.location.Location
 import android.os.Build
 import com.example.ama.android2_lesson03.R
 import com.example.ama.android2_lesson03.utils.AddressUtils
 import com.example.ama.android2_lesson03.utils.ResourceUtils
 import com.example.ama.android2_lesson03.widget.LocationWidgetService
+import com.google.android.gms.maps.model.LatLng
 
 class WidgetModelFactory(val context: Context) {
 
@@ -17,9 +17,9 @@ class WidgetModelFactory(val context: Context) {
         private const val REQUEST_CODE = 1
     }
 
-    fun fullModel(location: Location, address: Address?) =
+    fun fullModel(latLng: LatLng, address: Address?) =
             WidgetModel(
-                    ResourceUtils.formatLocationCoordinates(location),
+                    ResourceUtils.formatLatLngCoordinates(latLng),
                     AddressUtils.buildFullName(address),
                     buildPendingIntent())
 
