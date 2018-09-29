@@ -87,24 +87,11 @@ public class MapController implements Controller {
     private void tuneMap() {
         map.getUiSettings().setZoomControlsEnabled(true);
         map.getUiSettings().setAllGesturesEnabled(true);
-        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                presenter.findAddressByLatLng(latLng);
-            }
-        });
-        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                clearMap();
-            }
-        });
-        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                presenter.onMarkerClick(marker);
-                return true;
-            }
+        map.setOnMapLongClickListener(latLng -> presenter.findAddressByLatLng(latLng));
+        map.setOnMapClickListener(latLng -> clearMap());
+        map.setOnMarkerClickListener(marker -> {
+            presenter.onMarkerClick(marker);
+            return true;
         });
     }
 

@@ -1,6 +1,5 @@
 package com.example.ama.android2_lesson03.ui.search.mvp;
 
-import android.net.Uri;
 import android.util.Log;
 
 import com.example.ama.android2_lesson03.repo.SearchQueryManager;
@@ -28,13 +27,10 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
 
     @Override
     public void loadSavedState() {
-        queryManager.loadSavedState(new SearchManager.OnMarkerPreparedCallback() {
-            @Override
-            public void onSuccess(String title, String address, LatLng position, float zoom) {
-                if (view != null) {
-                    view.moveMapCamera(position, zoom, false);
-                    view.showOnInnerMap(title, address, position);
-                }
+        queryManager.loadSavedState((title, address, position, zoom) -> {
+            if (view != null) {
+                view.moveMapCamera(position, zoom, false);
+                view.showOnInnerMap(title, address, position);
             }
         });
     }
@@ -46,38 +42,29 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
 
     @Override
     public void findAddressByQuery(String query) {
-        queryManager.getFullLocationName(query, new SearchManager.OnFullNamePreparedCallback() {
-            @Override
-            public void onSuccess(String fullLocationName, LatLng latLng, float zoom) {
-                if (view != null) {
-                    view.moveMapCamera(latLng, zoom, true);
-                    view.showOnInnerMap(null, fullLocationName, latLng);
-                }
+        queryManager.getFullLocationName(query, (fullLocationName, latLng, zoom) -> {
+            if (view != null) {
+                view.moveMapCamera(latLng, zoom, true);
+                view.showOnInnerMap(null, fullLocationName, latLng);
             }
         });
     }
 
     @Override
     public void findAddressByLatLng(LatLng latLng) {
-        queryManager.getFullLocationName(latLng, new SearchManager.OnFullNamePreparedCallback() {
-            @Override
-            public void onSuccess(String fullLocationName, LatLng latLng, float zoom) {
-                if (view != null) {
-                    view.moveMapCamera(latLng, zoom, true);
-                    view.showOnInnerMap(null, fullLocationName, latLng);
-                }
+        queryManager.getFullLocationName(latLng, (fullLocationName, latLng1, zoom) -> {
+            if (view != null) {
+                view.moveMapCamera(latLng1, zoom, true);
+                view.showOnInnerMap(null, fullLocationName, latLng1);
             }
         });
     }
 
     @Override
     public void sendQueryToGMapsApp(Marker currentMarker, LatLng cameraPosition, float zoom) {
-        queryManager.prepareUriForGMaps(currentMarker, cameraPosition, zoom, new SearchManager.OnUriPreparedCallback() {
-            @Override
-            public void onSuccess(Uri uri) {
-                if (view != null) {
-                    view.showOnGMapsApp(uri);
-                }
+        queryManager.prepareUriForGMaps(currentMarker, cameraPosition, zoom, uri -> {
+            if (view != null) {
+                view.showOnGMapsApp(uri);
             }
         });
     }
@@ -103,24 +90,18 @@ public class SearchOnTheMapPresenter<T extends SearchOnTheMapView>
 
     @Override
     public void onMarkerClick(Marker marker) {
-        queryManager.prepareSaveMarkerDialog(marker, new SearchManager.OnDialogDataPrepared() {
-            @Override
-            public void onSuccess(String title, String message, Marker marker) {
-                if (view != null) {
-                    view.showDialog(title, message, marker);
-                }
+        queryManager.prepareSaveMarkerDialog(marker, (title, message, marker1) -> {
+            if (view != null) {
+                view.showDialog(title, message, marker1);
             }
         });
     }
 
     @Override
     public void saveMarker(Marker currentMarker, String customName) {
-        queryManager.saveMarkerToList(currentMarker, customName, new SearchManager.OnMarkerSavedCallback() {
-            @Override
-            public void onSuccess(String message) {
-                if (view != null) {
-                    view.showMessage(message);
-                }
+        queryManager.saveMarkerToList(currentMarker, customName, message -> {
+            if (view != null) {
+                view.showMessage(message);
             }
         });
     }

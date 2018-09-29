@@ -9,7 +9,6 @@ import com.example.ama.android2_lesson03.PocketMap;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 public class PermissionManager {
 
@@ -19,12 +18,7 @@ public class PermissionManager {
         RxPermissions rxPermissions = new RxPermissions(activity);
         return rxPermissions
                 .request(permission)
-                .subscribe(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean aBoolean) throws Exception {
-                        callback.sendResult(aBoolean);
-                    }
-                });
+                .subscribe(callback::sendResult);
     }
 
     public static boolean checkLocationPermission() {

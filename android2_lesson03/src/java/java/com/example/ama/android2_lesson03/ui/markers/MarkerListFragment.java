@@ -32,7 +32,10 @@ public class MarkerListFragment extends ListFragment implements MarkerView {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         presenter = new MarkerListPresenter<>();
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<SimpleMarker>());
+        adapter = new ArrayAdapter<>(
+                getActivity(),
+                android.R.layout.simple_list_item_1,
+                new ArrayList<SimpleMarker>());
         setListAdapter(adapter);
         registerForContextMenu(getListView());
         super.onViewCreated(view, savedInstanceState);
@@ -88,12 +91,8 @@ public class MarkerListFragment extends ListFragment implements MarkerView {
 
     @Override
     public void showEditDialog(String dialogTitle, String dialogMessage, final SimpleMarker marker) {
-        DialogLauncher.showEditDialog(getActivity(), dialogTitle, dialogMessage, marker.getTitle(), new DialogLauncher.OnDialogResult() {
-            @Override
-            public void onPositiveResult(String inputText) {
-                presenter.editMarkerName(marker, inputText);
-            }
-        });
+        DialogLauncher.showEditDialog(getActivity(), dialogTitle, dialogMessage, marker.getTitle(),
+                inputText -> presenter.editMarkerName(marker, inputText));
     }
 
 }

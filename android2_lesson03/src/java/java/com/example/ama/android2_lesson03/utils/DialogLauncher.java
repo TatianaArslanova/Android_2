@@ -1,7 +1,6 @@
 package com.example.ama.android2_lesson03.utils;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,19 +24,11 @@ public class DialogLauncher {
                 .setView(view)
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(PocketMap.getInstance().getString(R.string.button_ok_text), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        okListener.onPositiveResult(etName.getText().toString());
-                        dialogInterface.cancel();
-                    }
+                .setPositiveButton(PocketMap.getInstance().getString(R.string.button_ok_text), (dialogInterface, i) -> {
+                    okListener.onPositiveResult(etName.getText().toString());
+                    dialogInterface.cancel();
                 })
-                .setNegativeButton(PocketMap.getInstance().getString(R.string.button_text_cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                })
+                .setNegativeButton(PocketMap.getInstance().getString(R.string.button_text_cancel), (dialogInterface, i) -> dialogInterface.cancel())
                 .create()
                 .show();
     }

@@ -1,6 +1,5 @@
 package com.example.ama.android2_lesson03.repo.data.location;
 
-import android.location.Location;
 import android.os.Looper;
 
 import com.example.ama.android2_lesson03.PocketMap;
@@ -11,7 +10,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 /**
  * Class for locating by Google Maps API
@@ -36,14 +34,11 @@ public class LocationManagerGoogle extends BaseLocationManager {
     @Override
     @SuppressWarnings({"MissingPermission"})
     public void findMyLocation(final OnLocationSearchResultCallback callback) {
-        client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    callback.onLocationFound(location);
-                } else {
-                    callback.onError(PocketMap.getInstance().getString(R.string.message_location_not_found));
-                }
+        client.getLastLocation().addOnSuccessListener(location -> {
+            if (location != null) {
+                callback.onLocationFound(location);
+            } else {
+                callback.onError(PocketMap.getInstance().getString(R.string.message_location_not_found));
             }
         });
     }

@@ -17,8 +17,6 @@ import com.example.ama.android2_lesson03.ui.search.base.SearchPresenter;
 import com.example.ama.android2_lesson03.ui.search.mvp.SearchOnTheMapPresenter;
 import com.example.ama.android2_lesson03.utils.DialogLauncher;
 import com.example.ama.android2_lesson03.utils.PermissionManager;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -40,12 +38,9 @@ public class SearchOnTheMapFragment extends BaseMapFragment implements SearchOnT
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         presenter = new SearchOnTheMapPresenter<>();
-        mapController = new MapController(presenter, new Controller.ClearAddressCallback() {
-            @Override
-            public void clearAddress() {
-                etSearch.getText().clear();
-                tvAddress.setText("");
-            }
+        mapController = new MapController(presenter, () -> {
+            etSearch.getText().clear();
+            tvAddress.setText("");
         });
         addListeners(view);
         super.onViewCreated(view, savedInstanceState);
@@ -53,20 +48,12 @@ public class SearchOnTheMapFragment extends BaseMapFragment implements SearchOnT
     }
 
     private void getMap() {
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                mapController.attachMap(googleMap);
-                disposable = PermissionManager.requestPermission(
-                        getActivity(),
-                        PermissionManager.FINE_LOCATION,
-                        new PermissionManager.OnGrantResult() {
-                            @Override
-                            public void sendResult(boolean granted) {
-                                mapController.setLocationAccess(granted);
-                            }
-                        });
-            }
+        mapView.getMapAsync(googleMap -> {
+            mapController.attachMap(googleMap);
+            disposable = PermissionManager.requestPermission(
+                    getActivity(),
+                    PermissionManager.FINE_LOCATION,
+                    granted -> mapController.setLocationAccess(granted));
         });
     }
 
@@ -127,27 +114,15 @@ public class SearchOnTheMapFragment extends BaseMapFragment implements SearchOnT
 
     @Override
     public void showDialog(String title, String message, final Marker marker) {
-        DialogLauncher.showEditDialog(getActivity(), title, message, marker.getTitle(), new DialogLauncher.OnDialogResult() {
-            @Override
-            public void onPositiveResult(String inputText) {
-                presenter.saveMarker(marker, inputText);
-            }
-        });
+        DialogLauncher.showEditDialog(getActivity(), title, message, marker.getTitle(),
+                inputText -> presenter.saveMarker(marker, inputText));
     }
 
     private void addListeners(View view) {
-        view.findViewById(R.id.btn_search).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startSearching(etSearch.getText().toString());
-            }
-        });
-        view.findViewById(R.id.btn_ongmap).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mapController.prepareToGMaps();
-            }
-        });
+        view.findViewById(R.id.btn_search).setOnClickListener(
+                view1 -> startSearching(etSearch.getText().toString()));
+        view.findViewById(R.id.btn_ongmap).setOnClickListener(
+                view12 -> mapController.prepareToGMaps());
     }
 
     private void startSearching(String query) {

@@ -7,8 +7,6 @@ import com.example.ama.android2_lesson03.ui.base.BasePresenter;
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerPresenter;
 import com.example.ama.android2_lesson03.ui.markers.base.MarkerView;
 
-import java.util.ArrayList;
-
 /**
  * Presenter implementation for {@link MarkerView}
  *
@@ -24,12 +22,7 @@ public class MarkerListPresenter<T extends MarkerView> extends BasePresenter<T> 
 
     @Override
     public void getMarkerList() {
-        markerManager.getAllMarkers(new MarkerListManager.OnGetMarkersCallback() {
-            @Override
-            public void onSuccess(ArrayList<SimpleMarker> markers) {
-                view.showMarkerList(markers);
-            }
-        });
+        markerManager.getAllMarkers(markers -> view.showMarkerList(markers));
     }
 
     @Override
@@ -39,31 +32,18 @@ public class MarkerListPresenter<T extends MarkerView> extends BasePresenter<T> 
 
     @Override
     public void editMarkerName(SimpleMarker marker, String newName) {
-        markerManager.updateMarker(marker, newName, new MarkerListManager.OnGetMarkersCallback() {
-            @Override
-            public void onSuccess(ArrayList<SimpleMarker> markers) {
-                view.showMarkerList(markers);
-            }
-        });
+        markerManager.updateMarker(marker, newName, markers -> view.showMarkerList(markers));
     }
 
     @Override
     public void deleteMarker(SimpleMarker marker) {
-        markerManager.deleteMarker(marker, new MarkerListManager.OnGetMarkersCallback() {
-            @Override
-            public void onSuccess(ArrayList<SimpleMarker> markers) {
-                view.showMarkerList(markers);
-            }
-        });
+        markerManager.deleteMarker(marker, markers -> view.showMarkerList(markers));
     }
 
     @Override
     public void onUpdateMarker(SimpleMarker marker) {
-        markerManager.prepareEditMarkerNameDialog(marker, new MarkerListManager.OnDialogPreparedCallback() {
-            @Override
-            public void onSuccess(String dialogTitle, String dialogMessage, SimpleMarker targetMarker) {
-                view.showEditDialog(dialogTitle, dialogMessage, targetMarker);
-            }
-        });
+        markerManager.prepareEditMarkerNameDialog(marker,
+                (dialogTitle, dialogMessage, targetMarker) ->
+                        view.showEditDialog(dialogTitle, dialogMessage, targetMarker));
     }
 }

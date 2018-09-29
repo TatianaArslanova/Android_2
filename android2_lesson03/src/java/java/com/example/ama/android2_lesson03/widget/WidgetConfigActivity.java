@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.example.ama.android2_lesson03.R;
 import com.example.ama.android2_lesson03.widget.utils.WidgetConstants;
@@ -35,21 +34,10 @@ public class WidgetConfigActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (view.getId()) {
-                    case R.id.ib_dark_theme:
-                        setWidgetTheme(WidgetConstants.THEME_DARK);
-                        break;
-                    case R.id.iv_light_theme:
-                        setWidgetTheme(WidgetConstants.THEME_LIGHT);
-                        break;
-                }
-            }
-        };
-        findViewById(R.id.ib_dark_theme).setOnClickListener(listener);
-        findViewById(R.id.iv_light_theme).setOnClickListener(listener);
+        findViewById(R.id.ib_dark_theme).setOnClickListener(
+                view -> setWidgetTheme(WidgetConstants.THEME_DARK));
+        findViewById(R.id.iv_light_theme).setOnClickListener(
+                view -> setWidgetTheme(WidgetConstants.THEME_LIGHT));
     }
 
     private void setWidgetTheme(int themeId) {
