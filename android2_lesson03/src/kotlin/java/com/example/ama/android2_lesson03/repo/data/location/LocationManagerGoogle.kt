@@ -25,11 +25,11 @@ class LocationManagerGoogle : BaseLocationManager() {
     private var listener: LocationCallback? = null
 
     @SuppressWarnings("MissingPermission")
-    override fun findMyLocation(found: (latLng: LatLng, zoom: Float) -> Unit, notFound: (message: String) -> Unit) {
+    override fun findMyLocation(found: (location: Location) -> Unit, notFound: (message: String) -> Unit) {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(PocketMap.instance)
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             if (location != null) {
-                found.invoke(LatLng(location.latitude, location.longitude), SearchQueryManager.DEFAULT_ZOOM)
+                found.invoke(location)
             } else {
                 notFound.invoke(PocketMap.instance.getString(R.string.message_location_not_found))
             }

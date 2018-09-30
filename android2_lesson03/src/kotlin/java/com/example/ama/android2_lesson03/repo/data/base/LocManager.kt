@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.LatLng
 interface LocManager {
     fun findAddressByQuery(query: String): Address?
     fun findAddressByLatLng(latLng: LatLng): Address?
-    fun findMyLocation(found: (latLng: LatLng, zoom: Float) -> Unit,
+    fun findMyLocation(found: (location: Location) -> Unit,
                        notFound: (message: String) -> Unit)
 
     fun subscribeOnLocationUpdates(locationFound: (location: Location) -> Unit,

@@ -27,10 +27,10 @@ class LocationManagerAndroid : BaseLocationManager() {
     private var listener: LocationListener? = null
 
     @SuppressWarnings("MissingPermission")
-    override fun findMyLocation(found: (latLng: LatLng, zoom: Float) -> Unit, notFound: (message: String) -> Unit) {
+    override fun findMyLocation(found: (location: Location) -> Unit, notFound: (message: String) -> Unit) {
         val location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)
         if (location != null) {
-            found.invoke(LatLng(location.latitude, location.longitude), SearchQueryManager.DEFAULT_ZOOM)
+            found.invoke(location)
         } else {
             notFound.invoke(PocketMap.instance.getString(R.string.message_location_not_found))
         }

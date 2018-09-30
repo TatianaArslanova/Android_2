@@ -61,7 +61,10 @@ class SearchQueryManager : SearchManager {
 
     override fun getMyLocation(found: (latLng: LatLng, zoom: Float) -> Unit,
                                notFound: (message: String) -> Unit) {
-        locManager.findMyLocation(found, notFound)
+        locManager.findMyLocation(
+                found = { location ->
+                    found.invoke(LatLng(location.latitude, location.longitude), DEFAULT_ZOOM)
+                }, notFound = { message -> notFound.invoke(message) })
     }
 
     override fun prepareSaveMarkerDialog(marker: Marker, success: (dialogTitle: String, dialogMessage: String, savingMarker: Marker) -> Unit) {

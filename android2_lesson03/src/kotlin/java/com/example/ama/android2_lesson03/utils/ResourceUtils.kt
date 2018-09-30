@@ -1,12 +1,12 @@
 package com.example.ama.android2_lesson03.utils
 
+import android.location.Location
 import com.example.ama.android2_lesson03.PocketMap
 import com.example.ama.android2_lesson03.R
-import com.google.android.gms.maps.model.LatLng
 
 object ResourceUtils {
 
-    fun formatLatLngCoordinates(latLng: LatLng) =
+    fun formatLocationCoordinates(location: Location) =
             String.format(PocketMap.instance.resources.getString(R.string.widget_latlng_format),
-                    latLng.latitude, latLng.longitude)
+                    location.latitude, location.longitude)
 }
