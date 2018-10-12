@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="SmsProviderColumnNames">
+        <item>address</item>
+        <item>body</item>
+        <item>date</item>
+        <item>date_sent</item>
+        <item>read</item>
+        <item>seen</item>
+        <item>status</item>
+        <item>type</item>
+    </string-array>
+
+    <integer-array name="SmsProviderColumnTypes">
+        <item>3</item>
+        <item>3</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+    </integer-array>
+</resources>

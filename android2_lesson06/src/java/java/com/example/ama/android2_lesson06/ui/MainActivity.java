@@ -14,12 +14,14 @@ import io.reactivex.disposables.Disposable;
 
 public class MainActivity extends AppCompatActivity {
     private SmsCursorAdapter adapter;
+    private SmsStorageManager manager;
     private Disposable disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        manager = new SmsStorageManager();
         disposable = new RxPermissions(this)
                 .request(Manifest.permission.READ_SMS,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -38,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-
+        findViewById(R.id.btn_export).setOnClickListener(view -> manager.exportSmsToSdCard(adapter.getCursor()));
+        findViewById(R.id.btn_import).setOnClickListener(view -> manager.importSmsFromSdCard());
     }
 
     @Override
