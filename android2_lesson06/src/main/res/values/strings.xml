@@ -2,4 +2,8 @@
     <string name="app_name">SmsSaver</string>
     <string name="button_text_export_sms">Export SMS</string>
     <string name="button_text_import_sms">Import SMS</string>
+    <string name="message_no_sd_card">SD-Card not found</string>
+    <string name="message_export_error">Export error</string>
+    <string name="message_import_error">Import error</string>
+    <string name="message_success">Success</string>
 </resources>

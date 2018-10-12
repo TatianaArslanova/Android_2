@@ -4,17 +4,15 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.example.ama.android2_lesson06.R;
-import com.example.ama.android2_lesson06.SmsExampleApp;
+import com.example.ama.android2_lesson06.utils.ResUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JsonMessageConverter {
-    private static final String[] COL_NAMES = SmsExampleApp.getInstance().getResources()
-            .getStringArray(R.array.SmsProviderColumnNames);
-    private static final int[] COL_TYPES = SmsExampleApp.getInstance().getResources()
-            .getIntArray(R.array.SmsProviderColumnTypes);
+    private static final String[] COL_NAMES = ResUtils.getStringArray(R.array.SmsProviderColumnNames);
+    private static final int[] COL_TYPES = ResUtils.getIntArray(R.array.SmsProviderColumnTypes);
 
     public static String messagesToJson(Cursor cursor) {
         if (cursor.moveToFirst()) {

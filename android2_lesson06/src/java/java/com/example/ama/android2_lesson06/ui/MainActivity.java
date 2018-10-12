@@ -4,24 +4,27 @@ import android.Manifest;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.ama.android2_lesson06.R;
-import com.example.ama.android2_lesson06.repo.SmsStorageManager;
 import com.example.ama.android2_lesson06.ui.adapter.SmsCursorAdapter;
+import com.example.ama.android2_lesson06.ui.base.SmsExampleView;
+import com.example.ama.android2_lesson06.ui.base.SmsPresenter;
+import com.example.ama.android2_lesson06.ui.mvp.SmsExamplePresenter;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.disposables.Disposable;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SmsExampleView {
     private SmsCursorAdapter adapter;
-    private SmsStorageManager manager;
+    private SmsPresenter<SmsExampleView> presenter;
     private Disposable disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        manager = new SmsStorageManager();
+        presenter = new SmsExamplePresenter<>();
         disposable = new RxPermissions(this)
                 .request(Manifest.permission.READ_SMS,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -33,6 +36,18 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    protected void onStart() {
+        presenter.attachView(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        presenter.detachView();
+        super.onStop();
+    }
+
     private void tuneList() {
         adapter = new SmsCursorAdapter(this);
         adapter.initLoader();
@@ -40,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-        findViewById(R.id.btn_export).setOnClickListener(view -> manager.exportSmsToSdCard(adapter.getCursor()));
-        findViewById(R.id.btn_import).setOnClickListener(view -> manager.importSmsFromSdCard());
+        findViewById(R.id.btn_export).setOnClickListener(view -> presenter.exportMessages(adapter.getCursor()));
+        findViewById(R.id.btn_import).setOnClickListener(view -> presenter.importMessages());
     }
 
     @Override
@@ -51,5 +66,10 @@ public class MainActivity extends AppCompatActivity {
             disposable = null;
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
