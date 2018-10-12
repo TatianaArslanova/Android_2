@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SmsSaver</string>
+    <string name="button_text_export_sms">Export SMS</string>
+    <string name="button_text_import_sms">Import SMS</string>
 </resources>
