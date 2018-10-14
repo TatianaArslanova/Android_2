@@ -23,8 +23,10 @@ class SmsCursorAdapter(context: Context?)
     val uri: Uri = Uri.parse("content://sms")
 
     fun initLoader() {
-        LoaderManager.getInstance(mContext as AppCompatActivity)
-                .initLoader(LOADER_ID, null, SmsLoaderCallbacks())
+        if (mContext is AppCompatActivity) {
+            LoaderManager.getInstance(mContext as AppCompatActivity)
+                    .initLoader(LOADER_ID, null, SmsLoaderCallbacks())
+        }
     }
 
     inner class SmsLoaderCallbacks : LoaderManager.LoaderCallbacks<Cursor> {

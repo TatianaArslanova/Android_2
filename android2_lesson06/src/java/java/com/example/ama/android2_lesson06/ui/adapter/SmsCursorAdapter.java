@@ -25,8 +25,10 @@ public class SmsCursorAdapter extends SimpleCursorAdapter {
     }
 
     public void initLoader() {
-        LoaderManager.getInstance((AppCompatActivity) mContext)
-                .initLoader(LOADER_ID, null, new SmsLoaderCallbacks());
+        if (mContext instanceof AppCompatActivity) {
+            LoaderManager.getInstance((AppCompatActivity) mContext)
+                    .initLoader(LOADER_ID, null, new SmsLoaderCallbacks());
+        }
     }
 
     public class SmsLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cursor> {
