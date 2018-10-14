@@ -47,10 +47,10 @@ class SmsStorageManager {
             val values = JsonMessageConverter.jsonToContentValues(json)
             values
                     ?: return SmsExampleApp.instance.resources.getString(R.string.message_import_error)
-            if (SmsExampleApp.instance.contentResolver.bulkInsert(uri, values) == values.size) {
-                return SmsExampleApp.instance.resources.getString(R.string.message_success)
+            return if (SmsExampleApp.instance.contentResolver.bulkInsert(uri, values) == values.size) {
+                SmsExampleApp.instance.resources.getString(R.string.message_success)
             } else {
-                return SmsExampleApp.instance.resources.getString(R.string.message_import_error)
+                SmsExampleApp.instance.resources.getString(R.string.message_import_error)
             }
         }
         return SmsExampleApp.instance.resources.getString(R.string.message_no_sd_card)
