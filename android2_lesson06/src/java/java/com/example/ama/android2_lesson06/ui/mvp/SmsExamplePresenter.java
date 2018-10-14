@@ -13,13 +13,17 @@ public class SmsExamplePresenter<T extends SmsExampleView> extends BaseSmsPresen
     public void exportMessages(Cursor cursor) {
         disposable.add(manager.startExport(cursor)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(s -> view.showMessage(s)));
+                .subscribe(s -> {
+                    if (view != null) view.showMessage(s);
+                }));
     }
 
     @Override
     public void importMessages() {
         disposable.add(manager.startImport()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(s -> view.showMessage(s)));
+                .subscribe(s -> {
+                    if (view != null) view.showMessage(s);
+                }));
     }
 }
