@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">BluetoothDeviceInfo</string>
     <string name="btn_text_bluetooth">Bluetooth</string>
+    <string name="btn_text_find_devices">Find Devices</string>
 </resources>
