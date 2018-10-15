@@ -1,5 +1,6 @@
-package com.example.ama.android2_lesson06_2;
+package com.example.ama.android2_lesson06_2.ui.list.adapter;
 
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,8 +12,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class DeviceListAdapter extends ArrayAdapter<String> {
-    private ArrayList<String> devices = new ArrayList<>();
+public class DeviceListAdapter extends ArrayAdapter<BluetoothDevice> {
+    private ArrayList<BluetoothDevice> devices = new ArrayList<>();
 
     public DeviceListAdapter(@NonNull Context context) {
         super(context, 0);
@@ -25,11 +26,11 @@ public class DeviceListAdapter extends ArrayAdapter<String> {
             convertView = LayoutInflater.from(getContext())
                     .inflate(android.R.layout.simple_list_item_1, parent, false);
         }
-        ((TextView) convertView.findViewById(android.R.id.text1)).setText(devices.get(position));
+        ((TextView) convertView.findViewById(android.R.id.text1)).setText(devices.get(position).getName());
         return convertView;
     }
 
-    public void addDevice(String device) {
+    public void addDevice(BluetoothDevice device) {
         if (!devices.contains(device)) {
             devices.add(device);
             super.clear();

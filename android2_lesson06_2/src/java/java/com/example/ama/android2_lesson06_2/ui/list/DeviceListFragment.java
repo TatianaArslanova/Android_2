@@ -1,6 +1,5 @@
-package com.example.ama.android2_lesson06_2;
+package com.example.ama.android2_lesson06_2.ui.list;
 
-import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -8,20 +7,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 
-import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.example.ama.android2_lesson06_2.R;
+import com.example.ama.android2_lesson06_2.ui.list.adapter.DeviceListAdapter;
 
-import io.reactivex.disposables.Disposable;
-
-public class MainActivity extends AppCompatActivity {
-
+public class DeviceListFragment extends Fragment {
     private final static int ENABLE_REQUEST_CODE = 1;
 
     private Switch bluetoothSwitch;
@@ -31,47 +32,49 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter bluetoothAdapter;
     private DeviceListAdapter adapter;
     private BroadcastReceiver receiver;
-    private Disposable disposable;
 
+    public static DeviceListFragment newInstance() {
+        return new DeviceListFragment();
+    }
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        disposable = new RxPermissions(this)
-                .request(Manifest.permission.ACCESS_COARSE_LOCATION)
-                .subscribe(granted -> {
-                    if (granted) {
-                        initUI();
-                        initBluetooth();
-                        initReceiver();
-                    } else {
-                        buttonFind.setEnabled(false);
-                    }
-                });
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_device_list, container, false);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        initUI(view);
+        initBluetooth();
+        initReceiver();
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == ENABLE_REQUEST_CODE)
-            if (resultCode == RESULT_CANCELED) {
+            if (resultCode == AppCompatActivity.RESULT_CANCELED) {
                 bluetoothSwitch.setChecked(false);
                 buttonFind.setEnabled(false);
-            } else if (resultCode == RESULT_OK) {
+            } else if (resultCode == AppCompatActivity.RESULT_OK) {
                 buttonFind.setEnabled(true);
             }
     }
 
-    private void initUI() {
-        progressBar = findViewById(R.id.pb_progress);
-        buttonFind = findViewById(R.id.btn_find_devices);
-        buttonFind.setOnClickListener(view -> findDevices());
-        bluetoothSwitch = findViewById(R.id.s_bluetooth);
+    private void initUI(View view) {
+        progressBar = view.findViewById(R.id.pb_progress);
+        buttonFind = view.findViewById(R.id.btn_find_devices);
+        buttonFind.setOnClickListener(v -> findDevices());
+        bluetoothSwitch = view.findViewById(R.id.s_bluetooth);
         bluetoothSwitch.setOnCheckedChangeListener((compoundButton, checked) -> {
             if (checked) enableBluetooth();
             else disableBluetooth();
         });
-        adapter = new DeviceListAdapter(this);
-        ((ListView) findViewById(R.id.lv_devices)).setAdapter(adapter);
+        if (getActivity() != null) {
+            adapter = new DeviceListAdapter(getActivity());
+            ((ListView) view.findViewById(R.id.lv_devices)).setAdapter(adapter);
+        }
     }
 
     private void initBluetooth() {
@@ -112,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     switch (intent.getAction()) {
                         case BluetoothDevice.ACTION_FOUND:
                             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                            adapter.addDevice(device.getName());
+                            adapter.addDevice(device);
                             break;
                         case BluetoothAdapter.ACTION_DISCOVERY_STARTED:
                             progressBar.setVisibility(View.VISIBLE);
@@ -128,15 +131,15 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        registerReceiver(receiver, filter);
+        if (getActivity() != null) {
+            getActivity().registerReceiver(receiver, filter);
+        }
     }
 
     @Override
-    protected void onDestroy() {
-        unregisterReceiver(receiver);
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
+    public void onDestroy() {
+        if (getActivity() != null) {
+            getActivity().unregisterReceiver(receiver);
         }
         super.onDestroy();
     }
