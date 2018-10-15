@@ -19,7 +19,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import io.reactivex.disposables.Disposable;
 
 public class MainActivity extends AppCompatActivity implements SmsExampleView {
-    private final static int RESULT_REQUEST = 1;
+    private final static int CHANGE_DEFAULT_APP_REQUEST = 1;
 
     private SmsCursorAdapter adapter;
     private SmsPresenter<SmsExampleView> presenter;
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements SmsExampleView {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == RESULT_REQUEST && resultCode == RESULT_OK) {
+        if (requestCode == CHANGE_DEFAULT_APP_REQUEST && resultCode == RESULT_OK) {
             if (shouldImport()) presenter.importMessages();
         }
     }
@@ -81,10 +81,11 @@ public class MainActivity extends AppCompatActivity implements SmsExampleView {
     }
 
     private void setListeners() {
-        findViewById(R.id.btn_export).setOnClickListener(view -> presenter.exportMessages(adapter.getCursor()));
+        findViewById(R.id.btn_export).setOnClickListener(view ->
+                presenter.exportMessages(adapter.getCursor()));
         findViewById(R.id.btn_import).setOnClickListener(view -> {
             if (shouldImport()) presenter.importMessages();
-            else changeDefaultRequest();
+            else requestChangeDefaultSmsApp();
         });
     }
 
@@ -93,10 +94,10 @@ public class MainActivity extends AppCompatActivity implements SmsExampleView {
                 Telephony.Sms.getDefaultSmsPackage(getApplicationContext()).equals(getPackageName());
     }
 
-    private void changeDefaultRequest() {
+    private void requestChangeDefaultSmsApp() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
-            startActivityForResult(intent, RESULT_REQUEST);
+            startActivityForResult(intent, CHANGE_DEFAULT_APP_REQUEST);
         }
     }
 }

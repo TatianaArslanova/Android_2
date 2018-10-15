@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.ama.android2_lesson06.repo.SmsConstants;
 
 public class SmsCursorAdapter extends SimpleCursorAdapter {
-    private final Uri URI = Uri.parse("content://sms");
     private final int LOADER_ID = 1;
 
     public SmsCursorAdapter(Context context) {
@@ -36,7 +35,7 @@ public class SmsCursorAdapter extends SimpleCursorAdapter {
         @NonNull
         @Override
         public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
-            return new CursorLoader(mContext, URI, null, null, null, null);
+            return new CursorLoader(mContext, SmsConstants.URI, null, null, null, null);
         }
 
         @Override

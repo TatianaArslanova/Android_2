@@ -2,7 +2,6 @@ package com.example.ama.android2_lesson06.repo;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Environment;
 
 import com.example.ama.android2_lesson06.R;
@@ -26,7 +25,6 @@ public class SmsStorageManager {
             Environment.getExternalStorageDirectory().getAbsolutePath()
                     + "/SmsSaver");
     private final File SMS_FILE = new File(DIRECTORY, "SMS.txt");
-    private final Uri URI = Uri.parse("content://sms");
 
     public Single<String> startExport(Cursor cursor) {
         return Single.fromCallable(() -> exportSmsToSdCard(cursor))
@@ -53,7 +51,7 @@ public class SmsStorageManager {
             String json = readFromFile();
             ContentValues[] values = JsonMessageConverter.jsonToContentValues(json);
             if (values != null) {
-                if (SmsExampleApp.getInstance().getContentResolver().bulkInsert(URI, values) == values.length) {
+                if (SmsExampleApp.getInstance().getContentResolver().bulkInsert(SmsConstants.URI, values) == values.length) {
                     return ResUtils.getString(R.string.message_success);
                 }
             } else {
