@@ -20,6 +20,8 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 
 import com.example.ama.android2_lesson06_2.R;
+import com.example.ama.android2_lesson06_2.ui.MainActivity;
+import com.example.ama.android2_lesson06_2.ui.Navigator;
 import com.example.ama.android2_lesson06_2.ui.list.adapter.DeviceListAdapter;
 
 public class DeviceListFragment extends Fragment {
@@ -73,7 +75,12 @@ public class DeviceListFragment extends Fragment {
         });
         if (getActivity() != null) {
             adapter = new DeviceListAdapter(getActivity());
-            ((ListView) view.findViewById(R.id.lv_devices)).setAdapter(adapter);
+            ListView listView = view.findViewById(R.id.lv_devices);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener((adapterView, view1, i, l) ->
+                    Navigator.plaseDetailsListFragment(
+                            (MainActivity) getActivity(),
+                            (BluetoothDevice) adapterView.getItemAtPosition(i)));
         }
     }
 

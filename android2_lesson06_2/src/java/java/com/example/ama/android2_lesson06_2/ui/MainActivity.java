@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-        if (savedInstanceState == null) placeFragment();
+        if (savedInstanceState == null) Navigator.placeDeviceListFragment(this);
     }
 
     @Override
@@ -37,13 +37,5 @@ public class MainActivity extends AppCompatActivity {
             disposable = null;
         }
         super.onDestroy();
-    }
-
-    private void placeFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fl_container,
-                        DeviceListFragment.newInstance(),
-                        DeviceListFragment.class.getSimpleName())
-                .commit();
     }
 }

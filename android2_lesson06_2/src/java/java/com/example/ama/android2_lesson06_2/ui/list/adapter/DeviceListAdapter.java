@@ -16,7 +16,7 @@ public class DeviceListAdapter extends ArrayAdapter<BluetoothDevice> {
     private ArrayList<BluetoothDevice> devices = new ArrayList<>();
 
     public DeviceListAdapter(@NonNull Context context) {
-        super(context, 0);
+        super(context, android.R.layout.simple_list_item_1);
     }
 
     @NonNull
