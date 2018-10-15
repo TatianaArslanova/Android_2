@@ -22,6 +22,12 @@ public class DeviceInfoConverter {
     private static final String MAJOR_DEVICE_CLASS = "Major device class";
 
     private static final String UNKNOWN = "Unknown";
+    private static final String CLASSIC = "Classic";
+    private static final String DUAL = "Dual";
+    private static final String LOW_ENERGY = "LowEnergy";
+    private static final String BONDED = "Bonded";
+    private static final String BONDING = "Bonding";
+    private static final String NONE = "None";
 
     public List<DeviceParam> getParams(BluetoothDevice device) {
         ArrayList<DeviceParam> params = new ArrayList<>();
@@ -40,11 +46,11 @@ public class DeviceInfoConverter {
     private String getType(BluetoothDevice device) {
         switch (device.getType()) {
             case BluetoothDevice.DEVICE_TYPE_CLASSIC:
-                return "Classic";
+                return CLASSIC;
             case BluetoothDevice.DEVICE_TYPE_DUAL:
-                return "Dual";
+                return DUAL;
             case BluetoothDevice.DEVICE_TYPE_LE:
-                return "LowEnergy";
+                return LOW_ENERGY;
             default:
                 return UNKNOWN;
         }
@@ -53,11 +59,11 @@ public class DeviceInfoConverter {
     private String getBondState(BluetoothDevice device) {
         switch (device.getBondState()) {
             case BOND_BONDED:
-                return "Bonded";
+                return BONDED;
             case BOND_BONDING:
-                return "Bonding";
+                return BONDING;
             default:
-                return "None";
+                return NONE;
         }
     }
 

@@ -54,9 +54,10 @@ public class DeviceListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         initUI(view);
+        setListeners();
         initBluetooth();
         initReceiver();
-        if (bluetoothAdapter.isDiscovering()){
+        if (bluetoothAdapter.isDiscovering()) {
             progressBar.setVisibility(View.VISIBLE);
         }
         super.onViewCreated(view, savedInstanceState);
@@ -84,14 +85,13 @@ public class DeviceListFragment extends Fragment {
     private void initUI(View view) {
         progressBar = view.findViewById(R.id.pb_progress);
         buttonFind = view.findViewById(R.id.btn_find_devices);
-        buttonFind.setOnClickListener(v -> findDevices());
         bluetoothSwitch = view.findViewById(R.id.s_bluetooth);
-        bluetoothSwitch.setOnCheckedChangeListener((compoundButton, checked) -> {
-            if (checked) enableBluetooth();
-            else disableBluetooth();
-        });
+        initList(view);
+    }
+
+    private void initList(View view) {
         if (getActivity() != null) {
-            if (adapter==null) {
+            if (adapter == null) {
                 adapter = new DeviceListAdapter(getActivity());
             }
             ListView listView = view.findViewById(R.id.lv_devices);
@@ -101,6 +101,14 @@ public class DeviceListFragment extends Fragment {
                             (MainActivity) getActivity(),
                             (BluetoothDevice) adapterView.getItemAtPosition(i)));
         }
+    }
+
+    private void setListeners() {
+        buttonFind.setOnClickListener(v -> findDevices());
+        bluetoothSwitch.setOnCheckedChangeListener((compoundButton, checked) -> {
+            if (checked) enableBluetooth();
+            else disableBluetooth();
+        });
     }
 
     private void initBluetooth() {
