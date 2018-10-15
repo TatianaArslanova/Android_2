@@ -16,9 +16,9 @@
             android:id="@+id/s_bluetooth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:checked="false"
             android:gravity="start"
-            android:layout_weight="1"
             android:text="@string/btn_text_bluetooth"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
@@ -26,8 +26,8 @@
             android:id="@+id/btn_find_devices"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:enabled="false"
             android:layout_weight="1"
+            android:enabled="false"
             android:text="@string/btn_text_find_devices" />
 
     </LinearLayout>
@@ -35,6 +35,13 @@
     <ListView
         android:id="@+id/lv_devices"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
+
+    <ProgressBar
+        android:id="@+id/pb_progress"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone" />
 
 </LinearLayout>

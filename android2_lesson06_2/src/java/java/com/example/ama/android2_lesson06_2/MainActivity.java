@@ -10,9 +10,10 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Switch bluetoothSwitch;
     private Button buttonFind;
+    private ProgressBar progressBar;
 
     private BluetoothAdapter bluetoothAdapter;
     private DeviceListAdapter adapter;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initUI() {
+        progressBar = findViewById(R.id.pb_progress);
         buttonFind = findViewById(R.id.btn_find_devices);
         buttonFind.setOnClickListener(view -> findDevices());
         bluetoothSwitch = findViewById(R.id.s_bluetooth);
@@ -112,10 +115,10 @@ public class MainActivity extends AppCompatActivity {
                             adapter.addDevice(device.getName());
                             break;
                         case BluetoothAdapter.ACTION_DISCOVERY_STARTED:
-                            Log.d("ON_RECEIVE", "DISCOVERY_STARTED");
+                            progressBar.setVisibility(View.VISIBLE);
                             break;
                         case BluetoothAdapter.ACTION_DISCOVERY_FINISHED:
-                            Log.d("ON_RECEIVE", "DISCOVERY_FINISHED");
+                            progressBar.setVisibility(View.GONE);
                             break;
                     }
                 }
