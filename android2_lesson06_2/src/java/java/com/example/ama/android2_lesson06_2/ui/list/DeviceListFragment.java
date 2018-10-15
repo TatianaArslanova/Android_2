@@ -39,6 +39,12 @@ public class DeviceListFragment extends Fragment {
         return new DeviceListFragment();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,6 +56,9 @@ public class DeviceListFragment extends Fragment {
         initUI(view);
         initBluetooth();
         initReceiver();
+        if (bluetoothAdapter.isDiscovering()){
+            progressBar.setVisibility(View.VISIBLE);
+        }
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -64,6 +73,14 @@ public class DeviceListFragment extends Fragment {
             }
     }
 
+    @Override
+    public void onDestroyView() {
+        if (getActivity() != null) {
+            getActivity().unregisterReceiver(receiver);
+        }
+        super.onDestroyView();
+    }
+
     private void initUI(View view) {
         progressBar = view.findViewById(R.id.pb_progress);
         buttonFind = view.findViewById(R.id.btn_find_devices);
@@ -74,7 +91,9 @@ public class DeviceListFragment extends Fragment {
             else disableBluetooth();
         });
         if (getActivity() != null) {
-            adapter = new DeviceListAdapter(getActivity());
+            if (adapter==null) {
+                adapter = new DeviceListAdapter(getActivity());
+            }
             ListView listView = view.findViewById(R.id.lv_devices);
             listView.setAdapter(adapter);
             listView.setOnItemClickListener((adapterView, view1, i, l) ->
@@ -141,13 +160,5 @@ public class DeviceListFragment extends Fragment {
         if (getActivity() != null) {
             getActivity().registerReceiver(receiver, filter);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (getActivity() != null) {
-            getActivity().unregisterReceiver(receiver);
-        }
-        super.onDestroy();
     }
 }
