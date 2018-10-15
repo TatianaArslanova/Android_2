@@ -13,6 +13,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.ama.android2_lesson06_2.R
+import com.example.ama.android2_lesson06_2.ui.MainActivity
+import com.example.ama.android2_lesson06_2.ui.Navigator
 import com.example.ama.android2_lesson06_2.ui.list.adapter.DeviceListAdapter
 import kotlinx.android.synthetic.main.fragment_device_list.*
 
@@ -85,6 +87,12 @@ class DeviceListFragment : Fragment() {
                 adapter = DeviceListAdapter(activity!!)
             }
             lv_devices.adapter = adapter
+            lv_devices.setOnItemClickListener { adapterView, view, i, l ->
+                if (activity != null) {
+                    Navigator.placeDetailsListFragment(activity as MainActivity,
+                            adapterView.getItemAtPosition(i) as BluetoothDevice)
+                }
+            }
         }
     }
 
