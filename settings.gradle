@@ -1,1 +1,1 @@
-include ':android2_lesson01', ':android2_lesson03', ':android2_lesson04', ':android2_lesson06', ':android2_lesson06_2'
+include ':android2_lesson01', ':android2_lesson03', ':android2_lesson04', ':android2_lesson06', ':android2_lesson06_2', ':lesson07'
