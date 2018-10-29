@@ -14,6 +14,7 @@ public class ShapeView extends View {
     private static final int DEFAULT_CORNERS = 0;
     private Paint shapePaint;
     private int corners;
+    private int shapeColor;
 
     public ShapeView(Context context) {
         super(context);
@@ -23,9 +24,9 @@ public class ShapeView extends View {
         super(context, attrs);
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ShapeView);
         corners = array.getInteger(R.styleable.ShapeView_shapeType, DEFAULT_CORNERS);
-        int color = array.getColor(R.styleable.ShapeView_shapeColor, Color.GRAY);
+        shapeColor = array.getColor(R.styleable.ShapeView_shapeColor, Color.GRAY);
         shapePaint = new Paint();
-        shapePaint.setColor(color);
+        shapePaint.setColor(shapeColor);
         array.recycle();
     }
 
@@ -78,5 +79,15 @@ public class ShapeView extends View {
         int right = widthLess ? canWidth : canWidth / 2 + canHeight / 2;
         int bottom = widthLess ? canHeight / 2 + canWidth / 2 : canHeight;
         canvas.drawRect(left, top, right, bottom, shapePaint);
+    }
+
+    public void setShapeColor(int shapeColor) {
+        this.shapeColor = shapeColor;
+        shapePaint.setColor(shapeColor);
+        invalidate();
+    }
+
+    public int getShapeColor() {
+        return shapeColor;
     }
 }

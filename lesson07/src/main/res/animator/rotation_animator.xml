@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:interpolator/anticipate_overshoot">
+    <objectAnimator
+        android:duration="@integer/medium_animation_duration"
+        android:propertyName="rotation"
+        android:repeatCount="1"
+        android:repeatMode="reverse"
+        android:valueFrom="0"
+        android:valueTo="270"
+        android:valueType="floatType" />
+
+    <objectAnimator
+        android:duration="@integer/medium_animation_duration"
+        android:propertyName="scaleX"
+        android:repeatCount="1"
+        android:repeatMode="reverse"
+        android:valueFrom="1"
+        android:valueTo="0.7"
+        android:valueType="floatType" />
+
+    <objectAnimator
+        android:duration="@integer/medium_animation_duration"
+        android:propertyName="scaleY"
+        android:repeatCount="1"
+        android:repeatMode="reverse"
+        android:valueFrom="1"
+        android:valueTo="0.7"
+        android:valueType="floatType" />
+
+    <objectAnimator
+        android:duration="@integer/medium_animation_duration"
+        android:propertyName="shapeColor"
+        android:repeatCount="1"
+        android:repeatMode="reverse"
+        android:valueFrom="@color/colorRed"
+        android:valueTo="@color/colorPink"
+        android:valueType="intType" />
+</set>
