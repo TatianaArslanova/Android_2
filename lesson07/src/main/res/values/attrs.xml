@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ShapeView">
+        <attr name="shapeType" format="enum">
+            <enum name="circle" value="0"/>
+            <enum name="triangle" value="3"/>
+            <enum name="square" value="4"/>
+        </attr>
+        <attr name="shapeColor" format="color" />
+    </declare-styleable>
+</resources>
