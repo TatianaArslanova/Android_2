@@ -22,7 +22,10 @@ public class MainActivity extends AppCompatActivity {
             set.start();
         });
 
-        findViewById(R.id.sv_triangle).setOnClickListener(view -> view.startAnimation(
-                AnimationUtils.loadAnimation(MainActivity.this, R.anim.simple_animation)));
+        findViewById(R.id.sv_triangle).setOnClickListener(view -> {
+            AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(MainActivity.this, R.animator.jump_animation);
+            set.setTarget(view);
+            set.start();
+        });
     }
 }
