@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class ShapeView extends View {
+    private static final int DEFAULT_SIZE = 100;
     private static final int DEFAULT_CORNERS = 0;
     private Paint shapePaint;
     private int corners;
@@ -89,5 +90,28 @@ public class ShapeView extends View {
 
     public int getShapeColor() {
         return shapeColor;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(
+                measureSize(widthMeasureSpec, getPaddingLeft() + getPaddingRight()),
+                measureSize(heightMeasureSpec, getPaddingBottom() + getPaddingTop())
+        );
+    }
+
+    private int measureSize(int measureSpec, int paddingSum) {
+        int mode = MeasureSpec.getMode(measureSpec);
+        int size = MeasureSpec.getSize(measureSpec);
+        int result;
+        if (mode == MeasureSpec.EXACTLY) {
+            result = size;
+        } else {
+            result = DEFAULT_SIZE + paddingSum;
+            if (mode == MeasureSpec.AT_MOST) {
+                result = Math.min(result, size);
+            }
+        }
+        return result;
     }
 }

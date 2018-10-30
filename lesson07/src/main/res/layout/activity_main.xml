@@ -10,7 +10,7 @@
     <com.example.ama.lesson07.ShapeView
         android:id="@+id/sv_circle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="8dp"
         android:layout_weight="1"
         app:shapeColor="@color/colorGreen"
@@ -19,7 +19,7 @@
     <com.example.ama.lesson07.ShapeView
         android:id="@+id/sv_square"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="8dp"
         android:layout_weight="1"
         app:shapeColor="@color/colorRed"
@@ -28,7 +28,7 @@
     <com.example.ama.lesson07.ShapeView
         android:id="@+id/sv_triangle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="8dp"
         android:layout_weight="1"
         app:shapeType="triangle" />
