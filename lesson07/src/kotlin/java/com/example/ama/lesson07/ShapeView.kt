@@ -8,7 +8,9 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.View
 
-class ShapeView : View {
+class ShapeView @JvmOverloads constructor(
+        context: Context,
+        attributeSet: AttributeSet? = null) : View(context, attributeSet) {
 
     companion object {
         const val DEFAULT_SIZE = 100
@@ -20,13 +22,11 @@ class ShapeView : View {
     var shapeColor: Int = Color.GRAY
         set(value) {
             field = value
-            shapePaint.setColor(field)
+            shapePaint.color = field
             invalidate()
         }
 
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet) {
+    init {
         val array = context.obtainStyledAttributes(attributeSet, R.styleable.ShapeView)
         corners = array.getInteger(R.styleable.ShapeView_shapeType, DEFAULT_CORNERS)
         shapeColor = array.getColor(R.styleable.ShapeView_shapeColor, Color.GRAY)
