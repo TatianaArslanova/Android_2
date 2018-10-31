@@ -14,6 +14,7 @@ public class ShapeView extends View {
     private static final int DEFAULT_SIZE = 100;
     private static final int DEFAULT_CORNERS = 0;
     private Paint shapePaint;
+    private Path shapePath;
     private int corners;
     private int shapeColor;
 
@@ -27,6 +28,7 @@ public class ShapeView extends View {
         corners = array.getInteger(R.styleable.ShapeView_shapeType, DEFAULT_CORNERS);
         shapeColor = array.getColor(R.styleable.ShapeView_shapeColor, Color.GRAY);
         shapePaint = new Paint();
+        shapePath = new Path();
         shapePaint.setColor(shapeColor);
         array.recycle();
     }
@@ -55,12 +57,12 @@ public class ShapeView extends View {
         int rightCornerX = widthLess ? canWidth : canWidth / 2 + canHeight / 2;
         int topCornerX = canWidth / 2;
         int topY = widthLess ? canHeight / 2 - canWidth / 2 : 0;
-        Path path = new Path();
-        path.moveTo(leftCornerX, bottomY);
-        path.lineTo(rightCornerX, bottomY);
-        path.lineTo(topCornerX, topY);
-        path.lineTo(leftCornerX, bottomY);
-        canvas.drawPath(path, shapePaint);
+        shapePath.reset();
+        shapePath.moveTo(leftCornerX, bottomY);
+        shapePath.lineTo(rightCornerX, bottomY);
+        shapePath.lineTo(topCornerX, topY);
+        shapePath.lineTo(leftCornerX, bottomY);
+        canvas.drawPath(shapePath, shapePaint);
     }
 
     private void drawCircle(Canvas canvas) {
