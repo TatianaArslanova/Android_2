@@ -18,6 +18,7 @@ class ShapeView @JvmOverloads constructor(
     }
 
     private val shapePaint = Paint()
+    private val shapePath = Path()
     private var corners: Int = 0
     var shapeColor: Int = Color.GRAY
         set(value) {
@@ -65,12 +66,12 @@ class ShapeView @JvmOverloads constructor(
         val rightCornerX = if (widthLess) canvas.width else canvas.width / 2 + canvas.height / 2
         val topCornerX = canvas.width / 2
         val topY = if (widthLess) canvas.height / 2 - canvas.width / 2 else 0
-        val path = Path()
-        path.moveTo(leftCornerX.toFloat(), bottomY.toFloat())
-        path.lineTo(rightCornerX.toFloat(), bottomY.toFloat())
-        path.lineTo(topCornerX.toFloat(), topY.toFloat())
-        path.lineTo(leftCornerX.toFloat(), bottomY.toFloat())
-        canvas.drawPath(path, shapePaint)
+        shapePath.reset()
+        shapePath.moveTo(leftCornerX.toFloat(), bottomY.toFloat())
+        shapePath.lineTo(rightCornerX.toFloat(), bottomY.toFloat())
+        shapePath.lineTo(topCornerX.toFloat(), topY.toFloat())
+        shapePath.lineTo(leftCornerX.toFloat(), bottomY.toFloat())
+        canvas.drawPath(shapePath, shapePaint)
     }
 
     private fun drawSquare(canvas: Canvas) {
